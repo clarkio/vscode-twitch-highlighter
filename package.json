@@ -18,6 +18,10 @@
       {
         "command": "extension.highlight",
         "title": "Twitch Highlighter: Highlight Line"
+      },
+      {
+        "command": "extension.unhighlightAll",
+        "title": "Twitch Highlighter: Unhighlight All"
       }
     ]
   },
