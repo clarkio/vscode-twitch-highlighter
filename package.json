@@ -10,20 +10,70 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.highlight"
+    "onCommand:twitchlinehighlighter.highlight",
+    "onCommand:twitchlinehighlighter.start"
   ],
   "main": "./out/extension",
   "contributes": {
     "commands": [
       {
-        "command": "extension.highlight",
+        "command": "twitchlinehighlighter.highlight",
         "title": "Twitch Highlighter: Highlight Line"
       },
       {
-        "command": "extension.unhighlightAll",
+        "command": "twitchlinehighlighter.unhighlightAll",
         "title": "Twitch Highlighter: Unhighlight All"
+      },
+      {
+        "command": "twitchlinehighlighter.start",
+        "title": "Twitch Highlighter: Start"
+      },
+      {
+        "command": "twitchlinehighlighter.stop",
+        "title": "Twitch Highlighter: Stop"
       }
     ]
+  },
+  "configuration": {
+    "type": "object",
+    "title": "Twitch Line Highlighter Configuration",
+    "properties": {
+      "twitchlinehighlighter.shouldConnect": {
+        "type": "boolean",
+        "default": true,
+        "description": "Whether to connect to IRC."
+      },
+      "twitchlinehighlighter.server": {
+        "type": "string",
+        "default": "irc.chat.twitch.tv",
+        "description": "The IRC server to connect to."
+      },
+      "twitchlinehighlighter.port": {
+        "type": "number",
+        "default": 6667,
+        "description": "The IRC server port."
+      },
+      "twitchlinehighlighter.password": {
+        "type": "string",
+        "default": "",
+        "description": "IRC server password. Leave empty if not needed. For Twitch generate a token here: http://www.twitchapps.com/tmi"
+      },
+      "twitchlinehighlighter.nickname": {
+        "type": "string",
+        "default": "clarkio",
+        "description": "IRC nickname. For Twitch, use your username."
+      },
+      "twitchlinehighlighter.channel": {
+        "type": "string",
+        "default": "#clarkio",
+        "description": "The channel name. For Twitch, use #${your channel/user name}."
+      },
+      "twitchlinehighlighter.command": {
+        "type": "string",
+        "default": ":highlight",
+        "description": "The command for your viewers to use."
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -33,10 +83,15 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.21",
-    "tslint": "^5.8.0",
+    "@types/mocha": "^2.2.42",
     "@types/node": "^8.10.25",
-    "@types/mocha": "^2.2.42"
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.1"
+  },
+  "dependencies": {
+    "irc": "^0.5.2",
+    "vscode": "^1.1.26",
+    "vscode-languageclient": "^5.2.1",
+    "vscode-languageserver": "^5.2.1"
   }
 }

@@ -2,6 +2,14 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
+import * as path from "path";
+import {
+  LanguageClient,
+  LanguageClientOptions,
+  // SettingMonitor,
+  ServerOptions,
+  TransportKind
+} from "vscode-languageclient";
 import { Highlight } from "./highlight";
 
 const decorationType = vscode.window.createTextEditorDecorationType({
@@ -9,10 +17,52 @@ const decorationType = vscode.window.createTextEditorDecorationType({
   border: "2px solid white"
 });
 let highlights: Array<Highlight> = new Array<Highlight>();
+let client: LanguageClient;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  let serverModule = context.asAbsolutePath(path.join("out", "server.js"));
+  let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
+  let serverOptions: ServerOptions = {
+    run: { module: serverModule, transport: TransportKind.ipc },
+    debug: {
+      module: serverModule,
+      transport: TransportKind.ipc,
+      options: debugOptions
+    }
+  };
+  let clientOptions: LanguageClientOptions = {
+    // Register the server for everything
+    documentSelector: ["*"],
+    synchronize: {
+      // Synchronize the setting section to the server
+      configurationSection: "twitchlinehighlighter"
+    }
+  };
+
+  client = new LanguageClient(
+    "twitchChatLanguageServer",
+    serverOptions,
+    clientOptions
+  );
+
+  client.onReady().then(() => {
+    client.onNotification("connected", () => {
+      vscode.window.showInformationMessage("TwitchLineHighlighter: Connected.");
+    });
+  });
+
+  vscode.commands.registerCommand("twitchlinehighlighter.start", () => {
+    vscode.window.showInformationMessage("TwitchLineHighlighter: Starting...");
+    client.start();
+  });
+
+  vscode.commands.registerCommand("twitchlinehighlighter.stop", () => {
+    vscode.window.showInformationMessage("TwitchLineHighlighter: Stopping...");
+    client.stop();
+  });
+
   // Listen for active text editor so we don't lose any existing highlights
   let activeTextEditorListener = vscode.window.onDidChangeActiveTextEditor(
     activeEditor => {
@@ -37,14 +87,17 @@ export function activate(context: vscode.ExtensionContext) {
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with  registerCommand
   // The commandId parameter must match the command field in package.json
-  let highlight = vscode.commands.registerCommand("extension.highlight", () => {
-    vscode.window
-      .showInputBox({ prompt: "Enter a line number" })
-      .then(handleHighlight);
-  });
+  let highlight = vscode.commands.registerCommand(
+    "twitchlinehighlighter.highlight",
+    () => {
+      vscode.window
+        .showInputBox({ prompt: "Enter a line number" })
+        .then(handleHighlight);
+    }
+  );
 
   let unhighlightAll = vscode.commands.registerCommand(
-    "extension.unhighlightAll",
+    "twitchlinehighlighter.unhighlightAll",
     () => {
       vscode.window.visibleTextEditors.forEach(visibleEditor => {
         visibleEditor.setDecorations(decorationType, []);
@@ -103,5 +156,9 @@ function getHighlightRange(lineNumber: string, doc: vscode.TextDocument) {
   return range;
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate(): Thenable<void> {
+  if (!client) {
+    return Promise.resolve();
+  }
+  return client.stop();
+}
