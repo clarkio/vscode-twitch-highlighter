@@ -10,65 +10,69 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:twitchlinehighlighter.highlight",
-    "onCommand:twitchlinehighlighter.start"
+    "onCommand:twitchhighlighter.highlight",
+    "onCommand:twitchhighlighter.startChat"
   ],
   "main": "./out/extension",
   "contributes": {
     "commands": [
       {
-        "command": "twitchlinehighlighter.highlight",
+        "command": "twitchhighlighter.highlight",
         "title": "Twitch Highlighter: Highlight Line"
       },
       {
-        "command": "twitchlinehighlighter.unhighlightAll",
+        "command": "twitchhighlighter.unhighlightAll",
         "title": "Twitch Highlighter: Unhighlight All"
       },
       {
-        "command": "twitchlinehighlighter.start",
-        "title": "Twitch Highlighter: Start"
+        "command": "twitchhighlighter.unhighlightSpecific",
+        "title": "Twitch Highlighter: Unhighlight by File and Line"
       },
       {
-        "command": "twitchlinehighlighter.stop",
-        "title": "Twitch Highlighter: Stop"
+        "command": "twitchhighlighter.startChat",
+        "title": "Twitch Highlighter: Start Listening to Chat"
+      },
+      {
+        "command": "twitchhighlighter.stopChat",
+        "title": "Twitch Highlighter: Stop Listening to Chat"
       }
     ]
   },
   "configuration": {
     "type": "object",
-    "title": "Twitch Line Highlighter Configuration",
+    "title": "Twitch Highlighter Configuration",
     "properties": {
-      "twitchlinehighlighter.shouldConnect": {
+      "twitchhighlighter.shouldConnect": {
         "type": "boolean",
         "default": true,
-        "description": "Whether to connect to IRC."
+        "description": "Whether to connect to Twitch Chat."
       },
-      "twitchlinehighlighter.server": {
+      "twitchhighlighter.server": {
         "type": "string",
         "default": "irc.chat.twitch.tv",
-        "description": "The IRC server to connect to."
+        "description": "The Twitch server to connect to."
       },
-      "twitchlinehighlighter.port": {
+      "twitchhighlighter.port": {
         "type": "number",
         "default": 6667,
         "description": "The IRC server port."
       },
-      "twitchlinehighlighter.password": {
+      "twitchhighlighter.password": {
         "type": "string",
         "default": "",
         "description": "IRC server password. Leave empty if not needed. For Twitch generate a token here: http://www.twitchapps.com/tmi"
       },
-      "twitchlinehighlighter.nickname": {
+      "twitchhighlighter.nickname": {
         "type": "string",
         "default": "clarkio",
         "description": "IRC nickname. For Twitch, use your username."
       },
-      "twitchlinehighlighter.channel": {
+      "twitchhighlighter.channel": {
         "type": "string",
         "default": "#clarkio",
         "description": "The channel name. For Twitch, use #${your channel/user name}."
       },
-      "twitchlinehighlighter.command": {
+      "twitchhighlighter.command": {
         "type": "string",
         "default": ":highlight",
         "description": "The command for your viewers to use."
@@ -84,12 +88,13 @@
   },
   "devDependencies": {
     "@types/mocha": "^2.2.42",
-    "@types/node": "^8.10.25",
+    "@types/node": "^8.10.39",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1"
   },
   "dependencies": {
     "irc": "^0.5.2",
+    "twitch-js": "^1.2.17",
     "vscode": "^1.1.26",
     "vscode-languageclient": "^5.2.1",
     "vscode-languageserver": "^5.2.1"
