@@ -15,10 +15,6 @@ const highlightDecorationType = vscode.window.createTextEditorDecorationType({
   backgroundColor: "green",
   border: "2px solid white"
 });
-const emptyDecorationType = vscode.window.createTextEditorDecorationType({
-  backgroundColor: "transparent",
-  border: "0px"
-});
 let highlighters: Array<Highlighter> = new Array<Highlighter>();
 let client: LanguageClient;
 
