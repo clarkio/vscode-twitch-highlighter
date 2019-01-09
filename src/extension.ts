@@ -70,21 +70,12 @@ export function activate(context: vscode.ExtensionContext) {
       console.log(params);
       executeHighlight(params.line, params.twitchUser);
     });
-    client.onNotification("unhighlight", (params: any) => {
-      console.log(params);
-      removeHighlight(params.line, params.fileName);
-    });
   });
 
   // #region command registrations
   registerCommand(context, "twitchhighlighter.startChat", startChatHandler);
   registerCommand(context, "twitchhighlighter.stopChat", stopChatHandler);
   registerCommand(context, "twitchhighlighter.highlight", highlightHandler);
-  registerCommand(
-    context,
-    "twitchhighlighter.unhighlightSpecific",
-    unhighlightSpecificHandler
-  );
   registerCommand(
     context,
     "twitchhighlighter.unhighlightAll",
@@ -104,30 +95,6 @@ export function activate(context: vscode.ExtensionContext) {
       visibleEditor.setDecorations(highlightDecorationType, []);
     });
     highlighters = new Array<Highlighter>();
-  }
-
-  function unhighlightSpecificHandler() {
-    let fileName: string;
-
-    vscode.window
-      .showInputBox({ prompt: "Enter a file name" })
-      .then(submittedFileName => {
-        if (!submittedFileName) {
-          vscode.window.showErrorMessage("A file name was not entered.");
-          return;
-        }
-        fileName = submittedFileName;
-        vscode.window
-          .showInputBox({ prompt: "Enter a line number" })
-          .then(lineNumber => {
-            if (!lineNumber || isNaN(+lineNumber)) {
-              vscode.window.showErrorMessage("Line number was not a number");
-              return;
-            }
-            const lineNumberInt = parseInt(lineNumber);
-            removeHighlight(lineNumberInt, fileName);
-          });
-      });
   }
 
   function startChatHandler() {
@@ -218,47 +185,6 @@ function addHighlight(
     );
     editor.setDecorations(highlightDecorationType, [decoration]);
   }
-}
-
-function removeHighlight(lineNumber: number, fileName: string) {
-  fileName = `c:\\Users\\bc\\dev\\_repos\\simple-node-server\\${fileName}`;
-  const existingHighlight = findHighlighter(lineNumber, fileName);
-  if (!existingHighlight) {
-    // TODO: remove log before going to production
-    console.log(`Highlight not found so can't unhighlight the line from file`);
-    return;
-  }
-  const highlightIndex = highlighters.indexOf(existingHighlight);
-  highlighters.splice(highlightIndex, 1);
-  console.log(existingHighlight.decorations);
-  // As BraveCobra suggests we should maybe look into using the workspace.textDocuments instead.
-  // then use the findFile function to see if we can find it
-  // if it doesn't exist or maybe there's multiple we can prompt the user in chat or a whisper to specify which one (see csharpfritz stream from 01/04/2018 for an example in visual studio)
-  console.log(vscode.workspace.textDocuments);
-  let matchedFile;
-  vscode.workspace.findFiles(`**/${fileName}`).then(foundFiles => {
-    console.log("here are the found files!!!");
-    console.log(foundFiles);
-  });
-  const editor = vscode.window.visibleTextEditors.find(editor => {
-    return editor.document.fileName === fileName;
-  });
-  if (!editor) {
-    return;
-  }
-  editor.setDecorations(emptyDecorationType, existingHighlight.decorations);
-}
-
-function findHighlighter(
-  lineNumber: number,
-  fileName: string
-): Highlighter | undefined {
-  return highlighters.find(highlighter => {
-    return (
-      highlighter.lineNumber === lineNumber &&
-      highlighter.editor.document.fileName === fileName
-    );
-  });
 }
 
 function getHighlightRange(lineNumber: string, doc: vscode.TextDocument) {

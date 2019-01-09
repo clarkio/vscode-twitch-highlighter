@@ -25,10 +25,6 @@
         "title": "Twitch Highlighter: Unhighlight All"
       },
       {
-        "command": "twitchhighlighter.unhighlightSpecific",
-        "title": "Twitch Highlighter: Unhighlight by File and Line"
-      },
-      {
         "command": "twitchhighlighter.startChat",
         "title": "Twitch Highlighter: Start Listening to Chat"
       },
