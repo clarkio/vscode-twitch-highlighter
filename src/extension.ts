@@ -1,23 +1,23 @@
-"use strict";
+'use strict';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from "vscode";
-import * as path from "path";
+import * as vscode from 'vscode';
+import * as path from 'path';
 import {
   LanguageClient,
   LanguageClientOptions,
   ServerOptions,
   TransportKind
-} from "vscode-languageclient/lib/main";
-import { Highlighter } from "./highlighter";
+} from 'vscode-languageclient/lib/main';
+import { Highlighter } from './highlighter';
 
 const highlightDecorationType = vscode.window.createTextEditorDecorationType({
-  backgroundColor: "green",
-  border: "2px solid white"
+  backgroundColor: 'green',
+  border: '2px solid white'
 });
 const emptyDecorationType = vscode.window.createTextEditorDecorationType({
-  backgroundColor: "transparent",
-  border: "0px"
+  backgroundColor: 'transparent',
+  border: '0px'
 });
 let highlighters: Array<Highlighter> = new Array<Highlighter>();
 let client: LanguageClient;
@@ -25,8 +25,8 @@ let client: LanguageClient;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-  let serverModule = context.asAbsolutePath(path.join("out", "server.js"));
-  let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
+  let serverModule = context.asAbsolutePath(path.join('out', 'server.js'));
+  let debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
   let serverOptions: ServerOptions = {
     run: { module: serverModule, transport: TransportKind.ipc },
     debug: {
@@ -37,57 +37,57 @@ export function activate(context: vscode.ExtensionContext) {
   };
   let clientOptions: LanguageClientOptions = {
     // Register the server for everything
-    documentSelector: ["*"],
+    documentSelector: ['*'],
     synchronize: {
       // Synchronize the setting section to the server
-      configurationSection: "twitchhighlighter"
+      configurationSection: 'twitchhighlighter'
     }
   };
 
   client = new LanguageClient(
-    "twitchChatLanguageServer",
+    'twitchChatLanguageServer',
     serverOptions,
     clientOptions
   );
 
   client.onReady().then(() => {
-    client.onNotification("connected", () => {
-      console.log("We have begun connection with the Language Server");
+    client.onNotification('connected', () => {
+      console.log('We have begun connection with the Language Server');
       vscode.window.showInformationMessage(
-        "Twitch Highlighter: Chat Listener Connected."
+        'Twitch Highlighter: Chat Listener Connected.'
       );
     });
-    client.onNotification("error", (params: any) => {
-      console.log("Error handling in extension from client has been reached");
+    client.onNotification('error', (params: any) => {
+      console.log('Error handling in extension from client has been reached');
       vscode.window.showErrorMessage(params.message);
     });
-    client.onNotification("exited", () => {
+    client.onNotification('exited', () => {
       vscode.window.showInformationMessage(
-        "Twitch Highlighter: Chat Listener Stopped"
+        'Twitch Highlighter: Chat Listener Stopped'
       );
     });
-    client.onNotification("highlight", (params: any) => {
+    client.onNotification('highlight', (params: any) => {
       console.log(params);
       executeHighlight(params.line, params.twitchUser);
     });
-    client.onNotification("unhighlight", (params: any) => {
+    client.onNotification('unhighlight', (params: any) => {
       console.log(params);
       removeHighlight(params.line, params.fileName);
     });
   });
 
   // #region command registrations
-  registerCommand(context, "twitchhighlighter.startChat", startChatHandler);
-  registerCommand(context, "twitchhighlighter.stopChat", stopChatHandler);
-  registerCommand(context, "twitchhighlighter.highlight", highlightHandler);
+  registerCommand(context, 'twitchhighlighter.startChat', startChatHandler);
+  registerCommand(context, 'twitchhighlighter.stopChat', stopChatHandler);
+  registerCommand(context, 'twitchhighlighter.highlight', highlightHandler);
   registerCommand(
     context,
-    "twitchhighlighter.unhighlightSpecific",
+    'twitchhighlighter.unhighlightSpecific',
     unhighlightSpecificHandler
   );
   registerCommand(
     context,
-    "twitchhighlighter.unhighlightAll",
+    'twitchhighlighter.unhighlightAll',
     unhighlightAllHandler
   );
   // #endregion command registrations
@@ -95,7 +95,7 @@ export function activate(context: vscode.ExtensionContext) {
   // #region command handlers
   function highlightHandler() {
     vscode.window
-      .showInputBox({ prompt: "Enter a line number" })
+      .showInputBox({ prompt: 'Enter a line number' })
       .then(executeHighlight);
   }
 
@@ -110,18 +110,18 @@ export function activate(context: vscode.ExtensionContext) {
     let fileName: string;
 
     vscode.window
-      .showInputBox({ prompt: "Enter a file name" })
+      .showInputBox({ prompt: 'Enter a file name' })
       .then(submittedFileName => {
         if (!submittedFileName) {
-          vscode.window.showErrorMessage("A file name was not entered.");
+          vscode.window.showErrorMessage('A file name was not entered.');
           return;
         }
         fileName = submittedFileName;
         vscode.window
-          .showInputBox({ prompt: "Enter a line number" })
+          .showInputBox({ prompt: 'Enter a line number' })
           .then(lineNumber => {
             if (!lineNumber || isNaN(+lineNumber)) {
-              vscode.window.showErrorMessage("Line number was not a number");
+              vscode.window.showErrorMessage('Line number was not a number');
               return;
             }
             const lineNumberInt = parseInt(lineNumber);
@@ -132,14 +132,14 @@ export function activate(context: vscode.ExtensionContext) {
 
   function startChatHandler() {
     vscode.window.showInformationMessage(
-      "Twitch Highlighter: Starting Chat Listener..."
+      'Twitch Highlighter: Starting Chat Listener...'
     );
     client.start();
   }
 
   function stopChatHandler() {
     vscode.window.showInformationMessage(
-      "Twitch Highlighter: Stopping Chat Listener..."
+      'Twitch Highlighter: Stopping Chat Listener...'
     );
     client.stop();
   }
@@ -147,7 +147,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   function executeHighlight(
     lineNumber: string | undefined,
-    twitchUser: string = "self"
+    twitchUser: string = 'self'
   ) {
     if (!lineNumber || isNaN(+lineNumber)) {
       return;
@@ -161,7 +161,10 @@ export function activate(context: vscode.ExtensionContext) {
         return highlighter.editor.document.fileName === doc.fileName;
       });
       let range = getHighlightRange(lineNumber, doc);
-      let decoration = { range, hoverMessage: `From @${twitchUser}` };
+      let decoration = {
+        range,
+        hoverMessage: `From @${twitchUser === 'self' ? 'You' : twitchUser}`
+      };
       addHighlight(
         existingHighlighter,
         decoration,
@@ -187,7 +190,7 @@ export function activate(context: vscode.ExtensionContext) {
       if (existingHighlight) {
         activeEditor.setDecorations(
           highlightDecorationType,
-          existingHighlight.decorations
+          existingHighlight.
         );
       }
     }
@@ -224,29 +227,40 @@ function removeHighlight(lineNumber: number, fileName: string) {
   fileName = `c:\\Users\\bc\\dev\\_repos\\simple-node-server\\${fileName}`;
   const existingHighlight = findHighlighter(lineNumber, fileName);
   if (!existingHighlight) {
-    // TODO: remove log before going to production
-    console.log(`Highlight not found so can't unhighlight the line from file`);
+    console.warn(`Highlight not found so can't unhighlight the line from file`);
     return;
   }
+  console.log(existingHighlight.decorations);
+  const existingRange = getHighlightRange(
+    lineNumber.toString(),
+    existingHighlight.editor.document
+  );
+  const indexToRemove = existingHighlight.decorations.indexOf({
+    range: existingRange
+  });
+  existingHighlight.decorations.splice(indexToRemove, 1);
   const highlightIndex = highlighters.indexOf(existingHighlight);
   highlighters.splice(highlightIndex, 1);
   console.log(existingHighlight.decorations);
+  existingHighlight.editor.setDecorations(
+    highlightDecorationType,
+    existingHighlight.decorations
+  );
   // As BraveCobra suggests we should maybe look into using the workspace.textDocuments instead.
   // then use the findFile function to see if we can find it
   // if it doesn't exist or maybe there's multiple we can prompt the user in chat or a whisper to specify which one (see csharpfritz stream from 01/04/2018 for an example in visual studio)
-  console.log(vscode.workspace.textDocuments);
-  let matchedFile;
-  vscode.workspace.findFiles(`**/${fileName}`).then(foundFiles => {
-    console.log("here are the found files!!!");
-    console.log(foundFiles);
-  });
-  const editor = vscode.window.visibleTextEditors.find(editor => {
-    return editor.document.fileName === fileName;
-  });
-  if (!editor) {
-    return;
-  }
-  editor.setDecorations(emptyDecorationType, existingHighlight.decorations);
+  // console.log(vscode.workspace.textDocuments);
+  // vscode.workspace.findFiles(`**/${fileName}`).then(foundFiles => {
+  //   console.log("here are the found files!!!");
+  //   console.log(foundFiles);
+  // });
+  // const editor = vscode.window.visibleTextEditors.find(editor => {
+  //   return editor.document.fileName === fileName;
+  // });
+  // if (!editor) {
+  //   return;
+  // }
+  // editor.setDecorations(emptyDecorationType, existingHighlight.decorations);
 }
 
 function findHighlighter(
