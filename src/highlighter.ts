@@ -27,11 +27,14 @@ export class Highlighter {
     const highlightIndex = this.highlights.findIndex(highlight => {
       return highlight.lineNumber === lineNumber;
     });
-    return this.highlights.splice(highlightIndex, 1);
+    if (highlightIndex > -1) {
+      return this.highlights.splice(highlightIndex, 1);
+    }
+    return this.highlights;
   }
 }
 
-class Highlight {
+export class Highlight {
   constructor(
     public decoration: { range: vscode.Range },
     public lineNumber: number,

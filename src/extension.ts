@@ -9,15 +9,11 @@ import {
   ServerOptions,
   TransportKind
 } from 'vscode-languageclient/lib/main';
-import { Highlighter } from './highlighter';
+import { Highlighter, Highlight } from './highlighter';
 
 const highlightDecorationType = vscode.window.createTextEditorDecorationType({
   backgroundColor: 'green',
   border: '2px solid white'
-});
-const emptyDecorationType = vscode.window.createTextEditorDecorationType({
-  backgroundColor: 'transparent',
-  border: '0px'
 });
 let highlighters: Array<Highlighter> = new Array<Highlighter>();
 let client: LanguageClient;
@@ -190,7 +186,7 @@ export function activate(context: vscode.ExtensionContext) {
       if (existingHighlight) {
         activeEditor.setDecorations(
           highlightDecorationType,
-          existingHighlight.
+          existingHighlight.getAllDecorations()
         );
       }
     }
@@ -209,42 +205,39 @@ function addHighlight(
     // We have a new decoration for a highlight with decorations already in a file
     // Add the decoration (a.k.a. style range) to the existing highlight's decoration array
     // Reapply decoration type for updated decorations array in this highlight
-    existingHighlighter.decorations.push(decoration);
+    existingHighlighter.addHighlight(
+      new Highlight(decoration, lineNumber, twitchUser)
+    );
     editor.setDecorations(
       highlightDecorationType,
-      existingHighlighter.decorations
+      existingHighlighter.getAllDecorations()
     );
   } else {
     // todo: for removing a highlight, find by linenumber, then update highlights array and editor.document decorations (how do we reset a single decoration and not all decorations?)
-    highlighters.push(
-      new Highlighter([decoration], editor, lineNumber, twitchUser)
+    const highlighter = new Highlighter(editor, [
+      new Highlight(decoration, lineNumber, twitchUser)
+    ]);
+    highlighters.push(highlighter);
+    editor.setDecorations(
+      highlightDecorationType,
+      highlighter.getAllDecorations()
     );
-    editor.setDecorations(highlightDecorationType, [decoration]);
   }
 }
 
 function removeHighlight(lineNumber: number, fileName: string) {
-  fileName = `c:\\Users\\bc\\dev\\_repos\\simple-node-server\\${fileName}`;
-  const existingHighlight = findHighlighter(lineNumber, fileName);
+  // fileName = `c:\\Users\\bc\\dev\\_repos\\simple-node-server\\${fileName}`;
+  fileName = `/Users/bc/dev/_repos/simple-node-server/${fileName}`;
+  const existingHighlight = findHighlighter(fileName);
   if (!existingHighlight) {
     console.warn(`Highlight not found so can't unhighlight the line from file`);
     return;
   }
-  console.log(existingHighlight.decorations);
-  const existingRange = getHighlightRange(
-    lineNumber.toString(),
-    existingHighlight.editor.document
-  );
-  const indexToRemove = existingHighlight.decorations.indexOf({
-    range: existingRange
-  });
-  existingHighlight.decorations.splice(indexToRemove, 1);
-  const highlightIndex = highlighters.indexOf(existingHighlight);
-  highlighters.splice(highlightIndex, 1);
-  console.log(existingHighlight.decorations);
+  console.log(existingHighlight.getAllDecorations());
+  existingHighlight.removeDecoration(lineNumber);
   existingHighlight.editor.setDecorations(
     highlightDecorationType,
-    existingHighlight.decorations
+    existingHighlight.getAllDecorations()
   );
   // As BraveCobra suggests we should maybe look into using the workspace.textDocuments instead.
   // then use the findFile function to see if we can find it
@@ -263,15 +256,9 @@ function removeHighlight(lineNumber: number, fileName: string) {
   // editor.setDecorations(emptyDecorationType, existingHighlight.decorations);
 }
 
-function findHighlighter(
-  lineNumber: number,
-  fileName: string
-): Highlighter | undefined {
+function findHighlighter(fileName: string): Highlighter | undefined {
   return highlighters.find(highlighter => {
-    return (
-      highlighter.lineNumber === lineNumber &&
-      highlighter.editor.document.fileName === fileName
-    );
+    return highlighter.editor.document.fileName === fileName;
   });
 }
 
