@@ -53,12 +53,10 @@ export function activate(context: vscode.ExtensionContext) {
         'Twitch Highlighter: Chat Listener Connected.'
       );
     });
-
     client.onNotification('error', (params: any) => {
       console.debug('Error handling in extension from client has been reached');
       vscode.window.showErrorMessage(params.message);
     });
-
     client.onNotification('exited', () => {
       vscode.window.showInformationMessage(
         'Twitch Highlighter: Chat Listener Stopped'
