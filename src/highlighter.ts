@@ -23,6 +23,12 @@ export class Highlighter {
     });
   }
 
+  getPickerDetails() {
+    return this.highlights.map(highlight => {
+      return `${this.editor.document.fileName}, ${highlight.lineNumber}`;
+    });
+  }
+
   removeDecoration(lineNumber: number): Highlight[] {
     const highlightIndex = this.highlights.findIndex(highlight => {
       return highlight.lineNumber === lineNumber;

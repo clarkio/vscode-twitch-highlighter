@@ -103,27 +103,32 @@ export function activate(context: vscode.ExtensionContext) {
   }
 
   function unhighlightSpecificHandler() {
-    let fileName: string;
+    if (highlighters.length === 0) {
+      vscode.window.showInformationMessage(
+        'There are no highlights to unhighlight'
+      );
+    }
+    const pickerOptions = highlighters.map(highlighter => {
+      return [...highlighter.getPickerDetails()];
+    });
 
-    vscode.window
-      .showInputBox({ prompt: 'Enter a file name' })
-      .then(submittedFileName => {
-        if (!submittedFileName) {
-          vscode.window.showErrorMessage('A file name was not entered.');
-          return;
-        }
-        fileName = submittedFileName;
-        vscode.window
-          .showInputBox({ prompt: 'Enter a line number' })
-          .then(lineNumber => {
-            if (!lineNumber || isNaN(+lineNumber)) {
-              vscode.window.showErrorMessage('Line number was not a number');
-              return;
-            }
-            const lineNumberInt = parseInt(lineNumber);
-            removeHighlight(lineNumberInt, fileName);
-          });
-      });
+    vscode.window.showQuickPick(pickerOptions).then(pickedOption => {
+      if (!pickedOption) {
+        vscode.window.showErrorMessage('A valid highlight was not selected.');
+        return;
+      }
+
+      // vscode.window
+      //   .showInputBox({ prompt: 'Enter a line number' })
+      //   .then(lineNumber => {
+      //     if (!lineNumber || isNaN(+lineNumber)) {
+      //       vscode.window.showErrorMessage('Line number was not a number');
+      //       return;
+      //     }
+      //     const lineNumberInt = parseInt(lineNumber);
+      //     removeHighlight(lineNumberInt, pickedFile);
+      //   });
+    });
   }
 
   function startChatHandler() {
@@ -213,7 +218,6 @@ function addHighlight(
       existingHighlighter.getAllDecorations()
     );
   } else {
-    // todo: for removing a highlight, find by linenumber, then update highlights array and editor.document decorations (how do we reset a single decoration and not all decorations?)
     const highlighter = new Highlighter(editor, [
       new Highlight(decoration, lineNumber, twitchUser)
     ]);
@@ -226,34 +230,18 @@ function addHighlight(
 }
 
 function removeHighlight(lineNumber: number, fileName: string) {
-  // fileName = `c:\\Users\\bc\\dev\\_repos\\simple-node-server\\${fileName}`;
-  fileName = `/Users/bc/dev/_repos/simple-node-server/${fileName}`;
   const existingHighlight = findHighlighter(fileName);
+  console.log(vscode.workspace.textDocuments);
   if (!existingHighlight) {
     console.warn(`Highlight not found so can't unhighlight the line from file`);
     return;
   }
-  console.log(existingHighlight.getAllDecorations());
+
   existingHighlight.removeDecoration(lineNumber);
   existingHighlight.editor.setDecorations(
     highlightDecorationType,
     existingHighlight.getAllDecorations()
   );
-  // As BraveCobra suggests we should maybe look into using the workspace.textDocuments instead.
-  // then use the findFile function to see if we can find it
-  // if it doesn't exist or maybe there's multiple we can prompt the user in chat or a whisper to specify which one (see csharpfritz stream from 01/04/2018 for an example in visual studio)
-  // console.log(vscode.workspace.textDocuments);
-  // vscode.workspace.findFiles(`**/${fileName}`).then(foundFiles => {
-  //   console.log("here are the found files!!!");
-  //   console.log(foundFiles);
-  // });
-  // const editor = vscode.window.visibleTextEditors.find(editor => {
-  //   return editor.document.fileName === fileName;
-  // });
-  // if (!editor) {
-  //   return;
-  // }
-  // editor.setDecorations(emptyDecorationType, existingHighlight.decorations);
 }
 
 function findHighlighter(fileName: string): Highlighter | undefined {
