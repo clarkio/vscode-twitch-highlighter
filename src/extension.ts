@@ -48,13 +48,13 @@ export function activate(context: vscode.ExtensionContext) {
 
   client.onReady().then(() => {
     client.onNotification('connected', () => {
-      console.log('We have begun connection with the Language Server');
+      console.debug('We have begun connection with the Language Server');
       vscode.window.showInformationMessage(
         'Twitch Highlighter: Chat Listener Connected.'
       );
     });
     client.onNotification('error', (params: any) => {
-      console.log('Error handling in extension from client has been reached');
+      console.debug('Error handling in extension from client has been reached');
       vscode.window.showErrorMessage(params.message);
     });
     client.onNotification('exited', () => {
@@ -63,11 +63,11 @@ export function activate(context: vscode.ExtensionContext) {
       );
     });
     client.onNotification('highlight', (params: any) => {
-      console.log(params);
+      console.debug(params);
       executeHighlight(params.line, params.twitchUser);
     });
     client.onNotification('unhighlight', (params: any) => {
-      console.log(params);
+      console.debug(params);
       removeHighlight(params.line, params.fileName);
     });
   });
@@ -224,7 +224,6 @@ function addHighlight(
 
 function removeHighlight(lineNumber: number, fileName: string) {
   const existingHighlight = findHighlighter(fileName);
-  console.log(vscode.workspace.textDocuments);
   if (!existingHighlight) {
     console.warn(`Highlight not found so can't unhighlight the line from file`);
     return;
