@@ -108,8 +108,9 @@ export function activate(context: vscode.ExtensionContext) {
         'There are no highlights to unhighlight'
       );
     }
-    const pickerOptions = highlighters.map(highlighter => {
-      return [...highlighter.getPickerDetails()];
+    let pickerOptions: Array<string> = new Array<string>();
+    highlighters.forEach(highlighter => {
+      pickerOptions = [...pickerOptions, ...highlighter.getPickerDetails()];
     });
 
     vscode.window.showQuickPick(pickerOptions).then(pickedOption => {
@@ -117,17 +118,9 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showErrorMessage('A valid highlight was not selected.');
         return;
       }
-
-      // vscode.window
-      //   .showInputBox({ prompt: 'Enter a line number' })
-      //   .then(lineNumber => {
-      //     if (!lineNumber || isNaN(+lineNumber)) {
-      //       vscode.window.showErrorMessage('Line number was not a number');
-      //       return;
-      //     }
-      //     const lineNumberInt = parseInt(lineNumber);
-      //     removeHighlight(lineNumberInt, pickedFile);
-      //   });
+      const [pickedFile, lineNumber] = pickedOption.split(', ');
+      const lineNumberInt = parseInt(lineNumber);
+      removeHighlight(lineNumberInt, pickedFile);
     });
   }
 
