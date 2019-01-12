@@ -62,13 +62,51 @@ export function activate(context: vscode.ExtensionContext) {
         'Twitch Highlighter: Chat Listener Stopped'
       );
     });
+
     client.onNotification('highlight', (params: any) => {
       console.debug(params);
+      if (!params.line) {
+        vscode.window.showWarningMessage(
+          'A line number was not provided to unhighlight'
+        );
+        return;
+      }
       executeHighlight(params.line, params.twitchUser);
     });
+
     client.onNotification('unhighlight', (params: any) => {
       console.debug(params);
-      removeHighlight(params.line, params.fileName);
+      if (!params.line) {
+        vscode.window.showWarningMessage(
+          'A line number was not provided to unhighlight'
+        );
+        return;
+      }
+      let currentDocumentFilename: string;
+      if (!params.fileName) {
+        // We need to assume it's for the currently opened file
+        let editor = vscode.window.activeTextEditor;
+        if (!editor) {
+          vscode.window.showWarningMessage(
+            'A file was not found to perform the unhighlight'
+          );
+          return;
+        }
+        currentDocumentFilename = editor.document.fileName;
+      } else {
+        const existingHighlighter = highlighters.find(highlighter => {
+          return highlighter.editor.document.fileName.includes(params.fileName);
+        });
+        if (!existingHighlighter) {
+          vscode.window.showWarningMessage(
+            'A file was not found to perform the unhighlight'
+          );
+          return;
+        }
+        currentDocumentFilename = existingHighlighter.editor.document.fileName;
+      }
+      const lineNumberInt = parseInt(params.line);
+      removeHighlight(lineNumberInt, currentDocumentFilename);
     });
   });
 

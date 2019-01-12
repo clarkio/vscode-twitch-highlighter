@@ -6,9 +6,9 @@ import {
   InitializeResult,
   InitializedParams,
   TextDocumentSyncKind
-} from "vscode-languageserver/lib/main";
+} from 'vscode-languageserver/lib/main';
 
-const tmi = require("twitch-js");
+const tmi = require('twitch-js');
 const ttvChatClient = new tmi.client(getTwitchChatOptions());
 
 let connection: IConnection = createConnection(
@@ -30,23 +30,23 @@ connection.onInitialize(
 );
 
 connection.onInitialized((params: InitializedParams) => {
-  connection.sendNotification("connected");
+  connection.sendNotification('connected');
   if (ttvChatClient) {
     ttvChatClient
       .connect(getTwitchChatOptions())
       .then(() => {
-        ttvChatClient.on("join", onTtvChatJoin);
-        ttvChatClient.on("chat", onTtvChatMessage);
+        ttvChatClient.on('join', onTtvChatJoin);
+        ttvChatClient.on('chat', onTtvChatMessage);
       })
       .catch((error: any) => {
-        console.error("There was an issue connecting to Twitch");
+        console.error('There was an issue connecting to Twitch');
         console.error(error);
-        connection.sendNotification("error", {
-          message: "Server started but failed to connect to Twitch chat"
+        connection.sendNotification('error', {
+          message: 'Server started but failed to connect to Twitch chat'
         });
       });
   } else {
-    console.error("Twitch Chat Client not initialized");
+    console.error('Twitch Chat Client not initialized');
   }
 });
 
@@ -57,17 +57,19 @@ function onTtvChatJoin(channel: string, username: string, self: boolean) {
 }
 
 function onTtvChatMessage(channel: string, user: any, message: string) {
-  const userName = user["display-name"] || user.username;
+  const userName = user['display-name'] || user.username;
   const lowerCaseMessage = message.toLowerCase();
   console.log(`${userName}: ${lowerCaseMessage}`);
   parseMessage(userName, message);
 }
 
-let highlighterCommands = ["!line", "!highlight"];
+let highlighterCommands = ['!line', '!highlight'];
 let highlightCommandUsed: string;
 
 function parseMessage(userName: string, message: string) {
   message = message.toLocaleLowerCase();
+  // Note: as RamblingGeek suggested might want to look into
+  // using switch instead of if/else for better performance
   if (!isHighlightCommand(message)) {
     return;
   }
@@ -76,29 +78,34 @@ function parseMessage(userName: string, message: string) {
     .slice(highlightCommandUsed.length)
     .trim();
 
-  const messageParts = chatMessageRawAction.split(" ");
+  const messageParts = chatMessageRawAction.split(' ');
   if (messageParts.length === 0) {
     // Example: !<command>
     return;
   }
 
+  const notificationType = messageParts[0].startsWith('!')
+    ? 'unhighlight'
+    : 'highlight';
+  const lineNumber = messageParts[0].replace('!', '');
   // Possible formats to support:
   // !<command> <line number> <default to currently open file>
   // !<command> <line number> <filename.ts>
   // !<command> <line number> <filename.ts>
   // !<command> <line number> <filename.ts>
   // !<command> <line number> <filename.ts>
+  // !<command> !8 <filename.ts>
   if (messageParts.length === 1) {
     // Example: !<command> <line number>
-    connection.sendNotification("highlight", {
-      line: messageParts[0],
+    connection.sendNotification(notificationType, {
+      line: lineNumber,
       twitchUser: userName
     });
   } else {
     // Format Example: !<command> <line number> <filename.ts>
     // Other Example: !<command> <line number> <filename.ts> <color>
-    connection.sendNotification("highlight", {
-      line: messageParts[0],
+    connection.sendNotification(notificationType, {
+      line: lineNumber,
       filename: messageParts[1],
       twitchUser: userName
     });
@@ -109,7 +116,7 @@ function isHighlightCommand(message: string) {
   return highlighterCommands.some(
     (command: string): boolean => {
       const comparison = message.startsWith(command.toLowerCase());
-      highlightCommandUsed = comparison ? command : "";
+      highlightCommandUsed = comparison ? command : '';
       return comparison;
     }
   );
@@ -130,7 +137,7 @@ interface TwitchHighlighterSettings {
   port: number;
 }
 connection.onShutdown(() => {
-  connection.sendNotification("exited");
+  connection.sendNotification('exited');
 
   ttvChatClient
     .disconnect()
@@ -151,26 +158,28 @@ connection.onDidChangeConfiguration(change => {
 
 let settings: TwitchHighlighterSettings = {
   connect: true,
-  server: "irc.chat.twitch.tv",
+  server: 'irc.chat.twitch.tv',
   port: 80,
-  password: "",
-  nickname: "clarkio",
-  channel: "#clarkio",
-  command: ":highlight"
+  password: '',
+  nickname: 'clarkio',
+  channel: '#clarkio',
+  command: ':highlight'
 };
 
+// #region hide this for now
 function getTwitchChatOptions() {
   return {
-    channels: ["<your channel>"],
+    channels: ['<your channel>'],
     connection: {
       reconnect: true
     },
     identity: {
-      password: "<your app password>"
+      password: '<your password>'
     },
     options: {
-      clientId: "<your app client id>",
+      clientId: '<your clientId>',
       debug: false
     }
   };
 }
+// #endregion
