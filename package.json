@@ -11,7 +11,11 @@
   ],
   "activationEvents": [
     "onCommand:twitchhighlighter.highlight",
-    "onCommand:twitchhighlighter.startChat"
+    "onCommand:twitchhighlighter.startChat",
+    "onCommand:twitchhighlighter.setTwitchClientId",
+    "onCommand:twitchhighlighter.removeTwitchClientId",
+    "onCommand:twitchhighlighter.setTwitchPassword",
+    "onCommand:twitchhighlighter.removeTwitchPassword"
   ],
   "main": "./out/extension",
   "contributes": {
@@ -35,6 +39,22 @@
       {
         "command": "twitchhighlighter.stopChat",
         "title": "Twitch Highlighter: Stop Listening to Chat"
+      },
+      {
+        "command": "twitchhighlighter.setTwitchClientId",
+        "title": "Twitch Highlighter: Set Client Id"
+      },
+      {
+        "command": "twitchhighlighter.removeTwitchClientId",
+        "title": "Twitch Highlighter: Remove Client Id"
+      },
+      {
+        "command": "twitchhighlighter.setTwitchPassword",
+        "title": "Twitch Highlighter: Set Password"        
+      },
+      {
+        "command": "twitchhighlighter.removeTwitchPassword",
+        "title": "Twitch Highlighter: Remove Password"
       }
     ]
   },
@@ -56,11 +76,6 @@
         "type": "number",
         "default": 6667,
         "description": "The IRC server port."
-      },
-      "twitchhighlighter.password": {
-        "type": "string",
-        "default": "",
-        "description": "IRC server password. Leave empty if not needed. For Twitch generate a token here: http://www.twitchapps.com/tmi"
       },
       "twitchhighlighter.nickname": {
         "type": "string",
@@ -88,6 +103,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^2.2.42",
+    "@types/keytar": "^4.0.1",
     "@types/node": "^8.10.39",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1"

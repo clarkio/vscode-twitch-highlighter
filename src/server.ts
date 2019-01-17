@@ -7,9 +7,12 @@ import {
   InitializedParams,
   TextDocumentSyncKind
 } from 'vscode-languageserver/lib/main';
+import { TwitchCredentials } from './credentialManager';
 
 const tmi = require('twitch-js');
-const ttvChatClient = new tmi.client(getTwitchChatOptions());
+
+let twitchCredentials: TwitchCredentials;
+let ttvChatClient: any;
 
 let connection: IConnection = createConnection(
   new IPCMessageReader(process),
@@ -20,6 +23,8 @@ let connection: IConnection = createConnection(
 connection.onInitialize(
   (params): InitializeResult => {
     // workspaceRoot = params.rootPath;
+    twitchCredentials = params.initializationOptions.TwitchCredentials;
+    ttvChatClient = new tmi.client(getTwitchChatOptions());
 
     return {
       capabilities: {
@@ -174,10 +179,10 @@ function getTwitchChatOptions() {
       reconnect: true
     },
     identity: {
-      password: '<your password>'
+      password: twitchCredentials.password
     },
     options: {
-      clientId: '<your clientId>',
+      clientId: twitchCredentials.clientId,
       debug: false
     }
   };
