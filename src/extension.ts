@@ -11,7 +11,7 @@ import {
 } from 'vscode-languageclient/lib/main';
 import { Highlighter, Highlight } from './highlighter';
 import CredentialManager, { TwitchCredentials } from './credentialManager';
-import { TwitchHighlighterDataProvider } from './twitchhighlighterTreeView';
+import { TwitchHighlighterDataProvider, HighlighterNode } from './twitchhighlighterTreeView';
 
 const highlightDecorationType = vscode.window.createTextEditorDecorationType({
   backgroundColor: 'green',
@@ -130,6 +130,17 @@ export function activate(context: vscode.ExtensionContext) {
       });
   });
   context.subscriptions.push(gotoHighlightCommand);
+
+  const removeHighlightCommand = vscode.commands.registerCommand('twitchhighlighter.removeHighlight', (highlighterNode: HighlighterNode) => {
+    const highlightsToRemove = Array<{lineNumber: number, fileName: string}>();
+    highlighterNode.highlights.map(highlight => highlightsToRemove.push({
+      lineNumber: highlight.lineNumber,
+      fileName: `${vscode.workspace.rootPath}\\${highlighterNode.fileName}`
+    }));
+    highlightsToRemove.forEach(v => removeHighlight(v.lineNumber, v.fileName, true));
+    twitchhighlighterTreeView.refresh();
+  });
+  context.subscriptions.push(removeHighlightCommand);
 
   // #region command registrations
   registerCommand(context, 'twitchhighlighter.refreshTreeView', () => twitchhighlighterTreeView.refresh());
@@ -368,7 +379,7 @@ function addHighlight(
   twitchhighlighterTreeView.refresh();
 }
 
-function removeHighlight(lineNumber: number, fileName: string) {
+function removeHighlight(lineNumber: number, fileName: string, deferRefresh?: boolean) {
   const existingHighlight = findHighlighter(fileName);
   if (!existingHighlight) {
     console.warn(`Highlight not found so can't unhighlight the line from file`);
@@ -380,7 +391,9 @@ function removeHighlight(lineNumber: number, fileName: string) {
     highlightDecorationType,
     existingHighlight.getAllDecorations()
   );
-  twitchhighlighterTreeView.refresh();
+  if (!deferRefresh) {
+    twitchhighlighterTreeView.refresh();
+  }
 }
 
 function findHighlighter(fileName: string): Highlighter | undefined {

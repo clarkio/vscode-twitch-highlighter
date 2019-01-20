@@ -15,7 +15,8 @@
     "onCommand:twitchhighlighter.setTwitchClientId",
     "onCommand:twitchhighlighter.removeTwitchClientId",
     "onCommand:twitchhighlighter.setTwitchPassword",
-    "onCommand:twitchhighlighter.removeTwitchPassword"
+    "onCommand:twitchhighlighter.removeTwitchPassword",
+    "onView:twitchHighlighterTreeView"
   ],
   "main": "./out/extension",
   "contributes": {
@@ -63,6 +64,10 @@
       {
         "command": "twitchhighlighter.gotoHighlight",
         "title": "Goto Highlight"
+      },
+      {
+        "command": "twitchhighlighter.removeHighlight",
+        "title": "Remove Highlight"
       }
     ],
     "menus": {
@@ -74,6 +79,10 @@
         {
           "command": "twitchhighlighter.gotoHighlight",
           "when": "false"
+        },
+        {
+          "command": "twitchhighlighter.removeHighlight",
+          "when": "false"
         }
       ],
       "view/title": [
@@ -81,6 +90,13 @@
           "command": "twitchhighlighter.refreshTreeView",
           "when": "view == twitchHighlighterTreeView",
           "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "twitchhighlighter.removeHighlight",
+          "when": "view == twitchHighlighterTreeView",
+          "group": "edit"
         }
       ]
     },
