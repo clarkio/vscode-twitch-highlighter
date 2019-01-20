@@ -11,6 +11,7 @@ import {
 } from 'vscode-languageclient/lib/main';
 import { Highlighter, Highlight } from './highlighter';
 import CredentialManager, { TwitchCredentials } from './credentialManager';
+import { TwitchHighlighterDataProvider } from './twitchhighlighterTreeView';
 
 const highlightDecorationType = vscode.window.createTextEditorDecorationType({
   backgroundColor: 'green',
@@ -18,6 +19,7 @@ const highlightDecorationType = vscode.window.createTextEditorDecorationType({
 });
 let highlighters: Array<Highlighter> = new Array<Highlighter>();
 let client: LanguageClient;
+let twitchhighlighterTreeView: TwitchHighlighterDataProvider;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -110,6 +112,11 @@ export function activate(context: vscode.ExtensionContext) {
       removeHighlight(lineNumberInt, currentDocumentFilename);
     });
   });
+
+  twitchhighlighterTreeView = new TwitchHighlighterDataProvider(() => {
+    return highlighters;
+  }, vscode.workspace.rootPath);
+  vscode.window.registerTreeDataProvider('twitchHighlighterTreeView', twitchhighlighterTreeView);
 
   // #region command registrations
   registerCommand(context, 'twitchhighlighter.setTwitchClientId', setTwitchClientIdHandler);
@@ -207,6 +214,7 @@ export function activate(context: vscode.ExtensionContext) {
       visibleEditor.setDecorations(highlightDecorationType, []);
     });
     highlighters = new Array<Highlighter>();
+    twitchhighlighterTreeView.refresh();
   }
 
   function unhighlightSpecificHandler() {
@@ -343,6 +351,7 @@ function addHighlight(
       highlighter.getAllDecorations()
     );
   }
+  twitchhighlighterTreeView.refresh();
 }
 
 function removeHighlight(lineNumber: number, fileName: string) {
@@ -357,6 +366,7 @@ function removeHighlight(lineNumber: number, fileName: string) {
     highlightDecorationType,
     existingHighlight.getAllDecorations()
   );
+  twitchhighlighterTreeView.refresh();
 }
 
 function findHighlighter(fileName: string): Highlighter | undefined {

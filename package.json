@@ -57,6 +57,24 @@
         "title": "Twitch Highlighter: Remove Password"
       }
     ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "twitchhighlighter-explorer",
+          "icon": "resources/twitchhighlighterIcon.svg",
+          "title": "Twitch Highlighter"
+        }
+      ]
+    },
+    "views": {
+      "twitchhighlighter-explorer": [
+        {
+          "id": "twitchHighlighterTreeView",
+          "name": "Highlights",
+          "when": "config.twitchhighlighter.shouldConnect"
+        }
+      ]
+    },
     "configuration": {
       "type": "object",
       "title": "Twitch Highlighter Configuration",
