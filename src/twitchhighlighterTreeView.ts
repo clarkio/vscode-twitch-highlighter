@@ -53,7 +53,11 @@ export class HighlighterNode extends vscode.TreeItem {
       if (existingNode) {
         existingNode.highlights.push(highlight);
       } else {
-        childrenNodes.push(new HighlighterNode(label, [highlight]));
+        childrenNodes.push(new HighlighterNode(label, [highlight], undefined, {
+          "command": "twitchhighlighter.gotoHighlight",
+          title: "",
+          arguments: [highlight.lineNumber, this.label]
+        }));
       }
     });
     return childrenNodes;

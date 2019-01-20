@@ -118,7 +118,21 @@ export function activate(context: vscode.ExtensionContext) {
   }, vscode.workspace.rootPath);
   vscode.window.registerTreeDataProvider('twitchHighlighterTreeView', twitchhighlighterTreeView);
 
+  const gotoHighlightCommand = vscode.commands.registerCommand('twitchhighlighter.gotoHighlight', (lineNumber: number, fileName: string) => {
+    vscode.workspace.findFiles(fileName)
+      .then((results) => {
+        vscode.workspace.openTextDocument(results[0])
+          .then((document) => {
+            vscode.window.showTextDocument(document).then((editor) => {
+              editor.revealRange(document.lineAt(lineNumber).range);
+            });
+          });
+      });
+  });
+  context.subscriptions.push(gotoHighlightCommand);
+
   // #region command registrations
+  registerCommand(context, 'twitchhighlighter.refreshTreeView', () => twitchhighlighterTreeView.refresh());
   registerCommand(context, 'twitchhighlighter.setTwitchClientId', setTwitchClientIdHandler);
   registerCommand(context, 'twitchhighlighter.removeTwitchClientId', removeTwitchClientIdHandler);
   registerCommand(context, 'twitchhighlighter.setTwitchPassword', setTwitchPasswordHandler);

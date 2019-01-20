@@ -59,12 +59,20 @@
       {
         "command": "twitchhighlighter.refreshTreeView",
         "title": "Refresh"
+      },
+      {
+        "command": "twitchhighlighter.gotoHighlight",
+        "title": "Goto Highlight"
       }
     ],
     "menus": {
       "commandPalette": [
         {
           "command": "twitchhighlighter.refreshTreeView",
+          "when": "false"
+        },
+        {
+          "command": "twitchhighlighter.gotoHighlight",
           "when": "false"
         }
       ],
