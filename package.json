@@ -55,8 +55,27 @@
       {
         "command": "twitchhighlighter.removeTwitchPassword",
         "title": "Twitch Highlighter: Remove Password"
+      },
+      {
+        "command": "twitchhighlighter.refreshTreeView",
+        "title": "Refresh"
       }
     ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "twitchhighlighter.refreshTreeView",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "twitchhighlighter.refreshTreeView",
+          "when": "view == twitchHighlighterTreeView",
+          "group": "navigation"
+        }
+      ]
+    },
     "viewsContainers": {
       "activitybar": [
         {
