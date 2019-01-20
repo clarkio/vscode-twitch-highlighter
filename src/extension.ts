@@ -16,8 +16,11 @@ const highlightDecorationType = vscode.window.createTextEditorDecorationType({
   backgroundColor: 'green',
   border: '2px solid white'
 });
+const twitchhighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)
 let highlighters: Array<Highlighter> = new Array<Highlighter>();
 let client: LanguageClient;
+let twitchhighlighterStatusBar: vscode.StatusBarItem;
+let isConnected: boolean = false;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -53,6 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.window.showInformationMessage(
         'Twitch Highlighter: Chat Listener Connected.'
       );
+      setConnectionStatus(true);
     });
     client.onNotification('error', (params: any) => {
       console.debug('Error handling in extension from client has been reached');
@@ -62,6 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.window.showInformationMessage(
         'Twitch Highlighter: Chat Listener Stopped'
       );
+      setConnectionStatus(false);
     });
 
     client.onNotification('highlight', (params: any) => {
@@ -118,6 +123,7 @@ export function activate(context: vscode.ExtensionContext) {
   registerCommand(context, 'twitchhighlighter.removeTwitchPassword', removeTwitchPasswordHandler);
   registerCommand(context, 'twitchhighlighter.startChat', startChatHandler);
   registerCommand(context, 'twitchhighlighter.stopChat', stopChatHandler);
+  registerCommand(context, 'twitchhighlighter.toggleChat', toggleChatHandler);
   registerCommand(context, 'twitchhighlighter.highlight', highlightHandler);
   registerCommand(
     context,
@@ -232,6 +238,7 @@ export function activate(context: vscode.ExtensionContext) {
   }
 
   function startChatHandler() {
+    setConnectionStatus(false, true);
     console.log('Retrieving twitch credentials');
     CredentialManager.getTwitchCredentials()
     .then((creds: TwitchCredentials | null) => {
@@ -260,7 +267,28 @@ export function activate(context: vscode.ExtensionContext) {
     );
     client.stop();
   }
+
+  function toggleChatHandler() {
+    if (!isConnected) {
+      startChatHandler();
+    } else {
+      stopChatHandler();
+    }
+  }
   // #endregion command handlers
+
+  function setConnectionStatus(connectionStatus: boolean, isConnecting?: boolean) {
+    isConnected = connectionStatus;
+    if (connectionStatus) {
+      twitchhighlighterStatusBar.text = `${twitchhighlighterStatusBarIcon} Connected`;
+    } else {
+      if (isConnecting) {
+        twitchhighlighterStatusBar.text = `${twitchhighlighterStatusBarIcon} Connecting...`;
+      } else {
+        twitchhighlighterStatusBar.text = `${twitchhighlighterStatusBarIcon} Disconnected`;
+      }
+    }
+  }
 
   function executeHighlight(
     lineNumber: string | undefined,
@@ -313,6 +341,15 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
   context.subscriptions.push(activeTextEditorListener);
+
+  // Creates the status bar toggle button
+  twitchhighlighterStatusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right);
+  twitchhighlighterStatusBar.command = 'twitchhighlighter.toggleChat';
+  twitchhighlighterStatusBar.tooltip = `Twitch Highlighter Extension`;
+  context.subscriptions.push(twitchhighlighterStatusBar);
+  
+  setConnectionStatus(false);
+  twitchhighlighterStatusBar.show();
 }
 
 function addHighlight(
