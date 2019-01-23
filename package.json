@@ -10,13 +10,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:twitchhighlighter.highlight",
-    "onCommand:twitchhighlighter.startChat",
-    "onCommand:twitchhighlighter.setTwitchClientId",
-    "onCommand:twitchhighlighter.removeTwitchClientId",
-    "onCommand:twitchhighlighter.setTwitchPassword",
-    "onCommand:twitchhighlighter.removeTwitchPassword",
-    "onView:twitchHighlighterTreeView"
+    "*"
   ],
   "main": "./out/extension",
   "contributes": {
@@ -40,6 +34,10 @@
       {
         "command": "twitchhighlighter.stopChat",
         "title": "Twitch Highlighter: Stop Listening to Chat"
+      },
+      {
+        "command": "twitchhighlighter.toggleChat",
+        "title": "Twitch Highlighter: Toggle Listening to Chat"
       },
       {
         "command": "twitchhighlighter.setTwitchClientId",
@@ -72,6 +70,10 @@
     ],
     "menus": {
       "commandPalette": [
+        {          
+          "when": "false",
+          "command": "twitchhighlighter.toggleChat"
+        },
         {
           "command": "twitchhighlighter.refreshTreeView",
           "when": "false"
@@ -115,7 +117,7 @@
           "id": "twitchHighlighterTreeView",
           "name": "Highlights",
           "when": "config.twitchhighlighter.shouldConnect"
-        }
+        }        
       ]
     },
     "configuration": {

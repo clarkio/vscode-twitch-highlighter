@@ -130,17 +130,6 @@ function isHighlightCommand(message: string) {
 //   twitchhighlighter: TwitchHighlighterSettings;
 // }
 
-// These are the example settings we defined in the client's package.json
-// file
-interface TwitchHighlighterSettings {
-  connect: boolean;
-  server: string;
-  nickname: string;
-  channel: string;
-  password: string;
-  command: string;
-  port: number;
-}
 connection.onShutdown(() => {
   connection.sendNotification('exited');
 
@@ -160,16 +149,6 @@ connection.onDidChangeConfiguration(change => {
   // disconnect();
   // disconnect = connectIRC(settings);
 });
-
-let settings: TwitchHighlighterSettings = {
-  connect: true,
-  server: 'irc.chat.twitch.tv',
-  port: 80,
-  password: '',
-  nickname: 'clarkio',
-  channel: '#clarkio',
-  command: ':highlight'
-};
 
 // #region hide this for now
 function getTwitchChatOptions() {
