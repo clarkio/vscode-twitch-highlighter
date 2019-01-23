@@ -11,7 +11,10 @@ import {
 } from 'vscode-languageclient/lib/main';
 import { Highlighter, Highlight } from './highlighter';
 import CredentialManager, { TwitchCredentials } from './credentialManager';
-import { TwitchHighlighterDataProvider, HighlighterNode } from './twitchhighlighterTreeView';
+import {
+  TwitchHighlighterDataProvider,
+  HighlighterNode
+} from './twitchhighlighterTreeView';
 
 const highlightDecorationType = vscode.window.createTextEditorDecorationType({
   backgroundColor: 'green',
@@ -116,38 +119,71 @@ export function activate(context: vscode.ExtensionContext) {
   twitchhighlighterTreeView = new TwitchHighlighterDataProvider(() => {
     return highlighters;
   }, vscode.workspace.rootPath);
-  vscode.window.registerTreeDataProvider('twitchHighlighterTreeView', twitchhighlighterTreeView);
+  vscode.window.registerTreeDataProvider(
+    'twitchHighlighterTreeView',
+    twitchhighlighterTreeView
+  );
 
-  const gotoHighlightCommand = vscode.commands.registerCommand('twitchhighlighter.gotoHighlight', (lineNumber: number, fileName: string) => {
-    vscode.workspace.findFiles(fileName)
-      .then((results) => {
-        vscode.workspace.openTextDocument(results[0])
-          .then((document) => {
-            vscode.window.showTextDocument(document).then((editor) => {
-              editor.revealRange(document.lineAt(lineNumber).range);
-            });
+  const gotoHighlightCommand = vscode.commands.registerCommand(
+    'twitchhighlighter.gotoHighlight',
+    (lineNumber: number, fileName: string) => {
+      vscode.workspace.findFiles(fileName).then(results => {
+        vscode.workspace.openTextDocument(results[0]).then(document => {
+          vscode.window.showTextDocument(document).then(editor => {
+            lineNumber = lineNumber < 3 ? 2 : lineNumber;
+            editor.revealRange(document.lineAt(lineNumber - 2).range);
           });
+        });
       });
-  });
+    }
+  );
   context.subscriptions.push(gotoHighlightCommand);
 
-  const removeHighlightCommand = vscode.commands.registerCommand('twitchhighlighter.removeHighlight', (highlighterNode: HighlighterNode) => {
-    const highlightsToRemove = Array<{lineNumber: number, fileName: string}>();
-    highlighterNode.highlights.map(highlight => highlightsToRemove.push({
-      lineNumber: highlight.lineNumber,
-      fileName: `${vscode.workspace.rootPath}\\${highlighterNode.fileName}`
-    }));
-    highlightsToRemove.forEach(v => removeHighlight(v.lineNumber, v.fileName, true));
-    twitchhighlighterTreeView.refresh();
-  });
+  const removeHighlightCommand = vscode.commands.registerCommand(
+    'twitchhighlighter.removeHighlight',
+    (highlighterNode: HighlighterNode) => {
+      const highlightsToRemove = Array<{
+        lineNumber: number;
+        fileName: string;
+      }>();
+      highlighterNode.highlights.map(highlight =>
+        highlightsToRemove.push({
+          lineNumber: highlight.lineNumber,
+          fileName: `${vscode.workspace.rootPath}\\${highlighterNode.fileName}`
+        })
+      );
+      highlightsToRemove.forEach(v =>
+        removeHighlight(v.lineNumber, v.fileName, true)
+      );
+      twitchhighlighterTreeView.refresh();
+    }
+  );
   context.subscriptions.push(removeHighlightCommand);
 
   // #region command registrations
-  registerCommand(context, 'twitchhighlighter.refreshTreeView', () => twitchhighlighterTreeView.refresh());
-  registerCommand(context, 'twitchhighlighter.setTwitchClientId', setTwitchClientIdHandler);
-  registerCommand(context, 'twitchhighlighter.removeTwitchClientId', removeTwitchClientIdHandler);
-  registerCommand(context, 'twitchhighlighter.setTwitchPassword', setTwitchPasswordHandler);
-  registerCommand(context, 'twitchhighlighter.removeTwitchPassword', removeTwitchPasswordHandler);
+  registerCommand(context, 'twitchhighlighter.refreshTreeView', () =>
+    twitchhighlighterTreeView.refresh()
+  );
+  registerCommand(
+    context,
+    'twitchhighlighter.setTwitchClientId',
+    setTwitchClientIdHandler
+  );
+  registerCommand(
+    context,
+    'twitchhighlighter.removeTwitchClientId',
+    removeTwitchClientIdHandler
+  );
+  registerCommand(
+    context,
+    'twitchhighlighter.setTwitchPassword',
+    setTwitchPasswordHandler
+  );
+  registerCommand(
+    context,
+    'twitchhighlighter.removeTwitchPassword',
+    removeTwitchPasswordHandler
+  );
   registerCommand(context, 'twitchhighlighter.startChat', startChatHandler);
   registerCommand(context, 'twitchhighlighter.stopChat', stopChatHandler);
   registerCommand(context, 'twitchhighlighter.highlight', highlightHandler);
@@ -166,7 +202,11 @@ export function activate(context: vscode.ExtensionContext) {
   // #region command handlers
   function setTwitchClientIdHandler() {
     vscode.window
-      .showInputBox({ prompt: 'Enter Twitch Client Id. Register your app here: https://glass.twitch.tv/console/apps/create', password: true })
+      .showInputBox({
+        prompt:
+          'Enter Twitch Client Id. Register your app here: https://glass.twitch.tv/console/apps/create',
+        password: true
+      })
       .then(setTwitchClientIdWithCredentialManager);
   }
 
@@ -174,11 +214,17 @@ export function activate(context: vscode.ExtensionContext) {
     if (value !== undefined) {
       CredentialManager.setClientId(value)
         .then(() => {
-          vscode.window.showInformationMessage(`Twitch Client Id saved in your keychain`);
+          vscode.window.showInformationMessage(
+            `Twitch Client Id saved in your keychain`
+          );
         })
-        .catch((reason) => {
-          vscode.window.showInformationMessage(`Failed to set Twitch Chat Client Id`);
-          console.error('An error occured while saving your password to the keychain');
+        .catch(reason => {
+          vscode.window.showInformationMessage(
+            `Failed to set Twitch Chat Client Id`
+          );
+          console.error(
+            'An error occured while saving your password to the keychain'
+          );
           console.error(reason);
         });
     }
@@ -187,18 +233,28 @@ export function activate(context: vscode.ExtensionContext) {
   function removeTwitchClientIdHandler() {
     CredentialManager.deleteTwitchClientId()
       .then((value: boolean) => {
-        vscode.window.showInformationMessage(`Twitch Chat Client Id removed from your keychain`);
+        vscode.window.showInformationMessage(
+          `Twitch Chat Client Id removed from your keychain`
+        );
       })
-      .catch((reason) => {
-        vscode.window.showInformationMessage(`Failed to remove the Twitch Chat Client Id`);
-        console.error('An error occured while removing your Client Id from the keychain');
+      .catch(reason => {
+        vscode.window.showInformationMessage(
+          `Failed to remove the Twitch Chat Client Id`
+        );
+        console.error(
+          'An error occured while removing your Client Id from the keychain'
+        );
         console.error(reason);
       });
   }
 
   function setTwitchPasswordHandler() {
     vscode.window
-      .showInputBox({ prompt: 'Enter Twitch token. Generate a token here: http://www.twitchapps.com/tmi', password: true })
+      .showInputBox({
+        prompt:
+          'Enter Twitch token. Generate a token here: http://www.twitchapps.com/tmi',
+        password: true
+      })
       .then(setPasswordWithCredentialManager);
   }
 
@@ -206,24 +262,36 @@ export function activate(context: vscode.ExtensionContext) {
     if (value !== undefined) {
       CredentialManager.setPassword(value)
         .then(() => {
-          vscode.window.showInformationMessage(`Twitch Chat password saved in your keychain`);
+          vscode.window.showInformationMessage(
+            `Twitch Chat password saved in your keychain`
+          );
         })
-        .catch((reason) => {
-          vscode.window.showInformationMessage(`Failed to set Twitch Chat password`);
-          console.error('An error occured while saving your password to the keychain');
+        .catch(reason => {
+          vscode.window.showInformationMessage(
+            `Failed to set Twitch Chat password`
+          );
+          console.error(
+            'An error occured while saving your password to the keychain'
+          );
           console.error(reason);
         });
     }
   }
-  
+
   function removeTwitchPasswordHandler() {
     CredentialManager.deletePassword()
       .then((value: boolean) => {
-        vscode.window.showInformationMessage(`Twitch Chat password removed from your keychain`);
+        vscode.window.showInformationMessage(
+          `Twitch Chat password removed from your keychain`
+        );
       })
-      .catch((reason) => {
-        vscode.window.showInformationMessage(`Failed to remove the Twitch Chat password`);
-        console.error('An error occured while removing your password from the keychain');
+      .catch(reason => {
+        vscode.window.showInformationMessage(
+          `Failed to remove the Twitch Chat password`
+        );
+        console.error(
+          'An error occured while removing your password from the keychain'
+        );
         console.error(reason);
       });
   }
@@ -267,24 +335,28 @@ export function activate(context: vscode.ExtensionContext) {
   function startChatHandler() {
     console.log('Retrieving twitch credentials');
     CredentialManager.getTwitchCredentials()
-    .then((creds: TwitchCredentials | null) => {
-      if(creds === null) {
-        vscode.window.showInformationMessage('Missing Twitch credentials. Cannot start Chat client');
-        return;
-      }
-      vscode.window.showInformationMessage(
-        'Twitch Highlighter: Starting Chat Listener...'
-      );
-      client.clientOptions.initializationOptions ={
-        TwitchCredentials: creds
-      };
-      client.start();
-    })
-    .catch((reason) => {
-      vscode.window.showErrorMessage('Could not start the chat client');
-      console.error('An error occured while gathering the Twitch credentials');
-      console.error(reason);
-    });
+      .then((creds: TwitchCredentials | null) => {
+        if (creds === null) {
+          vscode.window.showInformationMessage(
+            'Missing Twitch credentials. Cannot start Chat client'
+          );
+          return;
+        }
+        vscode.window.showInformationMessage(
+          'Twitch Highlighter: Starting Chat Listener...'
+        );
+        client.clientOptions.initializationOptions = {
+          TwitchCredentials: creds
+        };
+        client.start();
+      })
+      .catch(reason => {
+        vscode.window.showErrorMessage('Could not start the chat client');
+        console.error(
+          'An error occured while gathering the Twitch credentials'
+        );
+        console.error(reason);
+      });
   }
 
   function stopChatHandler() {
@@ -379,7 +451,11 @@ function addHighlight(
   twitchhighlighterTreeView.refresh();
 }
 
-function removeHighlight(lineNumber: number, fileName: string, deferRefresh?: boolean) {
+function removeHighlight(
+  lineNumber: number,
+  fileName: string,
+  deferRefresh?: boolean
+) {
   const existingHighlight = findHighlighter(fileName);
   if (!existingHighlight) {
     console.warn(`Highlight not found so can't unhighlight the line from file`);
