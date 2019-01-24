@@ -497,19 +497,11 @@ export function activate(context: vscode.ExtensionContext) {
       existingHighlighter.addHighlight(
         new Highlight(decoration, lineNumber, twitchUser)
       );
-      // editor.setDecorations(
-      //   highlightDecorationType,
-      //   existingHighlighter.getAllDecorations()
-      // );
     } else {
       const highlighter = new Highlighter(editor, [
         new Highlight(decoration, lineNumber, twitchUser)
       ]);
       highlighters.push(highlighter);
-      // editor.setDecorations(
-      //   highlightDecorationType,
-      //   highlighter.getAllDecorations()
-      // );
     }
     triggerUpdateDecorations();
     twitchhighlighterTreeView.refresh();
@@ -529,10 +521,6 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     existingHighlight.removeDecoration(lineNumber);
-    // existingHighlight.editor.setDecorations(
-    //   highlightDecorationType,
-    //   existingHighlight.getAllDecorations()
-    // );
     triggerUpdateDecorations();
     if (!deferRefresh) {
       twitchhighlighterTreeView.refresh();
