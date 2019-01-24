@@ -54,13 +54,69 @@
       {
         "command": "twitchhighlighter.removeTwitchPassword",
         "title": "Twitch Highlighter: Remove Password"
+      },
+      {
+        "command": "twitchhighlighter.refreshTreeView",
+        "title": "Refresh"
+      },
+      {
+        "command": "twitchhighlighter.gotoHighlight",
+        "title": "Goto Highlight"
+      },
+      {
+        "command": "twitchhighlighter.removeHighlight",
+        "title": "Remove Highlight"
       }
     ],
     "menus": {
       "commandPalette": [
-        {
+        {          
           "when": "false",
           "command": "twitchhighlighter.toggleChat"
+        },
+        {
+          "command": "twitchhighlighter.refreshTreeView",
+          "when": "false"
+        },
+        {
+          "command": "twitchhighlighter.gotoHighlight",
+          "when": "false"
+        },
+        {
+          "command": "twitchhighlighter.removeHighlight",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "twitchhighlighter.refreshTreeView",
+          "when": "view == twitchHighlighterTreeView",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "twitchhighlighter.removeHighlight",
+          "when": "view == twitchHighlighterTreeView",
+          "group": "edit"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "twitchhighlighter-explorer",
+          "icon": "resources/twitchhighlighterIcon.svg",
+          "title": "Twitch Highlighter"
+        }
+      ]
+    },
+    "views": {
+      "twitchhighlighter-explorer": [
+        {
+          "id": "twitchHighlighterTreeView",
+          "name": "Highlights",
+          "when": "config.twitchhighlighter.shouldConnect"
         }        
       ]
     },
