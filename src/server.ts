@@ -7,25 +7,17 @@ import {
   InitializedParams,
   TextDocumentSyncKind
 } from 'vscode-languageserver/lib/main';
-import { TwitchCredentials } from './credentialManager';
 
-const tmi = require('twitch-js');
+import * as tmi from 'twitch-js';
 
-let twitchCredentials: TwitchCredentials;
-let ttvChatClient: any;
-
+let ttvChatClient: tmi.Client;
 let connection: IConnection = createConnection(
   new IPCMessageReader(process),
   new IPCMessageWriter(process)
 );
-// let workspaceRoot: string | null | undefined;
 
 connection.onInitialize(
   (params): InitializeResult => {
-    // workspaceRoot = params.rootPath;
-    twitchCredentials = params.initializationOptions.TwitchCredentials;
-    ttvChatClient = new tmi.client(getTwitchChatOptions());
-
     return {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.None
@@ -33,29 +25,50 @@ connection.onInitialize(
     };
   }
 );
-
 connection.onInitialized((params: InitializedParams) => {
-  connection.sendNotification('connected');
-  if (ttvChatClient) {
-    ttvChatClient
-      .connect(getTwitchChatOptions())
+  // connection.sendNotification('connected');
+});
+
+connection.listen();
+
+connection.onRequest('stopchat', () => {
+  if (!ttvChatClient) {
+    return false;
+  }
+  return ttvChatClient
+    .disconnect()
+    .then(() => {
+      return true;
+    })
+    .catch(error => {
+      console.error(error);
+      throw error;
+    });
+});
+
+connection.onRequest(
+  'startchat',
+  (params: {
+    channels: string[];
+    clientId: string;
+    username: string;
+    password: string;
+  }) => {
+    ttvChatClient = new tmi.client(getTwitchChatOptions(params));
+    return ttvChatClient
+      .connect()
       .then(() => {
         ttvChatClient.on('join', onTtvChatJoin);
         ttvChatClient.on('chat', onTtvChatMessage);
+        return;
       })
       .catch((error: any) => {
         console.error('There was an issue connecting to Twitch');
         console.error(error);
-        connection.sendNotification('error', {
-          message: 'Server started but failed to connect to Twitch chat'
-        });
+        throw error;
       });
-  } else {
-    console.error('Twitch Chat Client not initialized');
   }
-});
-
-connection.listen();
+);
 
 function onTtvChatJoin(channel: string, username: string, self: boolean) {
   console.log(`[${username} has JOINED the channel ${channel}`);
@@ -126,9 +139,6 @@ function isHighlightCommand(message: string) {
     }
   );
 }
-// interface Settings {
-//   twitchhighlighter: TwitchHighlighterSettings;
-// }
 
 connection.onShutdown(() => {
   connection.sendNotification('exited');
@@ -144,26 +154,18 @@ connection.onShutdown(() => {
     });
 });
 
-connection.onDidChangeConfiguration(change => {
-  // console.log("Configuration change detected. Reconnecting...");
-  // disconnect();
-  // disconnect = connectIRC(settings);
-});
-
-// #region hide this for now
-function getTwitchChatOptions() {
+function getTwitchChatOptions(params: any) {
   return {
-    channels: ['<your channel>'],
+    channels: params.channels,
     connection: {
       reconnect: true
     },
     identity: {
-      password: twitchCredentials.password
+      password: params.password
     },
     options: {
-      clientId: twitchCredentials.clientId,
+      clientId: params.clientId,
       debug: false
     }
   };
 }
-// #endregion
