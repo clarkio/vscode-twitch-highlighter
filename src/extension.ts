@@ -56,13 +56,6 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   client.onReady().then(() => {
-    client.onNotification('connected', () => {
-      console.debug('We have begun connection with the Language Server');
-      vscode.window.showInformationMessage(
-        'Twitch Highlighter: Chat Listener Connected.'
-      );
-      setConnectionStatus(true);
-    });
     client.onNotification('error', (params: any) => {
       console.debug('Error handling in extension from client has been reached');
       vscode.window.showErrorMessage(params.message);
@@ -120,6 +113,9 @@ export function activate(context: vscode.ExtensionContext) {
       removeHighlight(lineNumberInt, currentDocumentFilename);
     });
   });
+
+  const runningClient = client.start();
+  context.subscriptions.push(runningClient);
 
   twitchhighlighterTreeView = new TwitchHighlighterDataProvider(() => {
     return highlighters;
@@ -340,7 +336,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   function startChatHandler() {
     setConnectionStatus(false, true);
-    console.log('Retrieving twitch credentials');
+    console.debug('Retrieving twitch credentials');
     CredentialManager.getTwitchCredentials()
       .then((creds: TwitchCredentials | null) => {
         if (creds === null) {
@@ -349,13 +345,30 @@ export function activate(context: vscode.ExtensionContext) {
           );
           return;
         }
+
         vscode.window.showInformationMessage(
           'Twitch Highlighter: Starting Chat Listener...'
         );
-        client.clientOptions.initializationOptions = {
-          TwitchCredentials: creds
+
+        // TODO: get channels and username from extension specific settings
+        const chatParams = {
+          channels: ['clarkio'],
+          clientId: creds.clientId,
+          username: 'clarkio',
+          password: creds.password
         };
-        client.start();
+        client.sendRequest('startchat', chatParams).then(
+          result => {
+            console.debug('We have begun connection with the Language Server');
+            vscode.window.showInformationMessage(
+              'Twitch Highlighter: Chat Listener Connected.'
+            );
+            setConnectionStatus(true);
+          },
+          () => {
+            vscode.window.showErrorMessage('Unable to connect to Twitch Chat');
+          }
+        );
       })
       .catch(reason => {
         vscode.window.showErrorMessage('Could not start the chat client');
@@ -370,7 +383,25 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(
       'Twitch Highlighter: Stopping Chat Listener...'
     );
-    client.stop();
+    client.sendRequest('stopchat').then(
+      result => {
+        if (!result) {
+          vscode.window.showErrorMessage(
+            'Twitch Highlighter: Unable to stop listening to chat'
+          );
+          return;
+        }
+        setConnectionStatus(false);
+        vscode.window.showInformationMessage(
+          'Twitch Highlighter: Stopped Listening to Chat'
+        );
+      },
+      error => {
+        vscode.window.showErrorMessage(
+          'Twitch Highlighter: Unable to stop listening to chat'
+        );
+      }
+    );
   }
 
   function toggleChatHandler() {
@@ -428,7 +459,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
   }
 
-  // Listen for active text editor so we don't lose any existing highlights
+  // Listen for active text editor or document so we don't lose any existing highlights
   let activeEditor = vscode.window.activeTextEditor;
   if (activeEditor) {
     triggerUpdateDecorations();

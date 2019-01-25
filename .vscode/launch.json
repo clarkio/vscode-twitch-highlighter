@@ -18,6 +18,15 @@
       "preLaunchTask": "npm: watch"
     },
     {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to Server",
+      "port": 6009,
+      "timeout": 10000,
+      "restart": true,
+      "outFiles": ["${workspaceRoot}/out/**/*.js"]
+    },
+    {
       "name": "Extension Tests",
       "type": "extensionHost",
       "request": "launch",
@@ -28,6 +37,12 @@
       ],
       "outFiles": ["${workspaceFolder}/out/test/**/*.js"],
       "preLaunchTask": "npm: watch"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Extension + LSP",
+      "configurations": ["Attach to Server", "Extension"]
     }
   ]
 }
