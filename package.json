@@ -115,8 +115,7 @@
       "twitchhighlighter-explorer": [
         {
           "id": "twitchHighlighterTreeView",
-          "name": "Highlights",
-          "when": "config.twitchhighlighter.shouldConnect"
+          "name": "Highlights"
         }        
       ]
     },
@@ -124,35 +123,10 @@
       "type": "object",
       "title": "Twitch Highlighter Configuration",
       "properties": {
-        "twitchhighlighter.shouldConnect": {
-          "type": "boolean",
-          "default": true,
-          "description": "Whether to connect to Twitch Chat."
-        },
-        "twitchhighlighter.server": {
-          "type": "string",
-          "default": "irc.chat.twitch.tv",
-          "description": "The Twitch server to connect to."
-        },
-        "twitchhighlighter.port": {
-          "type": "number",
-          "default": 6667,
-          "description": "The IRC server port."
-        },
-        "twitchhighlighter.nickname": {
-          "type": "string",
-          "default": "clarkio",
-          "description": "IRC nickname. For Twitch, use your username."
-        },
-        "twitchhighlighter.channel": {
-          "type": "string",
-          "default": "#clarkio",
+        "twitchhighlighter.channels": {
+          "type": "array",
+          "default": [],
           "description": "The channel name. For Twitch, use #${your channel/user name}."
-        },
-        "twitchhighlighter.command": {
-          "type": "string",
-          "default": ":highlight",
-          "description": "The command for your viewers to use."
         }
       }
     }

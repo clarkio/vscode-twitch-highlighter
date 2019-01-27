@@ -31,10 +31,13 @@ connection.onInitialized((params: InitializedParams) => {
 
 connection.listen();
 
-connection.onRequest('stopchat', () => {
+connection.onRequest('stopchat', async () => {
   if (!ttvChatClient) {
     return false;
   }
+  await ttvChatClient.channels.forEach((channel: string) => {
+    ttvChatClient.say(channel, "Highlighter has left the building...");
+  });
   return ttvChatClient
     .disconnect()
     .then(() => {
@@ -48,13 +51,8 @@ connection.onRequest('stopchat', () => {
 
 connection.onRequest(
   'startchat',
-  (params: {
-    channels: string[];
-    clientId: string;
-    username: string;
-    password: string;
-  }) => {
-    ttvChatClient = new tmi.client(getTwitchChatOptions(params));
+  (params) => {
+    ttvChatClient = new tmi.Client(getTwitchChatOptions(params));
     return ttvChatClient
       .connect()
       .then(() => {
@@ -71,6 +69,9 @@ connection.onRequest(
 );
 
 function onTtvChatJoin(channel: string, username: string, self: boolean) {
+  if (self) {
+    ttvChatClient.say(channel, `Highlighter in the house!`);
+  }
   console.log(`[${username} has JOINED the channel ${channel}`);
 }
 
@@ -146,7 +147,7 @@ connection.onShutdown(() => {
   ttvChatClient
     .disconnect()
     .then(() => {
-      console.debug(`Successfully disconnected from the Twitch chat`);
+      console.log(`Successfully disconnected from the Twitch chat`);
     })
     .catch((error: any) => {
       console.error(`There was an error disconnecting from the Twitch chat`);
@@ -154,18 +155,19 @@ connection.onShutdown(() => {
     });
 });
 
-function getTwitchChatOptions(params: any) {
+function getTwitchChatOptions(params: any): tmi.ClientOptions {
   return {
     channels: params.channels,
     connection: {
       reconnect: true
     },
     identity: {
+      username: "do_not_change_me",
       password: params.password
     },
     options: {
       clientId: params.clientId,
-      debug: false
+      debug: true
     }
   };
 }

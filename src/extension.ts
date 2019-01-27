@@ -50,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   client = new LanguageClient(
-    'twitchChatLanguageServer',
+    'Twitch Chat Highlighter', // sets the name of the 'output' window in VSCode
     serverOptions,
     clientOptions
   );
@@ -202,34 +202,27 @@ export function activate(context: vscode.ExtensionContext) {
   // #endregion command registrations
 
   // #region command handlers
-  function setTwitchClientIdHandler() {
-    vscode.window
+  async function setTwitchClientIdHandler() {
+    const value = await vscode.window
       .showInputBox({
-        prompt:
-          'Enter Twitch Client Id. Register your app here: https://glass.twitch.tv/console/apps/create',
+        prompt: 'Enter Twitch Client Id. Register your app here: https://glass.twitch.tv/console/apps/create',
         password: true
-      })
-      .then(setTwitchClientIdWithCredentialManager);
+      });
+    await setTwitchClientIdWithCredentialManager(value);
   }
 
-  function setTwitchClientIdWithCredentialManager(value: string | undefined) {
+  async function setTwitchClientIdWithCredentialManager(value: string | undefined): Promise<void> {
     if (value !== undefined) {
-      CredentialManager.setClientId(value)
-        .then(() => {
-          vscode.window.showInformationMessage(
-            `Twitch Client Id saved in your keychain`
-          );
-        })
-        .catch(reason => {
-          vscode.window.showInformationMessage(
-            `Failed to set Twitch Chat Client Id`
-          );
-          console.error(
-            'An error occured while saving your password to the keychain'
-          );
+      try {
+        await CredentialManager.setClientId(value);
+        vscode.window.showInformationMessage(`Twitch Client Id saved in your keychain`);
+      }
+      catch (reason) {
+        vscode.window.showInformationMessage(`Failed to set Twitch Chat Client Id`);
+        console.error('An error occured while saving your password to the keychain');
           console.error(reason);
-        });
     }
+  }
   }
 
   function removeTwitchClientIdHandler() {
@@ -250,19 +243,18 @@ export function activate(context: vscode.ExtensionContext) {
       });
   }
 
-  function setTwitchPasswordHandler() {
-    vscode.window
+  async function setTwitchPasswordHandler() {
+    const value = await vscode.window
       .showInputBox({
-        prompt:
-          'Enter Twitch token. Generate a token here: http://www.twitchapps.com/tmi',
+        prompt: 'Enter Twitch token. Generate a token here: http://www.twitchapps.com/tmi',
         password: true
-      })
-      .then(setPasswordWithCredentialManager);
+      });
+    await setPasswordWithCredentialManager(value);
   }
 
-  function setPasswordWithCredentialManager(value: string | undefined) {
+  async function setPasswordWithCredentialManager(value: string | undefined) {
     if (value !== undefined) {
-      CredentialManager.setPassword(value)
+      await CredentialManager.setPassword(value)
         .then(() => {
           vscode.window.showInformationMessage(
             `Twitch Chat password saved in your keychain`
@@ -340,9 +332,19 @@ export function activate(context: vscode.ExtensionContext) {
     CredentialManager.getTwitchCredentials()
       .then((creds: TwitchCredentials | null) => {
         if (creds === null) {
+          setConnectionStatus(false, false);
           vscode.window.showInformationMessage(
-            'Missing Twitch credentials. Cannot start Chat client'
-          );
+            'Missing Twitch credentials. Cannot start Chat client', {
+              modal: true
+            }, "Set Credentials"
+          )
+          .then(async (action) => {
+            if (action) { // The user did not click the 'cancel' button.
+              await setTwitchClientIdHandler();
+              await setTwitchPasswordHandler();
+              startChatHandler();
+            }
+          });
           return;
         }
 
@@ -350,11 +352,12 @@ export function activate(context: vscode.ExtensionContext) {
           'Twitch Highlighter: Starting Chat Listener...'
         );
 
+        const configuration = vscode.workspace.getConfiguration('twitchhighlighter');
+
         // TODO: get channels and username from extension specific settings
         const chatParams = {
-          channels: ['clarkio'],
+          channels: configuration.get<string[]>('channels'),
           clientId: creds.clientId,
-          username: 'clarkio',
           password: creds.password
         };
         client.sendRequest('startchat', chatParams).then(
@@ -366,6 +369,7 @@ export function activate(context: vscode.ExtensionContext) {
             setConnectionStatus(true);
           },
           () => {
+            setConnectionStatus(false, false);
             vscode.window.showErrorMessage('Unable to connect to Twitch Chat');
           }
         );
