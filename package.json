@@ -127,6 +127,16 @@
           "type": "array",
           "default": [],
           "description": "The channel name. For Twitch, use #${your channel/user name}."
+        },
+        "twitchhighlighter.highlightColor": {
+          "type": "string",
+          "default": "green",
+          "description": "Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Alternatively a color from the color registry can be [referenced](#ThemeColor)"
+        },
+        "twitchhighlighter.highlightBorder": {
+          "type": "string",
+          "default": "2px solid white",
+          "description": "CSS styling property that will be applied to text enclosed by a decoration."
         }
       }
     }

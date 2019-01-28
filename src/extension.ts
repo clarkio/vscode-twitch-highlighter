@@ -16,10 +16,7 @@ import {
   HighlighterNode
 } from './twitchhighlighterTreeView';
 
-const highlightDecorationType = vscode.window.createTextEditorDecorationType({
-  backgroundColor: 'green',
-  border: '2px solid white'
-});
+let highlightDecorationType: vscode.TextEditorDecorationType;
 const twitchhighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)
 let highlighters: Array<Highlighter> = new Array<Highlighter>();
 let client: LanguageClient;
@@ -30,6 +27,14 @@ let isConnected: boolean = false;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+
+  setupDecoratorType();
+  vscode.workspace.onDidChangeConfiguration((e) => {
+    if (e.affectsConfiguration('twitchhighlighter')) {
+      setupDecoratorType();
+    }
+  });
+
   let serverModule = context.asAbsolutePath(path.join('out', 'server.js'));
   let debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
   let serverOptions: ServerOptions = {
@@ -57,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   client.onReady().then(() => {
     client.onNotification('error', (params: any) => {
-      console.debug('Error handling in extension from client has been reached');
+      console.log('Error handling in extension from client has been reached');
       vscode.window.showErrorMessage(params.message);
     });
     client.onNotification('exited', () => {
@@ -68,7 +73,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     client.onNotification('highlight', (params: any) => {
-      console.debug(params);
+      console.log(params);
       if (!params.line) {
         vscode.window.showWarningMessage(
           'A line number was not provided to unhighlight'
@@ -79,7 +84,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     client.onNotification('unhighlight', (params: any) => {
-      console.debug(params);
+      console.log(params);
       if (!params.line) {
         vscode.window.showWarningMessage(
           'A line number was not provided to unhighlight'
@@ -328,7 +333,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   function startChatHandler() {
     setConnectionStatus(false, true);
-    console.debug('Retrieving twitch credentials');
+    console.log('Retrieving twitch credentials');
     CredentialManager.getTwitchCredentials()
       .then((creds: TwitchCredentials | null) => {
         if (creds === null) {
@@ -362,7 +367,7 @@ export function activate(context: vscode.ExtensionContext) {
         };
         client.sendRequest('startchat', chatParams).then(
           result => {
-            console.debug('We have begun connection with the Language Server');
+            console.log('We have begun connection with the Language Server');
             vscode.window.showInformationMessage(
               'Twitch Highlighter: Chat Listener Connected.'
             );
@@ -597,4 +602,12 @@ function registerCommand(
 ) {
   let disposable = vscode.commands.registerCommand(name, handler);
   context.subscriptions.push(disposable);
+}
+
+function setupDecoratorType() {
+  const configuration = vscode.workspace.getConfiguration("twitchhighlighter");
+  highlightDecorationType = vscode.window.createTextEditorDecorationType({
+    backgroundColor: configuration.get<string>("highlightColor") || "green",
+    border: configuration.get<string>("highlightBorder") || "2px solid white"
+  });
 }

@@ -155,7 +155,11 @@ connection.onShutdown(() => {
     });
 });
 
-function getTwitchChatOptions(params: any): tmi.ClientOptions {
+function getTwitchChatOptions(params: {
+  channels: string[],
+  clientId: string,
+  password: string
+}): tmi.ClientOptions {
   return {
     channels: params.channels,
     connection: {
@@ -167,7 +171,7 @@ function getTwitchChatOptions(params: any): tmi.ClientOptions {
     },
     options: {
       clientId: params.clientId,
-      debug: true
+      debug: true /* True if you want DEBUG messages in your terminal; false otherwise */
     }
   };
 }
