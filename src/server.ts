@@ -10,6 +10,7 @@ import {
 
 import * as tmi from 'twitch-js';
 
+let botparams: { announce: boolean, joinMessage: string, leaveMessage: string };
 let ttvChatClient: tmi.Client;
 let connection: IConnection = createConnection(
   new IPCMessageReader(process),
@@ -35,9 +36,11 @@ connection.onRequest('stopchat', async () => {
   if (!ttvChatClient) {
     return false;
   }
-  await ttvChatClient.channels.forEach((channel: string) => {
-    ttvChatClient.say(channel, "Highlighter has left the building...");
-  });
+  if (botparams.announce && botparams.leaveMessage !== "") {
+    await ttvChatClient.channels.forEach((channel: string) => {
+      ttvChatClient.say(channel, botparams.leaveMessage);
+    });
+  }
   return ttvChatClient
     .disconnect()
     .then(() => {
@@ -52,6 +55,7 @@ connection.onRequest('stopchat', async () => {
 connection.onRequest(
   'startchat',
   (params) => {
+    botparams = { ...params };
     ttvChatClient = new tmi.Client(getTwitchChatOptions(params));
     return ttvChatClient
       .connect()
@@ -69,8 +73,8 @@ connection.onRequest(
 );
 
 function onTtvChatJoin(channel: string, username: string, self: boolean) {
-  if (self) {
-    ttvChatClient.say(channel, `Highlighter in the house!`);
+  if (self && botparams.announce && botparams.joinMessage !== "") {
+    ttvChatClient.say(channel, botparams.joinMessage);
   }
   console.log(`[${username} has JOINED the channel ${channel}`);
 }

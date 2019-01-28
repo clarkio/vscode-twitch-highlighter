@@ -363,7 +363,10 @@ export function activate(context: vscode.ExtensionContext) {
         const chatParams = {
           channels: configuration.get<string[]>('channels'),
           clientId: creds.clientId,
-          password: creds.password
+          password: creds.password,
+          announce: configuration.get<boolean>('announceBot') || false,
+          joinMessage: configuration.get<string>('joinMessage') || "",
+          leaveMessage: configuration.get<string>('leaveMessage') || ""
         };
         client.sendRequest('startchat', chatParams).then(
           result => {
