@@ -22,8 +22,8 @@ function getNodeModule<T>(moduleName: string): T | undefined {
 }
 
 export interface TwitchCredentials {
-  clientId: string;
-  password: string;
+  clientId: string | null;
+  password: string | null;
 }
 
 export class CredentialManager {
@@ -54,14 +54,10 @@ export class CredentialManager {
     }
     return false;
   }
-  public static getTwitchCredentials(): Promise<TwitchCredentials | null> {
-    return new Promise<TwitchCredentials | null>(async resolve => {
+  public static getTwitchCredentials(): Promise<TwitchCredentials> {
+    return new Promise<TwitchCredentials>(async resolve => {
       const clientId = await CredentialManager.getPassword(CredentialManager.clientIdIdentifier);
       const password = await CredentialManager.getPassword(CredentialManager.passwordIdentifier);
-      if (clientId === null || password === null) {
-        resolve(null);
-        return;
-      }
       const twitchCredential: TwitchCredentials = {
         clientId,
         password

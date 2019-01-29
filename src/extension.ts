@@ -207,13 +207,16 @@ export function activate(context: vscode.ExtensionContext) {
   // #endregion command registrations
 
   // #region command handlers
-  async function setTwitchClientIdHandler() {
+  async function setTwitchClientIdHandler(): Promise<boolean> {
     const value = await vscode.window
       .showInputBox({
         prompt: 'Enter Twitch Client Id. Register your app here: https://glass.twitch.tv/console/apps/create',
+        ignoreFocusOut: true,
         password: true
       });
+    if (value === undefined || value === null) { return false; }
     await setTwitchClientIdWithCredentialManager(value);
+    return true;
   }
 
   async function setTwitchClientIdWithCredentialManager(value: string | undefined): Promise<void> {
@@ -248,13 +251,16 @@ export function activate(context: vscode.ExtensionContext) {
       });
   }
 
-  async function setTwitchPasswordHandler() {
+  async function setTwitchPasswordHandler(): Promise<boolean> {
     const value = await vscode.window
       .showInputBox({
         prompt: 'Enter Twitch token. Generate a token here: http://www.twitchapps.com/tmi',
+        ignoreFocusOut: true,
         password: true
       });
+    if (value === undefined || value === null) { return false; }
     await setPasswordWithCredentialManager(value);
+    return true;
   }
 
   async function setPasswordWithCredentialManager(value: string | undefined) {
@@ -335,18 +341,19 @@ export function activate(context: vscode.ExtensionContext) {
     setConnectionStatus(false, true);
     console.log('Retrieving twitch credentials');
     CredentialManager.getTwitchCredentials()
-      .then((creds: TwitchCredentials | null) => {
-        if (creds === null) {
+      .then((creds: TwitchCredentials) => {
+        if (creds.clientId === null || creds.password === null) {
           setConnectionStatus(false, false);
           vscode.window.showInformationMessage(
-            'Missing Twitch credentials. Cannot start Chat client', {
-              modal: true
-            }, "Set Credentials"
+            'Missing Twitch credentials. Cannot start Chat client',
+            "Set Credentials"
           )
           .then(async (action) => {
             if (action) { // The user did not click the 'cancel' button.
-              await setTwitchClientIdHandler();
-              await setTwitchPasswordHandler();
+              // Set the clientId when null, if the result is false (i.e. user cancelled) then cancel the connection
+              if (creds.clientId === null && !await setTwitchClientIdHandler()) { return; }
+              // Set the password when null, if the result is false (i.e. user cancelled) then cancel the connection
+              if (creds.password === null && !await setTwitchPasswordHandler()) { return; }
               startChatHandler();
             }
           });
