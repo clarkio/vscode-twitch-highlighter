@@ -445,6 +445,16 @@ export function activate(context: vscode.ExtensionContext) {
         return highlighter.editor.document.fileName === doc.fileName;
       });
       let range = getHighlightRange(lineNumber, doc);
+
+      // Do not allow a highlight on an empty line.
+      if (range.isEmpty) {
+        /**
+         * TODO: Maybe whisper to the end-user that the line requested is empty.
+         * Although whispers aren't guarenteed to reach the end-user.
+         */
+        return;
+      }
+
       let decoration = {
         range,
         hoverMessage: `From @${twitchUser === 'self' ? 'You' : twitchUser}`
