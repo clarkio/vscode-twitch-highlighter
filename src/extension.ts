@@ -444,6 +444,13 @@ export function activate(context: vscode.ExtensionContext) {
       let existingHighlighter = highlighters.find(highlighter => {
         return highlighter.editor.document.fileName === doc.fileName;
       });
+      
+      // Do not highlight a line already requested by the same user.
+      if (existingHighlighter && 
+          existingHighlighter.highlights.filter(h => h.twitchUser === twitchUser && h.lineNumber === lineNumberInt).length > 0) {
+        return;
+      }
+      
       let range = getHighlightRange(lineNumber, doc);
       let decoration = {
         range,
