@@ -10,7 +10,7 @@ import {
 
 import * as tmi from 'twitch-js';
 
-let botparams: { announce: boolean, joinMessage: string, leaveMessage: string };
+let botparams: { announce: boolean; joinMessage: string; leaveMessage: string };
 let ttvChatClient: tmi.Client;
 let connection: IConnection = createConnection(
   new IPCMessageReader(process),
@@ -25,8 +25,7 @@ connection.onInitialize(
       }
     };
   }
-);
-connection.onInitialized((params: InitializedParams) => {
+);connection.onInitialized((params: InitializedParams) => {
   // connection.sendNotification('connected');
 });
 
@@ -36,7 +35,7 @@ connection.onRequest('stopchat', async () => {
   if (!ttvChatClient) {
     return false;
   }
-  if (botparams.announce && botparams.leaveMessage !== "") {
+  if (botparams.announce && botparams.leaveMessage !== '') {
     await ttvChatClient.channels.forEach((channel: string) => {
       ttvChatClient.say(channel, botparams.leaveMessage);
     });
@@ -52,28 +51,25 @@ connection.onRequest('stopchat', async () => {
     });
 });
 
-connection.onRequest(
-  'startchat',
-  (params) => {
-    botparams = { ...params };
-    ttvChatClient = new tmi.Client(getTwitchChatOptions(params));
-    return ttvChatClient
-      .connect()
-      .then(() => {
-        ttvChatClient.on('join', onTtvChatJoin);
-        ttvChatClient.on('chat', onTtvChatMessage);
-        return;
-      })
-      .catch((error: any) => {
-        console.error('There was an issue connecting to Twitch');
-        console.error(error);
-        throw error;
-      });
-  }
-);
+connection.onRequest('startchat', params => {
+  botparams = { ...params };
+  ttvChatClient = new tmi.Client(getTwitchChatOptions(params));
+  return ttvChatClient
+    .connect()
+    .then(() => {
+      ttvChatClient.on('join', onTtvChatJoin);
+      ttvChatClient.on('chat', onTtvChatMessage);
+      return;
+    })
+    .catch((error: any) => {
+      console.error('There was an issue connecting to Twitch');
+      console.error(error);
+      throw error;
+    });
+});
 
 function onTtvChatJoin(channel: string, username: string, self: boolean) {
-  if (self && botparams.announce && botparams.joinMessage !== "") {
+  if (self && botparams.announce && botparams.joinMessage !== '') {
     ttvChatClient.say(channel, botparams.joinMessage);
   }
   console.log(`[${username} has JOINED the channel ${channel}`);
@@ -160,9 +156,9 @@ connection.onShutdown(() => {
 });
 
 function getTwitchChatOptions(params: {
-  channels: string[],
-  clientId: string,
-  password: string
+  channels: string[];
+  clientId: string;
+  password: string;
 }): tmi.ClientOptions {
   return {
     channels: params.channels,
@@ -170,7 +166,7 @@ function getTwitchChatOptions(params: {
       reconnect: true
     },
     identity: {
-      username: "do_not_change_me",
+      username: 'vscodehighlighterbot',
       password: params.password
     },
     options: {
