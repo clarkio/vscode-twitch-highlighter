@@ -49,7 +49,7 @@
       },
       {
         "command": "twitchhighlighter.setTwitchPassword",
-        "title": "Twitch Highlighter: Set Password"        
+        "title": "Twitch Highlighter: Set Password"
       },
       {
         "command": "twitchhighlighter.removeTwitchPassword",
@@ -70,7 +70,7 @@
     ],
     "menus": {
       "commandPalette": [
-        {          
+        {
           "when": "false",
           "command": "twitchhighlighter.toggleChat"
         },
@@ -116,7 +116,7 @@
         {
           "id": "twitchHighlighterTreeView",
           "name": "Highlights"
-        }        
+        }
       ]
     },
     "configuration": {
@@ -126,7 +126,7 @@
         "twitchhighlighter.channels": {
           "type": "array",
           "default": [],
-          "description": "The channel name. For Twitch, use #${your channel/user name}."
+          "description": "The channel name(s) to connect to on Twitch. Example: ['clarkio'], Another Example: ['clarkio', 'parithon']"
         },
         "twitchhighlighter.nickname": {
           "type": "string",
@@ -136,7 +136,7 @@
         "twitchhighlighter.highlightColor": {
           "type": "string",
           "default": "green",
-          "description": "Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Alternatively a color from the color registry can be [referenced](#ThemeColor)"
+          "markdownDescription": "Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Example: green"
         },
         "twitchhighlighter.highlightBorder": {
           "type": "string",
