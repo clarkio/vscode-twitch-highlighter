@@ -369,6 +369,7 @@ export function activate(context: vscode.ExtensionContext) {
         // TODO: get channels and username from extension specific settings
         const chatParams = {
           channels: configuration.get<string[]>('channels'),
+          nickname: configuration.get<string>('nickname'),
           clientId: creds.clientId,
           password: creds.password,
           announce: configuration.get<boolean>('announceBot') || false,

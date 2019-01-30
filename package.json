@@ -128,6 +128,11 @@
           "default": [],
           "description": "The channel name. For Twitch, use #${your channel/user name}."
         },
+        "twitchhighlighter.nickname": {
+          "type": "string",
+          "default": "",
+          "description": "The username the bot should use when joining a Twitch channel."
+        },
         "twitchhighlighter.highlightColor": {
           "type": "string",
           "default": "green",

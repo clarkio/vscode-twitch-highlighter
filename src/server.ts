@@ -157,6 +157,7 @@ connection.onShutdown(() => {
 
 function getTwitchChatOptions(params: {
   channels: string[];
+  nickname: string;
   clientId: string;
   password: string;
 }): tmi.ClientOptions {
@@ -166,7 +167,7 @@ function getTwitchChatOptions(params: {
       reconnect: true
     },
     identity: {
-      username: 'vscodehighlighterbot',
+      username: params.nickname,
       password: params.password
     },
     options: {
