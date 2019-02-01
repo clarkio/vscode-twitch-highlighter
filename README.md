@@ -21,12 +21,6 @@ Some of the code in this extension has been adapted from the [twitchlint extensi
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
 - `twitchhighlighter.channels`: The channel name(s) to connect to on Twitch.
         
         Example: `['clarkio'], Another Example: ['clarkio', 'parithon']
