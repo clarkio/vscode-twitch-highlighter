@@ -1,6 +1,6 @@
 # twitch-line-highlighter README
 
-This is the README for your extension "twitch-line-highlighter". After writing up a brief description, we recommend including the following sections.
+A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. etc. by sending a command in chat that will highlight the line of code they want you to check.
 
 ## Attribution
 
@@ -8,17 +8,16 @@ Some of the code in this extension has been adapted from the [twitchlint extensi
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- Allow Twitch viewers to highlight and unhighlight lines of code in the currently active file in VS Code.
+- Remove all highlights at once.
+- View a list of all highlights per file in an explorer panel.
+- Control connection to a Twitch channel's chat.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- A Twitch account ([sign up here](https://www.twitch.tv/signup))
+- Register an application [here](https://glass.twitch.tv/console/apps/create)
+- [VS Code](https://code.visualstudio.com)
 
 ## Extension Settings
 
@@ -28,42 +27,22 @@ For example:
 
 This extension contributes the following settings:
 
-- `myExtension.enable`: enable/disable this extension
-- `myExtension.thing`: set to `blah` to do something
+- `twitchhighlighter.channels`: The channel name(s) to connect to on Twitch. Example: `['clarkio'], Another Example: ['clarkio', 'parithon']
+- `twitchhighlighter.nickname`: The username the bot should use when joining a Twitch channel.
+- `twitchhighlighter.highlightColor`: Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Example: green
+- `twitchhighlighter.highlightBorder`: CSS styling property that will be applied to text enclosed by a decoration.
+- `twitchhighlighter.announceBot`: Whether or not the bot should announce its joining or leaving the chat room.
+- `twitchhighlighter.joinMessage`: The message the bot will say when joining a chat room
+- `twitchhighlighter.leaveMessage`: The message the bot will say when leaving a chat room
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- Extension doesn't allow specifying the file to put the highlight in. This is a work in progress.
 
 ## Release Notes
 
 Users appreciate release notes as you update your extension.
 
-### 1.0.0
+### 0.1.0
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-- Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-- Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-- Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-- [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-- [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Pre-release version to gather feedback from the community and help identify gaps.
