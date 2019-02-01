@@ -1,4 +1,4 @@
-# twitch-line-highlighter README
+# Twitch Line Highlighter VS Code Extension
 
 A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. etc. by sending a command in chat that will highlight the line of code they want you to check.
 
@@ -27,9 +27,15 @@ For example:
 
 This extension contributes the following settings:
 
-- `twitchhighlighter.channels`: The channel name(s) to connect to on Twitch. Example: `['clarkio'], Another Example: ['clarkio', 'parithon']
+- `twitchhighlighter.channels`: The channel name(s) to connect to on Twitch.
+        
+        Example: `['clarkio'], Another Example: ['clarkio', 'parithon']
+        
 - `twitchhighlighter.nickname`: The username the bot should use when joining a Twitch channel.
-- `twitchhighlighter.highlightColor`: Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Example: green
+- `twitchhighlighter.highlightColor`: Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+
+        Example: green
+        
 - `twitchhighlighter.highlightBorder`: CSS styling property that will be applied to text enclosed by a decoration.
 - `twitchhighlighter.announceBot`: Whether or not the bot should announce its joining or leaving the chat room.
 - `twitchhighlighter.joinMessage`: The message the bot will say when joining a chat room
