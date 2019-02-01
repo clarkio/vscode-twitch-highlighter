@@ -2,16 +2,24 @@
   "name": "twitch-line-highlighter",
   "displayName": "twitch-line-highlighter",
   "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. etc. bysending a command in chat that will highlight the line of code they want you to check.",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "preview": true,
+  "publisher": "clarkio",
   "engines": {
     "vscode": "^1.29.0"
   },
+  "icon": "resources/twitchhighlighterIcon_128.png",
   "categories": [
     "Other"
   ],
   "activationEvents": [
     "*"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clarkio/vscode-twitch-highlighter.git"
+  },
+  "license": "MIT",
   "main": "./out/extension",
   "contributes": {
     "commands": [
@@ -172,13 +180,12 @@
     "@types/mocha": "^2.2.42",
     "@types/keytar": "^4.0.1",
     "@types/node": "^8.10.39",
+    "vscode": "^1.1.26",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1"
   },
   "dependencies": {
-    "irc": "^0.5.2",
     "twitch-js": "^1.2.17",
-    "vscode": "^1.1.26",
     "vscode-languageclient": "^5.2.1",
     "vscode-languageserver": "^5.2.1"
   }
