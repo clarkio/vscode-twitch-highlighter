@@ -36,6 +36,16 @@ Outside of the Command Palette:
 
 6. Hit `Disconnected` at the bottom right of VS Code to connect
 
+## Twitch Commands
+
+To highlight a line, use:
+
+        !highlight <LineNumber> OR !line <LineNumber>
+        
+To unhighlight a line, use:
+
+        !line !<LineNumber>
+
 ## Extension Settings
 
 - `twitchhighlighter.channels`: The channel name(s) to connect to on Twitch.
