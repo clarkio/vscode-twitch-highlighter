@@ -17,7 +17,24 @@ Some of the code in this extension has been adapted from the [twitchlint extensi
 
 - A Twitch account ([sign up here](https://www.twitch.tv/signup))
 - Register an application [here](https://glass.twitch.tv/console/apps/create)
+- An OAuth token which you can generate [here](http://twitchapps.com/tmi/)
 - [VS Code](https://code.visualstudio.com)
+
+## Getting Started
+
+From the Command Palette:
+1. Run `Twitch Highlighter: Set Client Id`
+2. Paste the Client ID from your application
+3. Run `Twitch Highlighter: Set Password`
+4. Paste your generated OAuth token with the 'OAuth:' in front
+
+Outside of the Command Palette:
+
+5. Set `twitchhighlighter.channels` to your channel in User/Workspace Settings
+
+        "twitchhighlighter.channels": ["clarkio"]
+
+6. Hit `Disconnected` at the bottom right of VS Code to connect
 
 ## Extension Settings
 
