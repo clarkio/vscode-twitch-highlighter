@@ -24,10 +24,10 @@ export class TwitchHighlighterDataProvider implements vscode.TreeDataProvider<Hi
     const highlighterNodes = new Array<HighlighterNode>();
     currentHighlighters.forEach((highlighter) => {
       const highlights = highlighter.highlights;
-      const fileName = highlighter.editor.document.fileName;
-      const label = path.basename(fileName);
-      console.log('fileName', fileName);
-      highlighterNodes.push(new HighlighterNode(label, fileName, highlights, vscode.TreeItemCollapsibleState.Collapsed));
+      const document = highlighter.editor.document;
+      const label = path.basename(highlighter.editor.document.fileName);
+      console.log('fileName', document);
+      highlighterNodes.push(new HighlighterNode(label, document, highlights, vscode.TreeItemCollapsibleState.Collapsed));
     });
     return Promise.resolve(highlighterNodes);
   }
@@ -36,7 +36,7 @@ export class TwitchHighlighterDataProvider implements vscode.TreeDataProvider<Hi
 export class HighlighterNode extends vscode.TreeItem {
   constructor(
     public readonly label: string,
-    public readonly fileName: string,
+    public readonly document: vscode.TextDocument,
     public readonly highlights: Highlight[] = [],
     public readonly collapsibleState: vscode.TreeItemCollapsibleState = vscode.TreeItemCollapsibleState.None,
     public readonly command?: vscode.Command) {
@@ -56,10 +56,10 @@ export class HighlighterNode extends vscode.TreeItem {
       if (existingNode) {
         existingNode.highlights.push(highlight);
       } else {
-        childrenNodes.push(new HighlighterNode(label, this.fileName, [highlight], undefined, {
+        childrenNodes.push(new HighlighterNode(label, this.document, [highlight], undefined, {
           "command": "twitchhighlighter.gotoHighlight",
           title: "",
-          arguments: [highlight.lineNumber, this.fileName]
+          arguments: [highlight.lineNumber, this.document]
         }));
       }
     });
