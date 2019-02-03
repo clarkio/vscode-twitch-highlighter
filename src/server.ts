@@ -25,7 +25,8 @@ connection.onInitialize(
       }
     };
   }
-);connection.onInitialized((params: InitializedParams) => {
+);
+connection.onInitialized((params: InitializedParams) => {
   // connection.sendNotification('connected');
 });
 
@@ -72,13 +73,10 @@ function onTtvChatJoin(channel: string, username: string, self: boolean) {
   if (self && botparams.announce && botparams.joinMessage !== '') {
     ttvChatClient.say(channel, botparams.joinMessage);
   }
-  console.log(`[${username} has JOINED the channel ${channel}`);
 }
 
 function onTtvChatMessage(channel: string, user: any, message: string) {
   const userName = user['display-name'] || user.username;
-  const lowerCaseMessage = message.toLowerCase();
-  console.log(`${userName}: ${lowerCaseMessage}`);
   parseMessage(userName, message);
 }
 
@@ -167,7 +165,10 @@ function getTwitchChatOptions(params: {
       reconnect: true
     },
     identity: {
-      username: params.nickname,
+      username:
+        !params.nickname || params.nickname === ''
+          ? undefined
+          : params.nickname,
       password: params.password
     },
     options: {
