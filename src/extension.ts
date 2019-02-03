@@ -124,7 +124,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   twitchhighlighterTreeView = new TwitchHighlighterDataProvider(() => {
     return highlighters;
-  }, vscode.workspace.rootPath);
+  });
   vscode.window.registerTreeDataProvider(
     'twitchHighlighterTreeView',
     twitchhighlighterTreeView
@@ -133,12 +133,10 @@ export function activate(context: vscode.ExtensionContext) {
   const gotoHighlightCommand = vscode.commands.registerCommand(
     'twitchhighlighter.gotoHighlight',
     (lineNumber: number, fileName: string) => {
-      vscode.workspace.findFiles(fileName).then(results => {
-        vscode.workspace.openTextDocument(results[0]).then(document => {
-          vscode.window.showTextDocument(document).then(editor => {
-            lineNumber = lineNumber < 3 ? 2 : lineNumber;
-            editor.revealRange(document.lineAt(lineNumber - 2).range);
-          });
+      vscode.workspace.openTextDocument(fileName).then((document: vscode.TextDocument) => {
+        vscode.window.showTextDocument(document).then(editor => {
+          lineNumber = lineNumber < 3 ? 2 : lineNumber;
+          editor.revealRange(document.lineAt(lineNumber - 2).range);
         });
       });
     }
@@ -155,7 +153,7 @@ export function activate(context: vscode.ExtensionContext) {
       highlighterNode.highlights.map(highlight =>
         highlightsToRemove.push({
           lineNumber: highlight.lineNumber,
-          fileName: `${vscode.workspace.rootPath}\\${highlighterNode.fileName}`
+          fileName: highlighterNode.fileName
         })
       );
       highlightsToRemove.forEach(v =>

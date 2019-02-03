@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 import { Highlighter, Highlight } from './highlighter';
 
 export class TwitchHighlighterDataProvider implements vscode.TreeDataProvider<HighlighterNode> {
   private _onDidChangeTreeData: vscode.EventEmitter<HighlighterNode | undefined> = new vscode.EventEmitter<HighlighterNode | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<HighlighterNode | undefined> = this._onDidChangeTreeData.event;
 
-  constructor(private getHighlighters = (): Highlighter[] => [], private readonly rootPath: string | undefined) {
+  constructor(private getHighlighters = (): Highlighter[] => []) {
   }
   refresh(): void {
     console.log('Refreshing twitch highlighter tree view.');
@@ -22,10 +23,11 @@ export class TwitchHighlighterDataProvider implements vscode.TreeDataProvider<Hi
     const currentHighlighters = this.getHighlighters().filter(highlighter => highlighter.highlights.length > 0);
     const highlighterNodes = new Array<HighlighterNode>();
     currentHighlighters.forEach((highlighter) => {
-      const fileName = highlighter.editor.document.fileName.replace(this.rootPath || '', '').substr(1);
       const highlights = highlighter.highlights;
+      const fileName = highlighter.editor.document.fileName;
+      const label = path.basename(fileName);
       console.log('fileName', fileName);
-      highlighterNodes.push(new HighlighterNode(fileName, fileName, highlights, vscode.TreeItemCollapsibleState.Collapsed));
+      highlighterNodes.push(new HighlighterNode(label, fileName, highlights, vscode.TreeItemCollapsibleState.Collapsed));
     });
     return Promise.resolve(highlighterNodes);
   }
@@ -57,7 +59,7 @@ export class HighlighterNode extends vscode.TreeItem {
         childrenNodes.push(new HighlighterNode(label, this.fileName, [highlight], undefined, {
           "command": "twitchhighlighter.gotoHighlight",
           title: "",
-          arguments: [highlight.lineNumber, this.label]
+          arguments: [highlight.lineNumber, this.fileName]
         }));
       }
     });
