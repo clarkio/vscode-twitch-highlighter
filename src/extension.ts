@@ -123,22 +123,18 @@ export function activate(context: vscode.ExtensionContext) {
 
   twitchhighlighterTreeView = new TwitchHighlighterDataProvider(() => {
     return highlighters;
-  }, vscode.workspace.rootPath);
+  });
   vscode.window.registerTreeDataProvider(
     'twitchHighlighterTreeView',
     twitchhighlighterTreeView
   );
 
   const gotoHighlightCommand = vscode.commands.registerCommand(
-    'twitchHighlighter.gotoHighlight',
-    (lineNumber: number, fileName: string) => {
-      vscode.workspace.findFiles(fileName).then(results => {
-        vscode.workspace.openTextDocument(results[0]).then(document => {
-          vscode.window.showTextDocument(document).then(editor => {
-            lineNumber = lineNumber < 3 ? 2 : lineNumber;
-            editor.revealRange(document.lineAt(lineNumber - 2).range);
-          });
-        });
+    'twitchhighlighter.gotoHighlight',
+    (lineNumber: number, document: vscode.TextDocument) => {
+      vscode.window.showTextDocument(document).then(editor => {
+        lineNumber = lineNumber < 3 ? 2 : lineNumber;
+        editor.revealRange(document.lineAt(lineNumber - 2).range);
       });
     }
   );
@@ -154,7 +150,7 @@ export function activate(context: vscode.ExtensionContext) {
       highlighterNode.highlights.map(highlight =>
         highlightsToRemove.push({
           lineNumber: highlight.lineNumber,
-          fileName: `${vscode.workspace.rootPath}\\${highlighterNode.fileName}`
+          fileName: highlighterNode.document.fileName
         })
       );
       highlightsToRemove.forEach(v =>
@@ -197,7 +193,7 @@ export function activate(context: vscode.ExtensionContext) {
     context,
     'twitchHighlighter.unhighlightAll',
     unhighlightAllHandler
-  );
+  );  
   // #endregion command registrations
 
   // #region command handlers
@@ -501,6 +497,14 @@ export function activate(context: vscode.ExtensionContext) {
     null,
     context.subscriptions
   );
+
+  vscode.workspace.onDidCloseTextDocument((document: vscode.TextDocument) => {
+    if (document.isUntitled) {
+      highlighters = highlighters.filter(highlight => highlight.editor.document !== document);
+      triggerUpdateDecorations();
+      twitchhighlighterTreeView.refresh();
+    }
+  });
 
   // Creates the status bar toggle button
   twitchhighlighterStatusBar = vscode.window.createStatusBarItem(
