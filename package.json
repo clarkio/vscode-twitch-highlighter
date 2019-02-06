@@ -2,13 +2,13 @@
   "name": "twitch-highlighter",
   "displayName": "Twitch Highlighter",
   "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. etc. bysending a command in chat that will highlight the line of code they want you to check.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "preview": true,
   "publisher": "clarkio",
   "engines": {
     "vscode": "^1.29.0"
   },
-  "icon": "resources/twitchhighlighterIcon_128.png",
+  "icon": "resources/twitchHighlighterIcon_128.png",
   "categories": [
     "Other"
   ],
@@ -109,14 +109,14 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "twitchhighlighter-explorer",
-          "icon": "resources/twitchhighlighterIcon.svg",
+          "id": "twitchHighlighter-explorer",
+          "icon": "resources/twitchHighlighterIcon.svg",
           "title": "Twitch Highlighter"
         }
       ]
     },
     "views": {
-      "twitchhighlighter-explorer": [
+      "twitchHighlighter-explorer": [
         {
           "id": "twitchHighlighterTreeView",
           "name": "Highlights"
@@ -179,11 +179,11 @@
     "@types/node": "^8.10.39",
     "vscode": "^1.1.26",
     "tslint": "^5.8.0",
-    "typescript": "^2.6.1"
-  },
-  "dependencies": {
-    "twitch-js": "^1.2.17",
+    "typescript": "^2.6.1",
     "vscode-languageclient": "^5.2.1",
     "vscode-languageserver": "^5.2.1"
+  },
+  "dependencies": {
+    "twitch-js": "^1.2.17"
   }
 }

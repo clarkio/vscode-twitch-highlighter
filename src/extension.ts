@@ -14,14 +14,14 @@ import CredentialManager, { TwitchCredentials } from './credentialManager';
 import {
   TwitchHighlighterDataProvider,
   HighlighterNode
-} from './twitchhighlighterTreeView';
+} from './twitchHighlighterTreeView';
 
 let highlightDecorationType: vscode.TextEditorDecorationType;
-const twitchhighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)
+const twitchHighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)
 let highlighters: Array<Highlighter> = new Array<Highlighter>();
 let client: LanguageClient;
-let twitchhighlighterTreeView: TwitchHighlighterDataProvider;
-let twitchhighlighterStatusBar: vscode.StatusBarItem;
+let twitchHighlighterTreeView: TwitchHighlighterDataProvider;
+let twitchHighlighterStatusBar: vscode.StatusBarItem;
 let isConnected: boolean = false;
 
 // this method is called when your extension is activated
@@ -121,16 +121,16 @@ export function activate(context: vscode.ExtensionContext) {
   const runningClient = client.start();
   context.subscriptions.push(runningClient);
 
-  twitchhighlighterTreeView = new TwitchHighlighterDataProvider(() => {
+  twitchHighlighterTreeView = new TwitchHighlighterDataProvider(() => {
     return highlighters;
   });
   vscode.window.registerTreeDataProvider(
     'twitchHighlighterTreeView',
-    twitchhighlighterTreeView
+    twitchHighlighterTreeView
   );
 
   const gotoHighlightCommand = vscode.commands.registerCommand(
-    'twitchhighlighter.gotoHighlight',
+    'twitchHighlighter.gotoHighlight',
     (lineNumber: number, document: vscode.TextDocument) => {
       vscode.window.showTextDocument(document).then(editor => {
         lineNumber = lineNumber < 3 ? 2 : lineNumber;
@@ -156,14 +156,14 @@ export function activate(context: vscode.ExtensionContext) {
       highlightsToRemove.forEach(v =>
         removeHighlight(v.lineNumber, v.fileName, true)
       );
-      twitchhighlighterTreeView.refresh();
+      twitchHighlighterTreeView.refresh();
     }
   );
   context.subscriptions.push(removeHighlightCommand);
 
   // #region command registrations
   registerCommand(context, 'twitchHighlighter.refreshTreeView', () =>
-    twitchhighlighterTreeView.refresh()
+    twitchHighlighterTreeView.refresh()
   );
   registerCommand(
     context,
@@ -193,7 +193,7 @@ export function activate(context: vscode.ExtensionContext) {
     context,
     'twitchHighlighter.unhighlightAll',
     unhighlightAllHandler
-  );  
+  );
   // #endregion command registrations
 
   // #region command handlers
@@ -279,7 +279,7 @@ export function activate(context: vscode.ExtensionContext) {
       visibleEditor.setDecorations(highlightDecorationType, []);
     });
     highlighters = new Array<Highlighter>();
-    twitchhighlighterTreeView.refresh();
+    twitchHighlighterTreeView.refresh();
   }
 
   function unhighlightSpecificHandler() {
@@ -410,12 +410,12 @@ export function activate(context: vscode.ExtensionContext) {
   ) {
     isConnected = connectionStatus;
     if (connectionStatus) {
-      twitchhighlighterStatusBar.text = `${twitchhighlighterStatusBarIcon} Connected`;
+      twitchHighlighterStatusBar.text = `${twitchHighlighterStatusBarIcon} Connected`;
     } else {
       if (isConnecting) {
-        twitchhighlighterStatusBar.text = `${twitchhighlighterStatusBarIcon} Connecting...`;
+        twitchHighlighterStatusBar.text = `${twitchHighlighterStatusBarIcon} Connecting...`;
       } else {
-        twitchhighlighterStatusBar.text = `${twitchhighlighterStatusBarIcon} Disconnected`;
+        twitchHighlighterStatusBar.text = `${twitchHighlighterStatusBarIcon} Disconnected`;
       }
     }
   }
@@ -500,22 +500,24 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.workspace.onDidCloseTextDocument((document: vscode.TextDocument) => {
     if (document.isUntitled) {
-      highlighters = highlighters.filter(highlight => highlight.editor.document !== document);
+      highlighters = highlighters.filter(
+        highlight => highlight.editor.document !== document
+      );
       triggerUpdateDecorations();
-      twitchhighlighterTreeView.refresh();
+      twitchHighlighterTreeView.refresh();
     }
   });
 
   // Creates the status bar toggle button
-  twitchhighlighterStatusBar = vscode.window.createStatusBarItem(
+  twitchHighlighterStatusBar = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right
   );
-  twitchhighlighterStatusBar.command = 'twitchHighlighter.toggleChat';
-  twitchhighlighterStatusBar.tooltip = `Twitch Highlighter Extension`;
-  context.subscriptions.push(twitchhighlighterStatusBar);
+  twitchHighlighterStatusBar.command = 'twitchHighlighter.toggleChat';
+  twitchHighlighterStatusBar.tooltip = `Twitch Highlighter Extension`;
+  context.subscriptions.push(twitchHighlighterStatusBar);
 
   setConnectionStatus(false);
-  twitchhighlighterStatusBar.show();
+  twitchHighlighterStatusBar.show();
 
   function triggerUpdateDecorations() {
     if (!activeEditor) {
@@ -555,7 +557,7 @@ export function activate(context: vscode.ExtensionContext) {
       highlighters.push(highlighter);
     }
     triggerUpdateDecorations();
-    twitchhighlighterTreeView.refresh();
+    twitchHighlighterTreeView.refresh();
   }
 
   function removeHighlight(
@@ -574,7 +576,7 @@ export function activate(context: vscode.ExtensionContext) {
     existingHighlight.removeDecoration(lineNumber);
     triggerUpdateDecorations();
     if (!deferRefresh) {
-      twitchhighlighterTreeView.refresh();
+      twitchHighlighterTreeView.refresh();
     }
   }
 }
