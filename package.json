@@ -179,11 +179,11 @@
     "@types/node": "^8.10.39",
     "vscode": "^1.1.26",
     "tslint": "^5.8.0",
-    "typescript": "^2.6.1",
-    "vscode-languageclient": "^5.2.1",
-    "vscode-languageserver": "^5.2.1"
+    "typescript": "^2.6.1"
   },
   "dependencies": {
-    "twitch-js": "^1.2.17"
+    "twitch-js": "^1.2.17",
+    "vscode-languageclient": "^5.2.1",
+    "vscode-languageserver": "^5.2.1"
   }
 }
