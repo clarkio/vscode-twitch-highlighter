@@ -53,6 +53,9 @@ To unhighlight a line, use:
 - `twitchHighlighter.channels`: The channel name(s) to connect to on Twitch.
   Example: `['clarkio'], Another Example: ['clarkio', 'parithon']
 - `twitchHighlighter.nickname`: The username the bot should use when joining a Twitch channel.
+
+  > Note: this is required if you'd like to have the bot send join/leave messages in your chat. It also needs to match the Twitch username with which you generated the OAuth token.
+
 - `twitchHighlighter.highlightColor`: Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
 
         Example: green
