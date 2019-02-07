@@ -40,10 +40,6 @@ In order to use this extension you will need the following before going to the [
 11. Next you'll be prompted to enter your Twitch token. This is the secret you copied and saved from earlier. It should be a value prefixed with `oauth:`. Copy and paste the secret into this prompt and press `Enter`
 12. Click the `Disconnected` button and you should see notifications indicating the extension is starting and finally started listening to the Twitch chat.
 
-## Attribution
-
-Some of the code in this extension has been adapted from the [twitchlint extension](https://github.com/irth/twitchlint) built by [@irth](https://github.com/irth)
-
 ## Twitch Commands
 
 To highlight a line, use:
@@ -68,29 +64,9 @@ To unhighlight a line, use:
 * `twitchHighlighter.joinMessage`: The message the bot will say when joining a chat room
 * `twitchHighlighter.leaveMessage`: The message the bot will say when leaving a chat room
 
-## Separate Twitch Account
+## Attribution
 
-Using a separate Twitch account for your chat bot allows you to keep your own personal account more secure by separating this responsibility. It also allows any messages sent to your chat from the bot to be shown under a unique name instead of your own account.
-
-Follow these instructions to get the proper requirements for using a separate Twitch account as a chat bot:
-
-1. Create your chat bot as an application [here](https://glass.twitch.tv/console/apps/create)
-2. Enter a name for the chat bot (such as "VS Code Highlighter Bot"), provide any localhost based url for the "Redirect URL" (example: http://localhost:1337), and choose the "Chat Bot" category.
-3. Click the "Create" button and you should be automatically redirected to the "Apps" view in the Dashboard. (here's a direct link in case that doesn't happen: https://glass.twitch.tv/console/apps)
-4. Click the "Manage" button for your newly created app.
-5. You should now see a "Client ID" field. Copy and save the value of this field somewhere safe temporarily (it will be needed later)
-6. Under "Client Secret" click the "New Secret" button. You'll be prompted to make sure you want to generate a new secret so choose "OK" to proceed.
-7. A client secret value should appear under the "Client Secret" section. Copy and save the value of this secret somewhere safe temporarily (it will be needed later)
-8. You are now ready to proceed to the [Getting Started](#getting-started) section.
-
-## Your Own Twitch Account
-
-Using your own Twitch account for your chat bot is a bit more simple to set up in that you don't have to create another account with its own password. Just note that any messages you wish to allow the chat bot to send to your chat will appear as though it is coming from you.
-
-Follow these instructions to get the proper requirements for using your own Twitch account as a chat bot:
-
-1. Get an OAuth token by having one generated [here](http://twitchapps.com/tmi/)
-2. Save this token somewhere safe temporarily as you'll need it later.
+Some of the code in this extension has been adapted from the [twitchlint extension](https://github.com/irth/twitchlint) built by [@irth](https://github.com/irth)
 
 ## Known Issues
 

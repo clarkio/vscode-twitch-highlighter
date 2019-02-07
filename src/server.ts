@@ -162,7 +162,9 @@ function getTwitchChatOptions(params: {
   return {
     channels: params.channels,
     connection: {
-      reconnect: true
+      secure: true,
+      reconnect: true,
+      maxReconnectAttempts: 5
     },
     identity: {
       username:
@@ -172,7 +174,6 @@ function getTwitchChatOptions(params: {
       password: params.password
     },
     options: {
-      clientId: params.clientId,
       debug: true /* True if you want DEBUG messages in your terminal; false otherwise */
     }
   };
