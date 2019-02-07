@@ -14,23 +14,22 @@ import CredentialManager, { TwitchCredentials } from './credentialManager';
 import {
   TwitchHighlighterDataProvider,
   HighlighterNode
-} from './twitchhighlighterTreeView';
+} from './twitchHighlighterTreeView';
 
 let highlightDecorationType: vscode.TextEditorDecorationType;
-const twitchhighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)
+const twitchHighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)
 let highlighters: Array<Highlighter> = new Array<Highlighter>();
 let client: LanguageClient;
-let twitchhighlighterTreeView: TwitchHighlighterDataProvider;
-let twitchhighlighterStatusBar: vscode.StatusBarItem;
+let twitchHighlighterTreeView: TwitchHighlighterDataProvider;
+let twitchHighlighterStatusBar: vscode.StatusBarItem;
 let isConnected: boolean = false;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
   setupDecoratorType();
-  vscode.workspace.onDidChangeConfiguration((e) => {
-    if (e.affectsConfiguration('twitchhighlighter')) {
+  vscode.workspace.onDidChangeConfiguration(e => {
+    if (e.affectsConfiguration('twitchHighlighter')) {
       setupDecoratorType();
     }
   });
@@ -50,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
     documentSelector: ['*'],
     synchronize: {
       // Synchronize the setting section to the server
-      configurationSection: 'twitchhighlighter'
+      configurationSection: 'twitchHighlighter'
     }
   };
 
@@ -122,16 +121,16 @@ export function activate(context: vscode.ExtensionContext) {
   const runningClient = client.start();
   context.subscriptions.push(runningClient);
 
-  twitchhighlighterTreeView = new TwitchHighlighterDataProvider(() => {
+  twitchHighlighterTreeView = new TwitchHighlighterDataProvider(() => {
     return highlighters;
   });
   vscode.window.registerTreeDataProvider(
     'twitchHighlighterTreeView',
-    twitchhighlighterTreeView
+    twitchHighlighterTreeView
   );
 
   const gotoHighlightCommand = vscode.commands.registerCommand(
-    'twitchhighlighter.gotoHighlight',
+    'twitchHighlighter.gotoHighlight',
     (lineNumber: number, document: vscode.TextDocument) => {
       vscode.window.showTextDocument(document).then(editor => {
         lineNumber = lineNumber < 3 ? 2 : lineNumber;
@@ -142,7 +141,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(gotoHighlightCommand);
 
   const removeHighlightCommand = vscode.commands.registerCommand(
-    'twitchhighlighter.removeHighlight',
+    'twitchHighlighter.removeHighlight',
     (highlighterNode: HighlighterNode) => {
       const highlightsToRemove = Array<{
         lineNumber: number;
@@ -157,77 +156,47 @@ export function activate(context: vscode.ExtensionContext) {
       highlightsToRemove.forEach(v =>
         removeHighlight(v.lineNumber, v.fileName, true)
       );
-      twitchhighlighterTreeView.refresh();
+      twitchHighlighterTreeView.refresh();
     }
   );
   context.subscriptions.push(removeHighlightCommand);
 
   // #region command registrations
-  registerCommand(context, 'twitchhighlighter.refreshTreeView', () =>
-    twitchhighlighterTreeView.refresh()
+  registerCommand(context, 'twitchHighlighter.refreshTreeView', () =>
+    twitchHighlighterTreeView.refresh()
   );
   registerCommand(
     context,
-    'twitchhighlighter.setTwitchClientId',
-    setTwitchClientIdHandler
-  );
-  registerCommand(
-    context,
-    'twitchhighlighter.removeTwitchClientId',
+    'twitchHighlighter.removeTwitchClientId',
     removeTwitchClientIdHandler
   );
   registerCommand(
     context,
-    'twitchhighlighter.setTwitchPassword',
+    'twitchHighlighter.setTwitchPassword',
     setTwitchPasswordHandler
   );
   registerCommand(
     context,
-    'twitchhighlighter.removeTwitchPassword',
+    'twitchHighlighter.removeTwitchPassword',
     removeTwitchPasswordHandler
   );
-  registerCommand(context, 'twitchhighlighter.startChat', startChatHandler);
-  registerCommand(context, 'twitchhighlighter.stopChat', stopChatHandler);
-  registerCommand(context, 'twitchhighlighter.toggleChat', toggleChatHandler);
-  registerCommand(context, 'twitchhighlighter.highlight', highlightHandler);
+  registerCommand(context, 'twitchHighlighter.startChat', startChatHandler);
+  registerCommand(context, 'twitchHighlighter.stopChat', stopChatHandler);
+  registerCommand(context, 'twitchHighlighter.toggleChat', toggleChatHandler);
+  registerCommand(context, 'twitchHighlighter.highlight', highlightHandler);
   registerCommand(
     context,
-    'twitchhighlighter.unhighlightSpecific',
+    'twitchHighlighter.unhighlightSpecific',
     unhighlightSpecificHandler
   );
   registerCommand(
     context,
-    'twitchhighlighter.unhighlightAll',
+    'twitchHighlighter.unhighlightAll',
     unhighlightAllHandler
-  );  
+  );
   // #endregion command registrations
 
   // #region command handlers
-  async function setTwitchClientIdHandler(): Promise<boolean> {
-    const value = await vscode.window
-      .showInputBox({
-        prompt: 'Enter Twitch Client Id. Register your app here: https://glass.twitch.tv/console/apps/create',
-        ignoreFocusOut: true,
-        password: true
-      });
-    if (value === undefined || value === null) { return false; }
-    await setTwitchClientIdWithCredentialManager(value);
-    return true;
-  }
-
-  async function setTwitchClientIdWithCredentialManager(value: string | undefined): Promise<void> {
-    if (value !== undefined) {
-      try {
-        await CredentialManager.setClientId(value);
-        vscode.window.showInformationMessage(`Twitch Client Id saved in your keychain`);
-      }
-      catch (reason) {
-        vscode.window.showInformationMessage(`Failed to set Twitch Chat Client Id`);
-        console.error('An error occured while saving your password to the keychain');
-          console.error(reason);
-    }
-  }
-  }
 
   function removeTwitchClientIdHandler() {
     CredentialManager.deleteTwitchClientId()
@@ -248,13 +217,15 @@ export function activate(context: vscode.ExtensionContext) {
   }
 
   async function setTwitchPasswordHandler(): Promise<boolean> {
-    const value = await vscode.window
-      .showInputBox({
-        prompt: 'Enter Twitch token. Generate a token here: http://www.twitchapps.com/tmi',
-        ignoreFocusOut: true,
-        password: true
-      });
-    if (value === undefined || value === null) { return false; }
+    const value = await vscode.window.showInputBox({
+      prompt:
+        'Enter Twitch token. Generate a token here: http://www.twitchapps.com/tmi',
+      ignoreFocusOut: true,
+      password: true
+    });
+    if (value === undefined || value === null) {
+      return false;
+    }
     await setPasswordWithCredentialManager(value);
     return true;
   }
@@ -308,7 +279,7 @@ export function activate(context: vscode.ExtensionContext) {
       visibleEditor.setDecorations(highlightDecorationType, []);
     });
     highlighters = new Array<Highlighter>();
-    twitchhighlighterTreeView.refresh();
+    twitchHighlighterTreeView.refresh();
   }
 
   function unhighlightSpecificHandler() {
@@ -338,21 +309,26 @@ export function activate(context: vscode.ExtensionContext) {
     console.log('Retrieving twitch credentials');
     CredentialManager.getTwitchCredentials()
       .then((creds: TwitchCredentials) => {
-        if (creds.clientId === null || creds.password === null) {
+        if (creds.password === null) {
           setConnectionStatus(false, false);
-          vscode.window.showInformationMessage(
-            'Missing Twitch credentials. Cannot start Chat client',
-            "Set Credentials"
-          )
-          .then(async (action) => {
-            if (action) { // The user did not click the 'cancel' button.
-              // Set the clientId when null, if the result is false (i.e. user cancelled) then cancel the connection
-              if (creds.clientId === null && !await setTwitchClientIdHandler()) { return; }
-              // Set the password when null, if the result is false (i.e. user cancelled) then cancel the connection
-              if (creds.password === null && !await setTwitchPasswordHandler()) { return; }
-              startChatHandler();
-            }
-          });
+          vscode.window
+            .showInformationMessage(
+              'Missing Twitch credentials. Cannot start Chat client',
+              'Set Credentials'
+            )
+            .then(async action => {
+              if (action) {
+                // The user did not click the 'cancel' button.
+                // Set the password when null, if the result is false (i.e. user cancelled) then cancel the connection
+                if (
+                  creds.password === null &&
+                  !(await setTwitchPasswordHandler())
+                ) {
+                  return;
+                }
+                startChatHandler();
+              }
+            });
           return;
         }
 
@@ -360,17 +336,17 @@ export function activate(context: vscode.ExtensionContext) {
           'Twitch Highlighter: Starting Chat Listener...'
         );
 
-        const configuration = vscode.workspace.getConfiguration('twitchhighlighter');
+        const configuration = vscode.workspace.getConfiguration(
+          'twitchHighlighter'
+        );
 
-        // TODO: get channels and username from extension specific settings
         const chatParams = {
           channels: configuration.get<string[]>('channels'),
           nickname: configuration.get<string>('nickname'),
-          clientId: creds.clientId,
           password: creds.password,
           announce: configuration.get<boolean>('announceBot') || false,
-          joinMessage: configuration.get<string>('joinMessage') || "",
-          leaveMessage: configuration.get<string>('leaveMessage') || ""
+          joinMessage: configuration.get<string>('joinMessage') || '',
+          leaveMessage: configuration.get<string>('leaveMessage') || ''
         };
         client.sendRequest('startchat', chatParams).then(
           result => {
@@ -428,19 +404,18 @@ export function activate(context: vscode.ExtensionContext) {
     }
   }
   // #endregion command handlers
-
   function setConnectionStatus(
     connectionStatus: boolean,
     isConnecting?: boolean
   ) {
     isConnected = connectionStatus;
     if (connectionStatus) {
-      twitchhighlighterStatusBar.text = `${twitchhighlighterStatusBarIcon} Connected`;
+      twitchHighlighterStatusBar.text = `${twitchHighlighterStatusBarIcon} Connected`;
     } else {
       if (isConnecting) {
-        twitchhighlighterStatusBar.text = `${twitchhighlighterStatusBarIcon} Connecting...`;
+        twitchHighlighterStatusBar.text = `${twitchHighlighterStatusBarIcon} Connecting...`;
       } else {
-        twitchhighlighterStatusBar.text = `${twitchhighlighterStatusBarIcon} Disconnected`;
+        twitchHighlighterStatusBar.text = `${twitchHighlighterStatusBarIcon} Disconnected`;
       }
     }
   }
@@ -460,13 +435,17 @@ export function activate(context: vscode.ExtensionContext) {
       let existingHighlighter = highlighters.find(highlighter => {
         return highlighter.editor.document.fileName === doc.fileName;
       });
-      
+
       // Do not highlight a line already requested by the same user.
-      if (existingHighlighter && 
-          existingHighlighter.highlights.filter(h => h.twitchUser === twitchUser && h.lineNumber === lineNumberInt).length > 0) {
+      if (
+        existingHighlighter &&
+        existingHighlighter.highlights.filter(
+          h => h.twitchUser === twitchUser && h.lineNumber === lineNumberInt
+        ).length > 0
+      ) {
         return;
       }
-      
+
       let range = getHighlightRange(lineNumber, doc);
 
       // Do not allow a highlight on an empty line.
@@ -521,22 +500,24 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.workspace.onDidCloseTextDocument((document: vscode.TextDocument) => {
     if (document.isUntitled) {
-      highlighters = highlighters.filter(highlight => highlight.editor.document !== document);
+      highlighters = highlighters.filter(
+        highlight => highlight.editor.document !== document
+      );
       triggerUpdateDecorations();
-      twitchhighlighterTreeView.refresh();
+      twitchHighlighterTreeView.refresh();
     }
   });
 
   // Creates the status bar toggle button
-  twitchhighlighterStatusBar = vscode.window.createStatusBarItem(
+  twitchHighlighterStatusBar = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right
   );
-  twitchhighlighterStatusBar.command = 'twitchhighlighter.toggleChat';
-  twitchhighlighterStatusBar.tooltip = `Twitch Highlighter Extension`;
-  context.subscriptions.push(twitchhighlighterStatusBar);
+  twitchHighlighterStatusBar.command = 'twitchHighlighter.toggleChat';
+  twitchHighlighterStatusBar.tooltip = `Twitch Highlighter Extension`;
+  context.subscriptions.push(twitchHighlighterStatusBar);
 
   setConnectionStatus(false);
-  twitchhighlighterStatusBar.show();
+  twitchHighlighterStatusBar.show();
 
   function triggerUpdateDecorations() {
     if (!activeEditor) {
@@ -576,7 +557,7 @@ export function activate(context: vscode.ExtensionContext) {
       highlighters.push(highlighter);
     }
     triggerUpdateDecorations();
-    twitchhighlighterTreeView.refresh();
+    twitchHighlighterTreeView.refresh();
   }
 
   function removeHighlight(
@@ -595,7 +576,7 @@ export function activate(context: vscode.ExtensionContext) {
     existingHighlight.removeDecoration(lineNumber);
     triggerUpdateDecorations();
     if (!deferRefresh) {
-      twitchhighlighterTreeView.refresh();
+      twitchHighlighterTreeView.refresh();
     }
   }
 }
@@ -637,9 +618,9 @@ function registerCommand(
 }
 
 function setupDecoratorType() {
-  const configuration = vscode.workspace.getConfiguration("twitchhighlighter");
+  const configuration = vscode.workspace.getConfiguration('twitchHighlighter');
   highlightDecorationType = vscode.window.createTextEditorDecorationType({
-    backgroundColor: configuration.get<string>("highlightColor") || "green",
-    border: configuration.get<string>("highlightBorder") || "2px solid white"
+    backgroundColor: configuration.get<string>('highlightColor') || 'green',
+    border: configuration.get<string>('highlightBorder') || '2px solid white'
   });
 }

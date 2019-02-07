@@ -1,70 +1,74 @@
 {
-  "name": "twitch-line-highlighter",
-  "displayName": "twitch-line-highlighter",
+  "name": "twitch-highlighter",
+  "displayName": "Twitch Highlighter",
   "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. etc. bysending a command in chat that will highlight the line of code they want you to check.",
-  "version": "0.1.0",
+  "version": "0.1.3",
+  "preview": true,
+  "publisher": "clarkio",
   "engines": {
     "vscode": "^1.29.0"
   },
+  "icon": "resources/twitchHighlighterIcon_128.png",
   "categories": [
     "Other"
   ],
   "activationEvents": [
     "*"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clarkio/vscode-twitch-highlighter.git"
+  },
+  "license": "MIT",
   "main": "./out/extension",
   "contributes": {
     "commands": [
       {
-        "command": "twitchhighlighter.highlight",
+        "command": "twitchHighlighter.highlight",
         "title": "Twitch Highlighter: Highlight Line"
       },
       {
-        "command": "twitchhighlighter.unhighlightAll",
+        "command": "twitchHighlighter.unhighlightAll",
         "title": "Twitch Highlighter: Unhighlight All"
       },
       {
-        "command": "twitchhighlighter.unhighlightSpecific",
+        "command": "twitchHighlighter.unhighlightSpecific",
         "title": "Twitch Highlighter: Unhighlight by File and Line"
       },
       {
-        "command": "twitchhighlighter.startChat",
+        "command": "twitchHighlighter.startChat",
         "title": "Twitch Highlighter: Start Listening to Chat"
       },
       {
-        "command": "twitchhighlighter.stopChat",
+        "command": "twitchHighlighter.stopChat",
         "title": "Twitch Highlighter: Stop Listening to Chat"
       },
       {
-        "command": "twitchhighlighter.toggleChat",
+        "command": "twitchHighlighter.toggleChat",
         "title": "Twitch Highlighter: Toggle Listening to Chat"
       },
       {
-        "command": "twitchhighlighter.setTwitchClientId",
-        "title": "Twitch Highlighter: Set Client Id"
-      },
-      {
-        "command": "twitchhighlighter.removeTwitchClientId",
+        "command": "twitchHighlighter.removeTwitchClientId",
         "title": "Twitch Highlighter: Remove Client Id"
       },
       {
-        "command": "twitchhighlighter.setTwitchPassword",
+        "command": "twitchHighlighter.setTwitchPassword",
         "title": "Twitch Highlighter: Set Password"
       },
       {
-        "command": "twitchhighlighter.removeTwitchPassword",
+        "command": "twitchHighlighter.removeTwitchPassword",
         "title": "Twitch Highlighter: Remove Password"
       },
       {
-        "command": "twitchhighlighter.refreshTreeView",
+        "command": "twitchHighlighter.refreshTreeView",
         "title": "Refresh"
       },
       {
-        "command": "twitchhighlighter.gotoHighlight",
+        "command": "twitchHighlighter.gotoHighlight",
         "title": "Goto Highlight"
       },
       {
-        "command": "twitchhighlighter.removeHighlight",
+        "command": "twitchHighlighter.removeHighlight",
         "title": "Remove Highlight"
       }
     ],
@@ -72,31 +76,31 @@
       "commandPalette": [
         {
           "when": "false",
-          "command": "twitchhighlighter.toggleChat"
+          "command": "twitchHighlighter.toggleChat"
         },
         {
-          "command": "twitchhighlighter.refreshTreeView",
+          "command": "twitchHighlighter.refreshTreeView",
           "when": "false"
         },
         {
-          "command": "twitchhighlighter.gotoHighlight",
+          "command": "twitchHighlighter.gotoHighlight",
           "when": "false"
         },
         {
-          "command": "twitchhighlighter.removeHighlight",
+          "command": "twitchHighlighter.removeHighlight",
           "when": "false"
         }
       ],
       "view/title": [
         {
-          "command": "twitchhighlighter.refreshTreeView",
+          "command": "twitchHighlighter.refreshTreeView",
           "when": "view == twitchHighlighterTreeView",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "twitchhighlighter.removeHighlight",
+          "command": "twitchHighlighter.removeHighlight",
           "when": "view == twitchHighlighterTreeView",
           "group": "edit"
         }
@@ -105,14 +109,14 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "twitchhighlighter-explorer",
-          "icon": "resources/twitchhighlighterIcon.svg",
+          "id": "twitchHighlighter-explorer",
+          "icon": "resources/twitchHighlighterIcon.svg",
           "title": "Twitch Highlighter"
         }
       ]
     },
     "views": {
-      "twitchhighlighter-explorer": [
+      "twitchHighlighter-explorer": [
         {
           "id": "twitchHighlighterTreeView",
           "name": "Highlights"
@@ -121,39 +125,40 @@
     },
     "configuration": {
       "type": "object",
-      "title": "Twitch Highlighter Configuration",
+      "title": "Twitch Highlighter",
       "properties": {
-        "twitchhighlighter.channels": {
+        "twitchHighlighter.channels": {
           "type": "array",
           "default": [],
           "description": "The channel name(s) to connect to on Twitch. Example: ['clarkio'], Another Example: ['clarkio', 'parithon']"
         },
-        "twitchhighlighter.nickname": {
+        "twitchHighlighter.nickname": {
           "type": "string",
           "default": "",
           "description": "The username the bot should use when joining a Twitch channel."
         },
-        "twitchhighlighter.highlightColor": {
+        "twitchHighlighter.highlightColor": {
           "type": "string",
           "default": "green",
           "markdownDescription": "Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Example: green"
         },
-        "twitchhighlighter.highlightBorder": {
+        "twitchHighlighter.highlightBorder": {
           "type": "string",
           "default": "2px solid white",
           "description": "CSS styling property that will be applied to text enclosed by a decoration."
         },
-        "twitchhighlighter.announceBot": {
+        "twitchHighlighter.announceBot": {
+          "title": "Twitch Highlighter",
           "type": "boolean",
           "default": true,
           "description": "Whether or not the bot should announce its joining or leaving the chat room"
         },
-        "twitchhighlighter.joinMessage": {
+        "twitchHighlighter.joinMessage": {
           "type": "string",
           "default": "Twitch Highlighter in the house!",
           "description": "The message the bot will say when joining a chat room"
         },
-        "twitchhighlighter.leaveMessage": {
+        "twitchHighlighter.leaveMessage": {
           "type": "string",
           "default": "Twitch Highlighter has left the building!",
           "description": "The message the bot will say when leaving a chat room"
@@ -172,14 +177,13 @@
     "@types/mocha": "^2.2.42",
     "@types/keytar": "^4.0.1",
     "@types/node": "^8.10.39",
-    "tslint": "^5.8.0",
-    "typescript": "^2.6.1"
-  },
-  "dependencies": {
-    "irc": "^0.5.2",
-    "twitch-js": "^1.2.17",
     "vscode": "^1.1.26",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.1",
     "vscode-languageclient": "^5.2.1",
     "vscode-languageserver": "^5.2.1"
+  },
+  "dependencies": {
+    "twitch-js": "^1.2.17"
   }
 }
