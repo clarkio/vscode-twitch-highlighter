@@ -4,9 +4,7 @@ A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos
 
 ## Requirements
 
-You just need an oauth:asdlfkasdjf pass to run the chat bot
-
-In order to use this extension you will need the following before going to the [Getting Started](#getting-started) section:
+In order to use this extension you will need the following things before going to the [Getting Started](#getting-started) section:
 
 - An installed version of [VS Code](https://code.visualstudio.com)
 - A Twitch account for yourself or a separate one to be used as a chat bot ([sign up here](https://www.twitch.tv/signup))
