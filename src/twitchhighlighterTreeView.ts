@@ -10,7 +10,7 @@ export class TwitchHighlighterDataProvider
   readonly onDidChangeTreeData: vscode.Event<HighlighterNode | undefined> = this
     ._onDidChangeTreeData.event;
 
-  constructor(private getHighlighters = (): Highlighter[] => []) {}
+  constructor(private getHighlighters = (): Highlighter[] => []) { }
   refresh(): void {
     console.log('Refreshing twitch highlighter tree view.');
     this._onDidChangeTreeData.fire();

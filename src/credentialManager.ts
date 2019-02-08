@@ -35,10 +35,10 @@ export class CredentialManager {
   public static async setClientId(value: string): Promise<void> {
     if (CredentialManager.keytar && value !== null) {
       await CredentialManager.keytar.setPassword(CredentialManager.service, CredentialManager.clientIdIdentifier, value);
-    }    
+    }
   }
   public static async deleteTwitchClientId(): Promise<boolean> {
-    if(CredentialManager.keytar) {
+    if (CredentialManager.keytar) {
       return await CredentialManager.keytar.deletePassword(CredentialManager.service, CredentialManager.clientIdIdentifier);
     }
     return false;
