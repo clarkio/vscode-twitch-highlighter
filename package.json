@@ -8,7 +8,7 @@
   "engines": {
     "vscode": "^1.29.0"
   },
-  "icon": "resources/twitchHighlighterIcon_128.png",
+  "icon": "resources/twitchHighlighterIcon.png",
   "categories": [
     "Other"
   ],
