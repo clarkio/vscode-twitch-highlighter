@@ -15,14 +15,23 @@ import {
   TwitchHighlighterDataProvider,
   HighlighterNode
 } from './twitchHighlighterTreeView';
+import { TwitchClient } from './client';
 
 let highlightDecorationType: vscode.TextEditorDecorationType;
 const twitchHighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)
 let highlighters: Array<Highlighter> = new Array<Highlighter>();
-let client: LanguageClient;
+let client: TwitchClient;
 let twitchHighlighterTreeView: TwitchHighlighterDataProvider;
 let twitchHighlighterStatusBar: vscode.StatusBarItem;
 let isConnected: boolean = false;
+
+function highlight(line: number, twitchUser: string) {
+
+}
+
+function unhighlight(fileName: string, line: number) {
+
+}
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -34,31 +43,11 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
 
-  let serverModule = context.asAbsolutePath(path.join('out', 'server.js'));
-  let debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
-  let serverOptions: ServerOptions = {
-    run: { module: serverModule, transport: TransportKind.ipc },
-    debug: {
-      module: serverModule,
-      transport: TransportKind.ipc,
-      options: debugOptions
-    }
-  };
-  let clientOptions: LanguageClientOptions = {
-    // Register the server for everything
-    documentSelector: ['*'],
-    synchronize: {
-      // Synchronize the setting section to the server
-      configurationSection: 'twitchHighlighter'
-    }
-  };
-
-  client = new LanguageClient(
-    'Twitch Chat Highlighter', // sets the name of the 'output' window in VSCode
-    serverOptions,
-    clientOptions
+  client = new TwitchClient(
+    context.asAbsolutePath(path.join('out', 'server.js')),
+    highlight,
+    unhighlight
   );
-
   client.onReady().then(() => {
     client.onNotification('error', (params: any) => {
       console.log('Error handling in extension from client has been reached');
@@ -70,7 +59,6 @@ export function activate(context: vscode.ExtensionContext) {
       );
       setConnectionStatus(false);
     });
-
     client.onNotification('highlight', (params: any) => {
       console.log(params);
       if (!params.line) {
@@ -81,7 +69,6 @@ export function activate(context: vscode.ExtensionContext) {
       }
       executeHighlight(params.line, params.twitchUser);
     });
-
     client.onNotification('unhighlight', (params: any) => {
       console.log(params);
       if (!params.line) {
@@ -404,6 +391,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
   }
   // #endregion command handlers
+  
   function setConnectionStatus(
     connectionStatus: boolean,
     isConnecting?: boolean
