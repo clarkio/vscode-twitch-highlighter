@@ -115,14 +115,14 @@ function parseMessage(userName: string, message: string) {
   if (messageParts.length === 1) {
     // Example: !<command> <line number>
     connection.sendNotification(notificationType, {
-      line: lineNumber,
+      line: +lineNumber,
       twitchUser: userName
     });
   } else {
     // Format Example: !<command> <line number> <filename.ts>
     // Other Example: !<command> <line number> <filename.ts> <color>
     connection.sendNotification(notificationType, {
-      line: lineNumber,
+      line: +lineNumber,
       filename: messageParts[1],
       twitchUser: userName
     });
