@@ -18,101 +18,10 @@ let twitchCC: TwitchChatClient;
 let twitchHighlighterTreeView: TwitchHighlighterDataProvider;
 let twitchHighlighterStatusBar: vscode.StatusBarItem;
 
-function highlight(line: number, twitchUser: string) {
-  console.log(`highlight called.`);
-  if (!line) {
-    vscode.window.showWarningMessage(
-      'A line number was not provided to unhighlight'
-    );
-    return;
-  }
-
-  let editor = vscode.window.activeTextEditor;
-  if (!editor) {
-    console.log('No active text editor is present.');
-    return;
-  }
-
-  const doc = editor.document;
-  const existingHighlighter = highlighters.find(highlighter => {
-    return highlighter.editor.document.fileName === doc.fileName;
-  });
-
-  // Do not highlight a line already requested by the same user.
-  if (existingHighlighter && existingHighlighter.highlights.some(h => h.twitchUser === twitchUser && h.lineNumber === line)) {
-    console.log(`An existing highlight already exists for '${twitchUser}' on line '${line}'`);
-    return;
-  }
-
-  const range = getHighlightRange(line, doc);
-  if (range.isEmpty) {
-    /**
-     * TODO: Maybe whisper to the end-user that the line requested is empty.
-     * Although whispers aren't gaurenteed to reach the end-user.
-     */
-    console.log(`line '${line}' is empty. Cancelled.`);
-    return;
-  }
-
-  const decoration = {
-    range,
-    hoverMessage: `From @${twitchUser === 'self' ? 'You' : twitchUser}`
-  };
-
-  addHighlight(
-    existingHighlighter,
-    decoration,
-    editor,
-    line,
-    twitchUser
-  );
-}
-
-function unhighlight(line: number, fileName: string) {
-  console.log('unhighlight called.');
-  if (!line) {
-    vscode.window.showWarningMessage('A line number was not provided to unhighlight.');
-    return;
-  }
-
-  let currentDocumentFileName: string;
-  if (!fileName) {
-    // We need to assume it's for the currently opened file
-    let editor = vscode.window.activeTextEditor;
-    if (!editor) {
-      vscode.window.showWarningMessage('A file was not found to perform the unhighlight.');
-      return;
-    }
-    currentDocumentFileName = editor.document.fileName;
-  } else {
-    const existingHighlighter = highlighters.find(highlighter => {
-      return highlighter.editor.document.fileName.includes(fileName);
-    });
-    if (!existingHighlighter) {
-      vscode.window.showWarningMessage('A file was not found to perform the unhighlight.');
-      return;
-    }
-    currentDocumentFileName = existingHighlighter.editor.document.fileName;
-  }
-
-  removeHighlight(line, currentDocumentFileName);
-}
-
-// Listen for active text editor or document so we don't lose any existing highlights
-let activeEditor = vscode.window.activeTextEditor;
-if (activeEditor) {
-  triggerUpdateDecorations();
-}
-
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
   setupDecoratorType();
-  vscode.workspace.onDidChangeConfiguration(e => {
-    if (e.affectsConfiguration('twitchHighlighter')) {
-      setupDecoratorType();
-    }
-  });
 
   twitchCC = new TwitchChatClient(
     context.asAbsolutePath(path.join('out', 'twitchLanguageServer.js')),
@@ -133,42 +42,21 @@ export function activate(context: vscode.ExtensionContext) {
     twitchHighlighterTreeView
   );
 
-  const gotoHighlightCommand = vscode.commands.registerCommand(
-    'twitchHighlighter.gotoHighlight',
-    (lineNumber: number, document: vscode.TextDocument) => {
-      vscode.window.showTextDocument(document).then(editor => {
-        lineNumber = lineNumber < 3 ? 2 : lineNumber;
-        editor.revealRange(document.lineAt(lineNumber - 2).range);
-      });
-    }
+  // Creates the status bar toggle button
+  twitchHighlighterStatusBar = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Right
   );
-  context.subscriptions.push(gotoHighlightCommand);
+  twitchHighlighterStatusBar.command = 'twitchHighlighter.toggleChat';
+  twitchHighlighterStatusBar.tooltip = `Twitch Highlighter Extension`;
+  context.subscriptions.push(twitchHighlighterStatusBar);
 
-  const removeHighlightCommand = vscode.commands.registerCommand(
-    'twitchHighlighter.removeHighlight',
-    (highlighterNode: HighlighterNode) => {
-      const highlightsToRemove = Array<{
-        lineNumber: number;
-        fileName: string;
-      }>();
-      highlighterNode.highlights.map(highlight =>
-        highlightsToRemove.push({
-          lineNumber: highlight.lineNumber,
-          fileName: highlighterNode.document.fileName
-        })
-      );
-      highlightsToRemove.forEach(v =>
-        removeHighlight(v.lineNumber, v.fileName, true)
-      );
-      twitchHighlighterTreeView.refresh();
-    }
-  );
-  context.subscriptions.push(removeHighlightCommand);
+  setConnectionStatus(false);
+  twitchHighlighterStatusBar.show();
 
   // #region command registrations
-  registerCommand(context, 'twitchHighlighter.refreshTreeView', () =>
-    twitchHighlighterTreeView.refresh()
-  );
+  registerCommand(context, 'twitchHighlighter.gotoHighlight', gotoHighlightHandler);
+  registerCommand(context, 'twitchHighlighter.removeHighlight', removeHighlightHandler);
+  registerCommand(context, 'twitchHighlighter.refreshTreeView', refreshTreeViewHandler);
   registerCommand(context, 'twitchHighlighter.removeTwitchClientId', removeTwitchClientIdHandler);
   registerCommand(context, 'twitchHighlighter.setTwitchPassword', setTwitchTokenHandler);
   registerCommand(context, 'twitchHighlighter.removeTwitchPassword', removeTwitchPasswordHandler);
@@ -181,6 +69,34 @@ export function activate(context: vscode.ExtensionContext) {
   // #endregion command registrations
 
   // #region command handlers
+  function gotoHighlightHandler(line: number, document: vscode.TextDocument) {
+    vscode.window.showTextDocument(document).then(editor => {
+      line = line < 3 ? 2 : line;
+      editor.revealRange(document.lineAt(line - 2).range);
+    });
+  }
+
+  function removeHighlightHandler(highlighterNode: HighlighterNode) {
+    const highlightsToRemove = Array<{
+      lineNumber: number;
+      fileName: string;
+    }>();
+    highlighterNode.highlights.map(highlight =>
+      highlightsToRemove.push({
+        lineNumber: highlight.lineNumber,
+        fileName: highlighterNode.document.fileName
+      })
+    );
+    highlightsToRemove.forEach(v =>
+      removeHighlight(v.lineNumber, v.fileName, true)
+    );
+    twitchHighlighterTreeView.refresh();
+  }
+
+  function refreshTreeViewHandler() {
+    twitchHighlighterTreeView.refresh();
+  }
+
   function removeTwitchClientIdHandler() {
     CredentialManager.deleteTwitchClientId()
       .then((value: boolean) => {
@@ -298,6 +214,16 @@ export function activate(context: vscode.ExtensionContext) {
   }
   // #endregion command handlers
 
+  // #region vscode events
+  vscode.workspace.onDidChangeConfiguration(
+    event => {
+      if (event.affectsConfiguration('twitchHighlighter')) {
+        setupDecoratorType();
+      }
+    },
+    null,
+    context.subscriptions
+  );
   vscode.window.onDidChangeActiveTextEditor(
     editor => {
       activeEditor = editor;
@@ -310,8 +236,8 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   vscode.workspace.onDidChangeTextDocument(
-    event => {
-      if (activeEditor && event.document === activeEditor.document) {
+    document => {
+      if (activeEditor && document.document === activeEditor.document) {
         triggerUpdateDecorations();
       }
     },
@@ -320,7 +246,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   vscode.workspace.onDidCloseTextDocument(
-    (document: vscode.TextDocument) => {
+    document => {
       if (document.isUntitled) {
         highlighters = highlighters.filter(
           highlight => highlight.editor.document !== document
@@ -332,23 +258,106 @@ export function activate(context: vscode.ExtensionContext) {
     null,
     context.subscriptions
   );
+  // #endregion  
+}
 
-  // Creates the status bar toggle button
-  twitchHighlighterStatusBar = vscode.window.createStatusBarItem(
-    vscode.StatusBarAlignment.Right
+export function deactivate(): Thenable<void> {
+  if (!twitchCC) {
+    return Promise.resolve();
+  }
+  return twitchCC.dispose();
+}
+
+function highlight(line: number, twitchUser: string) {
+  console.log(`highlight called.`);
+  if (!line) {
+    vscode.window.showWarningMessage(
+      'A line number was not provided to unhighlight'
+    );
+    return;
+  }
+
+  let editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    console.log('No active text editor is present.');
+    return;
+  }
+
+  const doc = editor.document;
+  const existingHighlighter = highlighters.find(highlighter => {
+    return highlighter.editor.document.fileName === doc.fileName;
+  });
+
+  // Do not highlight a line already requested by the same user.
+  if (existingHighlighter && existingHighlighter.highlights.some(h => h.twitchUser === twitchUser && h.lineNumber === line)) {
+    console.log(`An existing highlight already exists for '${twitchUser}' on line '${line}'`);
+    return;
+  }
+
+  const range = getHighlightRange(line, doc);
+  if (range.isEmpty) {
+    /**
+     * TODO: Maybe whisper to the end-user that the line requested is empty.
+     * Although whispers aren't gaurenteed to reach the end-user.
+     */
+    console.log(`line '${line}' is empty. Cancelled.`);
+    return;
+  }
+
+  const decoration = {
+    range,
+    hoverMessage: `From @${twitchUser === 'self' ? 'You' : twitchUser}`
+  };
+
+  addHighlight(
+    existingHighlighter,
+    decoration,
+    editor,
+    line,
+    twitchUser
   );
-  twitchHighlighterStatusBar.command = 'twitchHighlighter.toggleChat';
-  twitchHighlighterStatusBar.tooltip = `Twitch Highlighter Extension`;
-  context.subscriptions.push(twitchHighlighterStatusBar);
+}
 
-  setConnectionStatus(false);
-  twitchHighlighterStatusBar.show();
+function unhighlight(line: number, fileName: string) {
+  console.log('unhighlight called.');
+  if (!line) {
+    vscode.window.showWarningMessage('A line number was not provided to unhighlight.');
+    return;
+  }
+
+  let currentDocumentFileName: string;
+  if (!fileName) {
+    // We need to assume it's for the currently opened file
+    let editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      vscode.window.showWarningMessage('A file was not found to perform the unhighlight.');
+      return;
+    }
+    currentDocumentFileName = editor.document.fileName;
+  } else {
+    const existingHighlighter = highlighters.find(highlighter => {
+      return highlighter.editor.document.fileName.includes(fileName);
+    });
+    if (!existingHighlighter) {
+      vscode.window.showWarningMessage('A file was not found to perform the unhighlight.');
+      return;
+    }
+    currentDocumentFileName = existingHighlighter.editor.document.fileName;
+  }
+
+  removeHighlight(line, currentDocumentFileName);
+}
+
+// Listen for active text editor or document so we don't lose any existing highlights
+let activeEditor = vscode.window.activeTextEditor;
+if (activeEditor) {
+  triggerUpdateDecorations();
 }
 
 function setConnectionStatus(
   connected: boolean,
   isConnecting?: boolean
-) {  
+) {
   if (connected) {
     twitchHighlighterStatusBar.text = `${twitchHighlighterStatusBarIcon} Connected`;
   } else {
@@ -442,17 +451,10 @@ function getHighlightRange(line: number, doc: vscode.TextDocument) {
   return range;
 }
 
-export function deactivate(): Thenable<void> {
-  if (!twitchCC) {
-    return Promise.resolve();
-  }
-  return twitchCC.dispose();
-}
-
 function registerCommand(
   context: vscode.ExtensionContext,
   name: string,
-  handler: () => void
+  handler: (...params: any) => void
 ) {
   let disposable = vscode.commands.registerCommand(name, handler);
   context.subscriptions.push(disposable);
