@@ -454,7 +454,7 @@ function getHighlightRange(line: number, doc: vscode.TextDocument) {
 function registerCommand(
   context: vscode.ExtensionContext,
   name: string,
-  handler: (...params: any) => void
+  handler: (...params: any[]) => void
 ) {
   let disposable = vscode.commands.registerCommand(name, handler);
   context.subscriptions.push(disposable);
