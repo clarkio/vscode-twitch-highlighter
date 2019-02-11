@@ -45,5 +45,5 @@ export class Highlight {
     public decoration: { range: vscode.Range },
     public lineNumber: number,
     public twitchUser?: string
-  ) {}
+  ) { }
 }
