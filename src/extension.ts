@@ -647,6 +647,7 @@ function setupDecoratorType() {
     highlightDecorationType = vscode.window.createTextEditorDecorationType({
         backgroundColor: configuration.get<string>('highlightColor') || 'green',
         border:
-            configuration.get<string>('highlightBorder') || '2px solid white'
+            configuration.get<string>('highlightBorder') || '2px solid white',
+        color: configuration.get<string>('highlightFontColor') || 'white'
     });
 }
