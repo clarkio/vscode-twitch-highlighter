@@ -1,7 +1,35 @@
-# Change Log
-All notable changes to the "twitch-line-highlighter" extension will be documented in this file.
+# Changelog
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Initial release
+
+## [0.1.4]
+
+### Added
+
+-   A setting to allow changes to font color within highlights ([#](https://github.com/clarkio/vscode-twitch-highlighter/pull/))
+-   An .editorconfig file to keep styling consistent. ([#54](https://github.com/clarkio/vscode-twitch-highlighter/pull/54) thanks @parithon)
+
+## [Released]
+
+## [0.1.3] - 2019-02-07
+
+### Changed
+
+-   Setting names to be camelCase ([#48](https://github.com/clarkio/vscode-twitch-highlighter/pull/48))
+-   README with better instructions to get started ([#43](https://github.com/clarkio/vscode-twitch-highlighter/pull/43) thanks @FletcherCodes)
+-   Icon used in the VS Code Marketplace for better contrast/visibility ([#50](https://github.com/clarkio/vscode-twitch-highlighter/pull/50) thanks @parithon)
+
+## [0.1.2] - 2019-02-03
+
+### Fixed
+
+-   Issues where commands were not registering. The cause was from node_modules not being included in the package.
+
+## [0.1.0] - 2019-02-01
+
+-   Pre-release version to gather feedback from the community and help identify gaps.
