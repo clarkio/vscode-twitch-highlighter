@@ -8,7 +8,7 @@
     "engines": {
         "vscode": "^1.29.0"
     },
-    "icon": "resources/twitchHighlighterIcon.png",
+    "icon": "resources/highlighterIcon.png",
     "categories": [
         "Other"
     ],
@@ -110,7 +110,7 @@
             "activitybar": [
                 {
                     "id": "twitchHighlighter-explorer",
-                    "icon": "resources/twitchHighlighterIcon.svg",
+                    "icon": "resources/highlighterIcon.svg",
                     "title": "Twitch Highlighter"
                 }
             ]
