@@ -1,19 +1,85 @@
 {
-    "name": "twitch-highlighter",
-    "displayName": "Twitch Highlighter",
-    "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. etc. bysending a command in chat that will highlight the line of code they want you to check.",
-    "version": "0.1.4",
-    "preview": true,
-    "publisher": "clarkio",
-    "engines": {
-        "vscode": "^1.29.0"
-    },
-    "icon": "resources/twitchHighlighterIcon.png",
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "*"
+  "name": "twitch-highlighter",
+  "displayName": "Twitch Highlighter",
+  "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. etc. bysending a command in chat that will highlight the line of code they want you to check.",
+  "version": "0.1.4",
+  "preview": true,
+  "publisher": "clarkio",
+  "engines": {
+    "vscode": "^1.29.0"
+  },
+  "icon": "resources/twitchHighlighterIcon.png",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clarkio/vscode-twitch-highlighter.git"
+  },
+  "license": "MIT",
+  "main": "./out/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "twitchHighlighter.highlight",
+        "title": "Highlight Line",
+        "category": "Twitch Highlighter" 
+      },
+      {
+        "command": "twitchHighlighter.unhighlightAll",
+        "title": "Unhighlight All",
+        "category": "Twitch Highlighter"
+      },
+      {
+        "command": "twitchHighlighter.unhighlightSpecific",
+        "title": "Unhighlight by File and Line",
+        "category": "Twitch Highlighter"
+      },
+      {
+        "command": "twitchHighlighter.startChat",
+        "title": "Start Listening to Chat",
+        "category": "Twitch Highlighter"
+      },
+      {
+        "command": "twitchHighlighter.stopChat",
+        "title": "Stop Listening to Chat",
+        "category": "Twitch Highlighter"
+      },
+      {
+        "command": "twitchHighlighter.toggleChat",
+        "title": "Toggle Listening to Chat",
+        "category": "Twitch Highlighter"
+      },
+      {
+        "command": "twitchHighlighter.removeTwitchClientId",
+        "title": "Remove Client Id",
+        "category": "Twitch Highlighter"
+      },
+      {
+        "command": "twitchHighlighter.setTwitchPassword",
+        "title": "Set Password",
+        "category": "Twitch Highlighter"
+      },
+      {
+        "command": "twitchHighlighter.removeTwitchPassword",
+        "title": "Remove Password",
+        "category": "Twitch Highlighter"
+      },
+      {
+        "command": "twitchHighlighter.refreshTreeView",
+        "title": "Refresh"
+      },
+      {
+        "command": "twitchHighlighter.gotoHighlight",
+        "title": "Goto Highlight"
+      },
+      {
+        "command": "twitchHighlighter.removeHighlight",
+        "title": "Remove Highlight"
+      }
     ],
     "repository": {
         "type": "git",
