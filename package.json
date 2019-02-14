@@ -25,39 +25,48 @@
     "commands": [
       {
         "command": "twitchHighlighter.highlight",
-        "title": "Twitch Highlighter: Highlight Line"
+        "title": "Highlight Line",
+        "category": "Twitch Highlighter" 
       },
       {
         "command": "twitchHighlighter.unhighlightAll",
-        "title": "Twitch Highlighter: Unhighlight All"
+        "title": "Unhighlight All",
+        "category": "Twitch Highlighter"
       },
       {
         "command": "twitchHighlighter.unhighlightSpecific",
-        "title": "Twitch Highlighter: Unhighlight by File and Line"
+        "title": "Unhighlight by File and Line",
+        "category": "Twitch Highlighter"
       },
       {
         "command": "twitchHighlighter.startChat",
-        "title": "Twitch Highlighter: Start Listening to Chat"
+        "title": "Start Listening to Chat",
+        "category": "Twitch Highlighter"
       },
       {
         "command": "twitchHighlighter.stopChat",
-        "title": "Twitch Highlighter: Stop Listening to Chat"
+        "title": "Stop Listening to Chat",
+        "category": "Twitch Highlighter"
       },
       {
         "command": "twitchHighlighter.toggleChat",
-        "title": "Twitch Highlighter: Toggle Listening to Chat"
+        "title": "Toggle Listening to Chat",
+        "category": "Twitch Highlighter"
       },
       {
         "command": "twitchHighlighter.removeTwitchClientId",
-        "title": "Twitch Highlighter: Remove Client Id"
+        "title": "Remove Client Id",
+        "category": "Twitch Highlighter"
       },
       {
         "command": "twitchHighlighter.setTwitchPassword",
-        "title": "Twitch Highlighter: Set Password"
+        "title": "Set Password",
+        "category": "Twitch Highlighter"
       },
       {
         "command": "twitchHighlighter.removeTwitchPassword",
-        "title": "Twitch Highlighter: Remove Password"
+        "title": "Remove Password",
+        "category": "Twitch Highlighter"
       },
       {
         "command": "twitchHighlighter.refreshTreeView",
