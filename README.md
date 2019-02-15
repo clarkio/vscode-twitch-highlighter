@@ -56,9 +56,13 @@ To unhighlight a line, use:
 
     > Note: this is required if you'd like to have the bot send join/leave messages in your chat. It also needs to match the Twitch username with which you generated the OAuth token.
 
--   `twitchHighlighter.highlightColor`: Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations.
+-   `twitchHighlighter.highlightColor`: Background color of the decoration (default: green). Use rgba() and define transparent background colors to play well with other decorations.
 
           Example: green
+
+-   `twitchHighlighter.highlightFontColor`: Font color of the decoration (default: white). Use rgba() and define transparent background colors to play well with other decorations.
+
+          Example: white
 
 *   `twitchHighlighter.highlightBorder`: CSS styling property that will be applied to text enclosed by a decoration.
 *   `twitchHighlighter.announceBot`: Whether or not the bot should announce its joining or leaving the chat room.
@@ -76,7 +80,9 @@ Some of the code in this extension has been adapted from the [twitchlint extensi
 ## Release Notes
 
 ### 0.1.4
+
 -   Established a .editorconfig file to keep styling consistent. ([#54](https://github.com/clarkio/vscode-twitch-highlighter/pull/54) thanks @parithon)
+-   Added a setting to allow changes to font color within highlights ([#](https://github.com/clarkio/vscode-twitch-highlighter/pull/))
 
 ### 0.1.3
 
