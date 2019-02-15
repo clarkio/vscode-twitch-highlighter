@@ -1,26 +1,26 @@
-import { LanguageClient, ServerOptions, LanguageClientOptions, TransportKind } from "vscode-languageclient";
+import {
+  LanguageClient,
+  ServerOptions,
+  LanguageClientOptions,
+  TransportKind
+} from 'vscode-languageclient';
 import { workspace, window, Disposable } from 'vscode';
-import CredentialManager from "./credentialManager";
+import CredentialManager from './credentialManager';
 
 export class TwitchChatClient {
   private readonly _languageClient: LanguageClient;
   private _isConnected: boolean = false;
 
-  constructor(
-    serverModule: string,
-    disposables?: Disposable[]
-  ) {
-    
+  constructor(serverModule: string, disposables?: Disposable[]) {
     this._languageClient = new LanguageClient(
-      'Twitch Chat Highlighter', 
-      this.getServerOptions(serverModule), 
+      'Twitch Chat Highlighter',
+      this.getServerOptions(serverModule),
       this.getClientOptions()
     );
 
-    this._languageClient.onReady()
-      .then(() => {
-        this.setup();
-      });
+    this._languageClient.onReady().then(() => {
+      this.setup();
+    });
 
     const disposable = this._languageClient.start();
     if (disposables) {
@@ -56,7 +56,7 @@ export class TwitchChatClient {
   /**
    * Retrieves the connection status.
    */
-  public isConnected() { 
+  public isConnected() {
     return this._isConnected;
   }
 
@@ -67,19 +67,28 @@ export class TwitchChatClient {
   public async start(setTokenCallback: () => Promise<boolean>) {
     CredentialManager.getTwitchToken()
       .then(token => {
-        if (!this.verifyToken(token, setTokenCallback)) { return; }
-        window.showInformationMessage('Twitch Highlighter: Starting Chat Listener...');
+        if (!this.verifyToken(token, setTokenCallback)) {
+          return;
+        }
+        window.showInformationMessage(
+          'Twitch Highlighter: Starting Chat Listener...'
+        );
         if (this.onConnecting) {
           this.onConnecting();
         }
-        if(token === null) { return; }
+        if (token === null) {
+          return;
+        }
         this.startListening(token);
       })
       .catch(err => {
         if (this.onDisconnected) {
           this.onDisconnected();
           this._isConnected = false;
-          console.error('An unhandled exception occured while connecting to the twitch chat client.', err);
+          console.error(
+            'An unhandled exception occured while connecting to the twitch chat client.',
+            err
+          );
           window.showErrorMessage('Twitch Highlighter: Unable to connect.');
         }
       });
@@ -89,21 +98,32 @@ export class TwitchChatClient {
    * Stop the connection to Twitch IRC
    */
   public stop() {
-    this._languageClient.sendRequest('stopchat')
-      .then(result => {
+    this._languageClient.sendRequest('stopchat').then(
+      result => {
         if (!result) {
-          window.showErrorMessage('Twitch Highlighter: Unable to stop listening to chat.');
+          window.showErrorMessage(
+            'Twitch Highlighter: Unable to stop listening to chat.'
+          );
           return;
         }
         if (this.onDisconnected) {
           this.onDisconnected();
           this._isConnected = false;
         }
-        window.showInformationMessage('Twitch Highlighter: Stopped listening to chat.');
-      }, rejected => {
-        console.error('An unhandled error occured while disconnecting from Twitch chat.', rejected);
-        window.showErrorMessage('Twitch Highlighter: Unable to stop listening to chat');
-      });
+        window.showInformationMessage(
+          'Twitch Highlighter: Stopped listening to chat.'
+        );
+      },
+      rejected => {
+        console.error(
+          'An unhandled error occured while disconnecting from Twitch chat.',
+          rejected
+        );
+        window.showErrorMessage(
+          'Twitch Highlighter: Unable to stop listening to chat'
+        );
+      }
+    );
   }
 
   public dispose(): Thenable<void> {
@@ -118,47 +138,56 @@ export class TwitchChatClient {
       password: token,
       announce: configuration.get<boolean>('announceBot') || false,
       joinMessage: configuration.get<string>('joinMessage') || '',
-      leaveMessage: configuration.get<string>('leaveMessage') || '' 
+      leaveMessage: configuration.get<string>('leaveMessage') || ''
     };
-    this._languageClient.sendRequest('startchat', chatParams)
-      .then(result => {
-        window.showInformationMessage('Twitch Highlighter: Chat Listener Conected.');
+    this._languageClient.sendRequest('startchat', chatParams).then(
+      result => {
+        window.showInformationMessage(
+          'Twitch Highlighter: Chat Listener Connected.'
+        );
         if (this.onConnected) {
           this.onConnected();
           this._isConnected = true;
         }
-      }, rejected => {
+      },
+      rejected => {
         console.error(`Unable to connect to twitch chat irc.`, rejected);
         window.showErrorMessage('Twitch Highlighter: Unable to connect.');
         if (this.onDisconnected) {
           this._isConnected = false;
           this.onDisconnected();
         }
-      });
+      }
+    );
   }
 
-  private async verifyToken(token: string | null, setTokenCallback: () => Promise<boolean>): Promise<boolean> {
+  private async verifyToken(
+    token: string | null,
+    setTokenCallback: () => Promise<boolean>
+  ): Promise<boolean> {
     if (token === null) {
-      window.showInformationMessage('Missing Twitch Token. Cannot start chat client.',
-      'Set Token')
-      .then(async action => {
-        if (action) {
-          // The user did not click the 'cancel' button.
-          // Set the password when null, if the result is false 
-          // (i.e. user cancelled) then cancel the connection
-          if (token === null && !(await setTokenCallback())) {
-            return;
+      window
+        .showInformationMessage(
+          'Missing Twitch Token. Cannot start chat client.',
+          'Set Token'
+        )
+        .then(async action => {
+          if (action) {
+            // The user did not click the 'cancel' button.
+            // Set the password when null, if the result is false
+            // (i.e. user cancelled) then cancel the connection
+            if (token === null && !(await setTokenCallback())) {
+              return;
+            }
+            this.start(setTokenCallback);
           }
-          this.start(setTokenCallback);
-        }
-      });
+        });
       return false;
     }
     return true;
   }
 
   private setup() {
-
     this._languageClient.onNotification('error', (params: any) => {
       console.error('An unhandled error from TwitchServer has been reached.');
       window.showErrorMessage(params.message);
@@ -177,7 +206,6 @@ export class TwitchChatClient {
         this.onUnhighlight(params.line, params.fileName);
       }
     });
-
   }
 
   private getServerOptions(serverModule: string): ServerOptions {
@@ -206,5 +234,4 @@ export class TwitchChatClient {
       }
     };
   }
-
 }
