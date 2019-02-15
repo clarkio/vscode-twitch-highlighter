@@ -6,8 +6,8 @@ import * as path from 'path';
 import { Highlighter, Highlight } from './highlighter';
 import CredentialManager from './credentialManager';
 import {
-  TwitchHighlighterDataProvider,
-  HighlighterNode
+    TwitchHighlighterDataProvider,
+    HighlighterNode
 } from './twitchHighlighterTreeView';
 import { TwitchChatClient } from './twitchChatClient';
 
@@ -214,10 +214,14 @@ export function activate(context: vscode.ExtensionContext) {
         'There are no highlights to unhighlight'
       );
     }
+
     let pickerOptions: Array<string> = new Array<string>();
-    highlighters.forEach(highlighter => {
-      pickerOptions = [...pickerOptions, ...highlighter.getPickerDetails()];
-    });
+        highlighters.forEach(highlighter => {
+            pickerOptions = [
+                ...pickerOptions,
+                ...highlighter.getPickerDetails()
+            ];
+        });
 
     vscode.window.showQuickPick(pickerOptions).then(pickedOption => {
       if (!pickedOption) {
@@ -464,9 +468,9 @@ function removeHighlight(
 }
 
 function findHighlighter(fileName: string): Highlighter | undefined {
-  return highlighters.find(highlighter => {
-    return highlighter.editor.document.fileName === fileName;
-  });
+    return highlighters.find(highlighter => {
+        return highlighter.editor.document.fileName === fileName;
+    });
 }
 
 function getHighlightRange(line: number, doc: vscode.TextDocument) {
@@ -489,14 +493,18 @@ function registerCommand(
   name: string,
   handler: (...params: any[]) => void
 ) {
-  let disposable = vscode.commands.registerCommand(name, handler);
-  context.subscriptions.push(disposable);
+    let disposable = vscode.commands.registerCommand(name, handler);
+    context.subscriptions.push(disposable);
 }
 
 function setupDecoratorType() {
-  const configuration = vscode.workspace.getConfiguration('twitchHighlighter');
-  highlightDecorationType = vscode.window.createTextEditorDecorationType({
-    backgroundColor: configuration.get<string>('highlightColor') || 'green',
-    border: configuration.get<string>('highlightBorder') || '2px solid white'
-  });
+    const configuration = vscode.workspace.getConfiguration(
+        'twitchHighlighter'
+    );
+    highlightDecorationType = vscode.window.createTextEditorDecorationType({
+        backgroundColor: configuration.get<string>('highlightColor') || 'green',
+        border:
+            configuration.get<string>('highlightBorder') || '2px solid white',
+        color: configuration.get<string>('highlightFontColor') || 'white'
+    });
 }
