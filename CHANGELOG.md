@@ -11,8 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   A setting to allow changes to font color within highlights ([#](https://github.com/clarkio/vscode-twitch-highlighter/pull/))
--   An .editorconfig file to keep styling consistent. ([#54](https://github.com/clarkio/vscode-twitch-highlighter/pull/54) thanks @parithon)
+- A setting to allow changes to font color within highlights ([#55](https://github.com/clarkio/vscode-twitch-highlighter/pull/55))
+- An .editorconfig file to keep styling consistent. ([#54](https://github.com/clarkio/vscode-twitch-highlighter/pull/54) thanks @parithon)
+
+### Changed
+
+- Client code with some refactoring to clean it up ([#57](https://github.com/clarkio/vscode-twitch-highlighter/pull/57) thanks @parithon)
+- Commands to use categories for grouping of them ([#63](https://github.com/clarkio/vscode-twitch-highlighter/pull/63) thanks @matthewkosloski)
 
 ## [Released]
 
@@ -20,16 +25,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Setting names to be camelCase ([#48](https://github.com/clarkio/vscode-twitch-highlighter/pull/48))
--   README with better instructions to get started ([#43](https://github.com/clarkio/vscode-twitch-highlighter/pull/43) thanks @FletcherCodes)
--   Icon used in the VS Code Marketplace for better contrast/visibility ([#50](https://github.com/clarkio/vscode-twitch-highlighter/pull/50) thanks @parithon)
+- Setting names to be camelCase ([#48](https://github.com/clarkio/vscode-twitch-highlighter/pull/48))
+- README with better instructions to get started ([#43](https://github.com/clarkio/vscode-twitch-highlighter/pull/43) thanks @FletcherCodes)
+- Icon used in the VS Code Marketplace for better contrast/visibility ([#50](https://github.com/clarkio/vscode-twitch-highlighter/pull/50) thanks @parithon)
 
 ## [0.1.2] - 2019-02-03
 
 ### Fixed
 
--   Issues where commands were not registering. The cause was from node_modules not being included in the package.
+- Issues where commands were not registering. The cause was from node_modules not being included in the package.
 
 ## [0.1.0] - 2019-02-01
 
--   Pre-release version to gather feedback from the community and help identify gaps.
+- Pre-release version to gather feedback from the community and help identify gaps.

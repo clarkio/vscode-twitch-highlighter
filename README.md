@@ -6,29 +6,29 @@ A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos
 
 In order to use this extension you will need the following things before going to the [Getting Started](#getting-started) section:
 
--   An installed version of [VS Code](https://code.visualstudio.com)
--   A Twitch account for yourself or a separate one to be used as a chat bot ([sign up here](https://www.twitch.tv/signup))
--   While logged in as your own account or as a separate account go to this site to generate a token for the chat bot: http://www.twitchapps.com/tmi
-    -   Save this token temporarily in a safe place as you will need it later in the [Getting Started](#getting-started) section.
+- An installed version of [VS Code](https://code.visualstudio.com)
+- A Twitch account for yourself or a separate one to be used as a chat bot ([sign up here](https://www.twitch.tv/signup))
+- While logged in as your own account or as a separate account go to this site to generate a token for the chat bot: http://www.twitchapps.com/tmi
+  - Save this token temporarily in a safe place as you will need it later in the [Getting Started](#getting-started) section.
 
 ## Getting Started
 
 1. Install the extension from the [marketplace](https://marketplace.visualstudio.com/items?itemName=clarkio.twitch-highlighter)
 2. Open your VS Code settings
 
-    - Keyboard shortcut: `CTRL/CMD + ,`
+   - Keyboard shortcut: `CTRL/CMD + ,`
 
 3. Type in "twitch" into the search bar
 4. Find the `Twitch Highlighter: Channels` setting and click on "Edit in settings.json"
 5. Add a new entry to the JSON settings file with the setting key `"twitchHighlighter.channels"` and a value that's an array of strings. For now this can just contain one string and its value should be the name of your Twitch account/channel.
 
-    Example:
+   Example:
 
-    ```json
-    {
-        "twitchHighlighter.channels": ["clarkio"]
-    }
-    ```
+   ```json
+   {
+     "twitchHighlighter.channels": ["clarkio"]
+   }
+   ```
 
 6. Save your changes and close that tab. Go back to the Settings UI tab.
 7. Find the `Nickname` setting. If you are using your own account for the chat bot then enter your account username as the value here. If you created a separate account use that username. Save your changes.
@@ -50,24 +50,24 @@ To unhighlight a line, use:
 
 ## Extension Settings
 
--   `twitchHighlighter.channels`: The channel name(s) to connect to on Twitch.
-    Example: `['clarkio'], Another Example: ['clarkio', 'parithon']
--   `twitchHighlighter.nickname`: The username the bot should use when joining a Twitch channel.
+- `twitchHighlighter.channels`: The channel name(s) to connect to on Twitch.
+  Example: `['clarkio'], Another Example: ['clarkio', 'parithon']
+- `twitchHighlighter.nickname`: The username the bot should use when joining a Twitch channel.
 
-    > Note: this is required if you'd like to have the bot send join/leave messages in your chat. It also needs to match the Twitch username with which you generated the OAuth token.
+  > Note: this is required if you'd like to have the bot send join/leave messages in your chat. It also needs to match the Twitch username with which you generated the OAuth token.
 
--   `twitchHighlighter.highlightColor`: Background color of the decoration (default: green). Use rgba() and define transparent background colors to play well with other decorations.
+- `twitchHighlighter.highlightColor`: Background color of the decoration (default: green). Use rgba() and define transparent background colors to play well with other decorations.
 
-          Example: green
+        Example: green
 
--   `twitchHighlighter.highlightFontColor`: Font color of the decoration (default: white). Use rgba() and define transparent background colors to play well with other decorations.
+- `twitchHighlighter.highlightFontColor`: Font color of the decoration (default: white). Use rgba() and define transparent background colors to play well with other decorations.
 
-          Example: white
+        Example: white
 
-*   `twitchHighlighter.highlightBorder`: CSS styling property that will be applied to text enclosed by a decoration.
-*   `twitchHighlighter.announceBot`: Whether or not the bot should announce its joining or leaving the chat room.
-*   `twitchHighlighter.joinMessage`: The message the bot will say when joining a chat room
-*   `twitchHighlighter.leaveMessage`: The message the bot will say when leaving a chat room
+* `twitchHighlighter.highlightBorder`: CSS styling property that will be applied to text enclosed by a decoration.
+* `twitchHighlighter.announceBot`: Whether or not the bot should announce its joining or leaving the chat room.
+* `twitchHighlighter.joinMessage`: The message the bot will say when joining a chat room
+* `twitchHighlighter.leaveMessage`: The message the bot will say when leaving a chat room
 
 ## Attribution
 
@@ -75,25 +75,8 @@ Some of the code in this extension has been adapted from the [twitchlint extensi
 
 ## Known Issues
 
--   Extension doesn't allow specifying the file to put the highlight in. This is a work in progress.
+- Extension doesn't allow specifying the file to put the highlight in. This is a work in progress.
 
 ## Release Notes
 
-### 0.1.4
-
--   Established a .editorconfig file to keep styling consistent. ([#54](https://github.com/clarkio/vscode-twitch-highlighter/pull/54) thanks @parithon)
--   Added a setting to allow changes to font color within highlights ([#](https://github.com/clarkio/vscode-twitch-highlighter/pull/))
-
-### 0.1.3
-
--   Cleaned up setting names ([#48](https://github.com/clarkio/vscode-twitch-highlighter/pull/48))
--   Updated README with better instructions to get started ([#43](https://github.com/clarkio/vscode-twitch-highlighter/pull/43) thanks @FletcherCodes)
--   Updated icon used in the VS Code Marketplace for better contrast/visibility ([#50](https://github.com/clarkio/vscode-twitch-highlighter/pull/50) thanks @parithon)
-
-### 0.1.2
-
--   Fix issues where commands were not registering. The cause was from node_modules not being included in the package.
-
-### 0.1.0
-
--   Pre-release version to gather feedback from the community and help identify gaps.
+See [CHANGELOG.md](CHANGELOG.md)
