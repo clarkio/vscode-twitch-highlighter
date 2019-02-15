@@ -208,6 +208,11 @@
                     "default": "green",
                     "markdownDescription": "Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Example: green"
                 },
+                "twitchHighlighter.highlightFontColor": {
+                    "type": "string",
+                    "default": "white",
+                    "markdownDescription": "Font color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Example: white"
+                },
                 "twitchHighlighter.highlightBorder": {
                     "type": "string",
                     "default": "2px solid white",
