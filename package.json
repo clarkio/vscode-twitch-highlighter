@@ -20,7 +20,7 @@
     "url": "https://github.com/clarkio/vscode-twitch-highlighter.git"
   },
   "license": "MIT",
-  "main": "./out/extension",
+  "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
@@ -151,6 +151,11 @@
           "default": "green",
           "markdownDescription": "Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Example: green"
         },
+        "twitchHighlighter.highlightFontColor": {
+          "type": "string",
+          "default": "white",
+          "markdownDescription": "Font color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Example: white"
+        },
         "twitchHighlighter.highlightBorder": {
           "type": "string",
           "default": "2px solid white",
@@ -176,9 +181,12 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile:prod",
+    "compile:tsc": "tsc -p ./",
+    "watch:tsc": "tsc -watch -p ./",
+    "compile:prod": "webpack --config webpack.config.js --mode production",
+    "compile": "webpack --config webpack.config.js --mode development",
+    "watch": "webpack --config webpack.config.js",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
@@ -188,7 +196,12 @@
     "@types/node": "^8.10.39",
     "vscode": "^1.1.26",
     "tslint": "^5.8.0",
-    "typescript": "^2.6.1"
+    "typescript": "^2.6.1",
+    "webpack": "^4.29.4",
+    "webpack-cli": "^3.2.3",
+    "ts-loader": "^5.3.3",
+    "bufferutil": "^4.0.1",
+    "utf-8-validate": "^5.0.2"
   },
   "dependencies": {
     "twitch-js": "^1.2.17",
