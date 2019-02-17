@@ -171,6 +171,11 @@
           "type": "string",
           "default": "Twitch Highlighter has left the building!",
           "description": "The message the bot will say when leaving a chat room"
+        },
+        "twitchHighlighter.unhighlightOnDisconnect": {
+          "type": "boolean",
+          "default": false,
+          "description": "Unhighlight all lines when disconnected from the chat service."
         }
       }
     }

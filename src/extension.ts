@@ -33,7 +33,14 @@ export function activate(context: vscode.ExtensionContext) {
   twitchChatClient.onUnhighlight = unhighlight;
   twitchChatClient.onConnected = () => setConnectionStatus(true);
   twitchChatClient.onConnecting = () => setConnectionStatus(false, true);
-  twitchChatClient.onDisconnected = () => setConnectionStatus(false);
+  twitchChatClient.onDisconnected = () => {
+    const config = vscode.workspace.getConfiguration('twitchHighlighter');
+    const unhighlightOnDisconnect = config.get<boolean>('unhighlightOnDisconnect');
+    setConnectionStatus(false);
+    if(unhighlightOnDisconnect) {
+      unhighlightAllHandler();
+    }
+  };
 
   twitchHighlighterTreeView = new TwitchHighlighterDataProvider(() => {
     return highlighters;
