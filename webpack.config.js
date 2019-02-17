@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   target: 'node',
@@ -9,6 +10,9 @@ module.exports = {
     twitchLanguageServer: './src/twitchLanguageServer.ts',
   },
   devtool: 'source-map',
+  plugins: [
+    new CleanWebpackPlugin(['out'])
+  ],
   module: {
     rules: [
       {

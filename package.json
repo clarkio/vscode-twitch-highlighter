@@ -181,27 +181,23 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile:prod",
-    "compile:tsc": "tsc -p ./",
-    "watch:tsc": "tsc -watch -p ./",
-    "compile:prod": "webpack --config webpack.config.js --mode production",
-    "compile": "webpack --config webpack.config.js --mode development",
-    "watch": "webpack --config webpack.config.js",
+    "vscode:prepublish": "webpack --config webpack.config.js --mode production",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/mocha": "^2.2.42",
     "@types/keytar": "^4.0.1",
+    "@types/mocha": "^2.2.42",
     "@types/node": "^8.10.39",
-    "vscode": "^1.1.26",
+    "clean-webpack-plugin": "^1.0.1",
+    "ts-loader": "^5.3.3",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1",
+    "vscode": "^1.1.26",
     "webpack": "^4.29.4",
-    "webpack-cli": "^3.2.3",
-    "ts-loader": "^5.3.3",
-    "bufferutil": "^4.0.1",
-    "utf-8-validate": "^5.0.2"
+    "webpack-cli": "^3.2.3"
   },
   "dependencies": {
     "twitch-js": "^1.2.17",

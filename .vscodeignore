@@ -1,4 +1,3 @@
-.config/**
 .vscode/**
 .vscode-test/**
 out/test/**
@@ -9,3 +8,4 @@ tsconfig.json
 vsc-extension-quickstart.md
 tslint.json
 node_modules/
+webpack.config.json
