@@ -80,64 +80,116 @@ function onTtvChatMessage(channel: string, user: any, message: string) {
   parseMessage(userName, message);
 }
 
-let highlighterCommands = ['!line', '!highlight'];
-let highlightCommandUsed: string;
+// let highlighterCommands = ['!line', '!highlight'];
+// let highlightCommandUsed: string;
 
 function parseMessage(userName: string, message: string) {
-  message = message.toLocaleLowerCase();
-  // Note: as RamblingGeek suggested might want to look into
-  // using switch instead of if/else for better performance
-  if (!isHighlightCommand(message)) {
-    return;
-  }
 
-  const chatMessageRawAction = message
-    .slice(highlightCommandUsed.length)
-    .trim();
+  /**
+   * Regex pattern to verify the command is a highlight command
+   * groups the different sections of the command.
+   *
+   * See `https://regexr.com/48gf0` for my tests on the pattern.
+   *
+   * Matches:
+   *
+   * !line 5
+   * !line !5
+   * !line 5-10
+   * !line !5-15
+   * !line settings.json 5
+   * !line settings.json !5
+   * !line settings.json 5-15
+   * !line settings.json !5-15
+   * !line settings.json 5 including a comment
+   * !line settings.json 5-15 including a comment
+   * !line settings.json 5 5 needs a comment
+   * !line 5 5 needs a comment
+   * !line 5-7 6 should be deleted
+   * !line settings.json 5-7 6 should be deleted
+   * !highlight 5
+   *
+   */
+  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.[\w]{1,}) )?(\!)?(\d+)(?:-{1}(\d+))?(?: (.+))?/;
 
-  const messageParts = chatMessageRawAction.split(' ');
-  if (messageParts.length === 0) {
-    // Example: !<command>
-    return;
-  }
+  const cmdopts = commandPattern.exec(message);
+  if (!cmdopts) { return; }
 
-  const notificationType = messageParts[0].startsWith('!')
-    ? 'unhighlight'
-    : 'highlight';
-  const lineNumber = messageParts[0].replace('!', '');
-  // Possible formats to support:
-  // !<command> <line number> <default to currently open file>
-  // !<command> <line number> <filename.ts>
-  // !<command> <line number> <filename.ts>
-  // !<command> <line number> <filename.ts>
-  // !<command> <line number> <filename.ts>
-  // !<command> !8 <filename.ts>
-  if (messageParts.length === 1) {
-    // Example: !<command> <line number>
-    connection.sendNotification(notificationType, {
-      line: +lineNumber,
-      twitchUser: userName
-    });
-  } else {
-    // Format Example: !<command> <line number> <filename.ts>
-    // Other Example: !<command> <line number> <filename.ts> <color>
-    connection.sendNotification(notificationType, {
-      line: +lineNumber,
-      filename: messageParts[1],
-      twitchUser: userName
-    });
-  }
-}
+  const fileName: string = cmdopts[1];
+  const highlight: boolean = cmdopts[2] === undefined;
+  const startLine: number = +cmdopts[3];
+  const endLine: number = cmdopts[4] ? +cmdopts[4] : +cmdopts[3];
+  const comment: string | undefined = cmdopts[5];
 
-function isHighlightCommand(message: string) {
-  return highlighterCommands.some(
-    (command: string): boolean => {
-      const comparison = message.startsWith(command.toLowerCase());
-      highlightCommandUsed = comparison ? command : '';
-      return comparison;
+  // Ensure that the startLine is smaller than the endLine.
+  const vStartLine = endLine < startLine ? endLine : startLine;
+  const vEndLine = endLine < startLine ? startLine : endLine;
+
+  connection.sendNotification(
+    highlight ? 'highlight' : 'unhighlight',
+    {
+      twitchUser: userName,
+      startLine: vStartLine,
+      endLine: vEndLine,
+      fileName,
+      comment
     }
   );
+
+  // message = message.toLocaleLowerCase();
+  // // Note: as RamblingGeek suggested might want to look into
+  // // using switch instead of if/else for better performance
+  // if (!isHighlightCommand(message)) {
+  //   return;
+  // }
+
+  // const chatMessageRawAction = message
+  //   .slice(highlightCommandUsed.length)
+  //   .trim();
+
+  // const messageParts = chatMessageRawAction.split(' ');
+  // if (messageParts.length === 0) {
+  //   // Example: !<command>
+  //   return;
+  // }
+
+  // const notificationType = messageParts[0].startsWith('!')
+  //   ? 'unhighlight'
+  //   : 'highlight';
+  // const lineNumber = messageParts[0].replace('!', '');
+  // // Possible formats to support:
+  // // !<command> <line number> <default to currently open file>
+  // // !<command> <line number> <filename.ts>
+  // // !<command> <line number> <filename.ts>
+  // // !<command> <line number> <filename.ts>
+  // // !<command> <line number> <filename.ts>
+  // // !<command> !8 <filename.ts>
+  // if (messageParts.length === 1) {
+  //   // Example: !<command> <line number>
+  //   connection.sendNotification(notificationType, {
+  //     line: +lineNumber,
+  //     twitchUser: userName
+  //   });
+  // } else {
+  //   // Format Example: !<command> <line number> <filename.ts>
+  //   // Other Example: !<command> <line number> <filename.ts> <color>
+  //   connection.sendNotification(notificationType, {
+  //     line: +lineNumber,
+  //     filename: messageParts[1],
+  //     twitchUser: userName
+  //   });
+  // }
 }
+
+// function isHighlightCommand(message: string) {
+//   return highlighterCommands.some(
+//     (command: string): boolean => {
+//       const comparison = message.startsWith(command.toLowerCase());
+//       highlightCommandUsed = comparison ? command : '';
+//       return comparison;
+//     }
+//   );
+// }
 
 connection.onShutdown(() => {
   connection.sendNotification('exited');

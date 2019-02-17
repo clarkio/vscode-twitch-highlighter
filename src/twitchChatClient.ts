@@ -30,16 +30,21 @@ export class TwitchChatClient {
 
   /**
    * Called when a highlight request is made from chat
-   * @param line The line number to highlight
    * @param twitchUser The user that made the request
+   * @param startLine The line number to start the highlight on
+   * @param endLine The line number to end the highlight on
+   * @param fileName The `TextDocument`s filename to highlight in
+   * @param comments The comments to add to the decoration
+   * this.onHighlight(params.twitchUser, params.startLine, params.endLine, params.fileName, params.comments);
    */
-  public onHighlight?: (line: number, twitchUser: string) => void;
+
+  public onHighlight?: (twitchUser: string, startLine: number, endLine: number, fileName?: string, comments?: string) => void;
   /**
    * Called when an unhighlight request is made from chat
-   * @param line The line number to unhighlight
-   * @param fileName The TextDocument's filename to remove the highlight from
+   * @param lineNumber The line number to unhighlight, the entire highlight is removed if the lineNumber exists in the highlight range.
+   * @param fileName The `TextDocument`s filename to remove the highlight from
    */
-  public onUnhighlight?: (line: number, fileName: string) => void;
+  public onUnhighlight?: (lineNumber: number, fileName?: string) => void;
   /**
    * Called when the chat client is connecting
    */
@@ -196,14 +201,14 @@ export class TwitchChatClient {
     this._languageClient.onNotification('highlight', (params: any) => {
       console.log('highlight requested.', params);
       if (this.onHighlight) {
-        this.onHighlight(params.line, params.twitchUser);
+        this.onHighlight(params.twitchUser, params.startLine, params.endLine, params.fileName, params.comment);
       }
     });
 
     this._languageClient.onNotification('unhighlight', (params: any) => {
       console.log('unhighlight requested.', params);
       if (this.onUnhighlight) {
-        this.onUnhighlight(params.line, params.fileName);
+        this.onUnhighlight(params.endLine, params.fileName);
       }
     });
   }
