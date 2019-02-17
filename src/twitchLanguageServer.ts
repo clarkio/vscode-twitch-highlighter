@@ -80,9 +80,6 @@ function onTtvChatMessage(channel: string, user: any, message: string) {
   parseMessage(userName, message);
 }
 
-// let highlighterCommands = ['!line', '!highlight'];
-// let highlightCommandUsed: string;
-
 function parseMessage(userName: string, message: string) {
 
   /**
@@ -135,61 +132,7 @@ function parseMessage(userName: string, message: string) {
       comment
     }
   );
-
-  // message = message.toLocaleLowerCase();
-  // // Note: as RamblingGeek suggested might want to look into
-  // // using switch instead of if/else for better performance
-  // if (!isHighlightCommand(message)) {
-  //   return;
-  // }
-
-  // const chatMessageRawAction = message
-  //   .slice(highlightCommandUsed.length)
-  //   .trim();
-
-  // const messageParts = chatMessageRawAction.split(' ');
-  // if (messageParts.length === 0) {
-  //   // Example: !<command>
-  //   return;
-  // }
-
-  // const notificationType = messageParts[0].startsWith('!')
-  //   ? 'unhighlight'
-  //   : 'highlight';
-  // const lineNumber = messageParts[0].replace('!', '');
-  // // Possible formats to support:
-  // // !<command> <line number> <default to currently open file>
-  // // !<command> <line number> <filename.ts>
-  // // !<command> <line number> <filename.ts>
-  // // !<command> <line number> <filename.ts>
-  // // !<command> <line number> <filename.ts>
-  // // !<command> !8 <filename.ts>
-  // if (messageParts.length === 1) {
-  //   // Example: !<command> <line number>
-  //   connection.sendNotification(notificationType, {
-  //     line: +lineNumber,
-  //     twitchUser: userName
-  //   });
-  // } else {
-  //   // Format Example: !<command> <line number> <filename.ts>
-  //   // Other Example: !<command> <line number> <filename.ts> <color>
-  //   connection.sendNotification(notificationType, {
-  //     line: +lineNumber,
-  //     filename: messageParts[1],
-  //     twitchUser: userName
-  //   });
-  // }
 }
-
-// function isHighlightCommand(message: string) {
-//   return highlighterCommands.some(
-//     (command: string): boolean => {
-//       const comparison = message.startsWith(command.toLowerCase());
-//       highlightCommandUsed = comparison ? command : '';
-//       return comparison;
-//     }
-//   );
-// }
 
 connection.onShutdown(() => {
   connection.sendNotification('exited');
