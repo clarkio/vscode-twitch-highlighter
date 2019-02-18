@@ -94,29 +94,29 @@ function parseMessage(userName: string, message: string) {
    * !line !5
    * !line 5-10
    * !line !5-15
-   * !line settings.json 5
-   * !line settings.json !5
-   * !line settings.json 5-15
-   * !line settings.json !5-15
-   * !line settings.json 5 including a comment
-   * !line settings.json 5-15 including a comment
-   * !line settings.json 5 5 needs a comment
+   * !line settings.json 5 | !line 5 settings.json
+   * !line settings.json !5 | !line !5 settings.json
+   * !line settings.json 5-15 | !line 5-15 settings.json
+   * !line settings.json !5-15 | !line !5-15 settings.json
+   * !line settings.json 5 including a comment | !line 5 settings.json including a comment
+   * !line settings.json 5-15 including a comment | !line 5-15 settings.json including a comment
+   * !line settings.json 5 5 needs a comment | !line 5 settings.json 5 needs a comment
    * !line 5 5 needs a comment
    * !line 5-7 6 should be deleted
    * !line settings.json 5-7 6 should be deleted
    * !highlight 5
    *
    */
-  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.[\w]{1,}) )?(\!)?(\d+)(?:-{1}(\d+))?(?: (.+))?/;
+  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.[\w]{1,}) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/;
 
   const cmdopts = commandPattern.exec(message);
   if (!cmdopts) { return; }
 
-  const fileName: string = cmdopts[1];
+  const fileName: string = cmdopts[1] || cmdopts[5];
   const highlight: boolean = cmdopts[2] === undefined;
   const startLine: number = +cmdopts[3];
   const endLine: number = cmdopts[4] ? +cmdopts[4] : +cmdopts[3];
-  const comment: string | undefined = cmdopts[5];
+  const comment: string | undefined = cmdopts[6];
 
   // Ensure that the startLine is smaller than the endLine.
   const vStartLine = endLine < startLine ? endLine : startLine;
