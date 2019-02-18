@@ -79,6 +79,11 @@
       {
         "command": "twitchHighlighter.removeHighlight",
         "title": "Remove Highlight"
+      },
+      {
+        "command": "twitchHighlighter.unhighlight",
+        "title": "Unhighlight",
+        "category": "Twitch Highlighter"
       }
     ],
     "menus": {
