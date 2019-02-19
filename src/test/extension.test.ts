@@ -66,7 +66,7 @@ suite("Extension Tests", function () {
 
     vscode.commands.getCommands(true)
       .then((allCommands: string[]) => {
-        const commands: string[] = allCommands.filter(c => c.startsWith(cmdSuffix));
+        const commands: string[] = allCommands.filter(c => c.startsWith(`${cmdSuffix}.`));
         commands.forEach(command => {
           const result = commandStrings.some(c => c === command);
           assert.ok(result);

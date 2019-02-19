@@ -1,13 +1,13 @@
-export const cmdSuffix = 'twitchHighlighter.';
+export const cmdSuffix = 'twitchHighlighter';
 
 export enum Settings {
-  'channels' = 'twitchHighlighter.channels',
-  'username' = 'twitchHighlighter.nickname',
-  'highlightColor' = 'twitchHighlighter.highlightColor',
-  'highlightBorder' = 'twitchHighlighter.highlightBorder',
-  'announceBot' = 'twitchHighlighter.announceBot',
-  'joinMessage' = 'twitchHighlighter.joinMessage',
-  'leaveMessage' = 'twitchHighlighter.leaveMessage',
+  'channels' = 'channels',
+  'username' = 'nickname',
+  'highlightColor' = 'highlightColor',
+  'highlightBorder' = 'highlightBorder',
+  'announceBot' = 'announceBot',
+  'joinMessage' = 'joinMessage',
+  'leaveMessage' = 'leaveMessage',
 }
 
 export enum Commands {
