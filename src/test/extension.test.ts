@@ -1,4 +1,4 @@
-import { cmdSuffix, Commands, Settings } from '../constants';
+import { extSuffix, Commands, Settings } from '../constants';
 
 //
 // Note: This example test is leveraging the Mocha test framework.
@@ -56,7 +56,7 @@ suite("Extension Tests", function () {
     const config: IConfiguration = extension.packageJSON.contributes.configuration;
     const properties = Object.keys(config.properties);
     for (let setting in Settings) {
-      const result = properties.some(property => property === Settings[setting]);
+      const result = properties.some(property => property === `${extSuffix}.${Settings[setting]}`);
       assert.ok(result);
     }
   });
@@ -66,7 +66,7 @@ suite("Extension Tests", function () {
 
     vscode.commands.getCommands(true)
       .then((allCommands: string[]) => {
-        const commands: string[] = allCommands.filter(c => c.startsWith(`${cmdSuffix}.`));
+        const commands: string[] = allCommands.filter(c => c.startsWith(`${extSuffix}.`));
         commands.forEach(command => {
           const result = commandStrings.some(c => c === command);
           assert.ok(result);

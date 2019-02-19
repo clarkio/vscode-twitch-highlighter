@@ -6,7 +6,7 @@ import {
 } from 'vscode-languageclient';
 import { workspace, window, Disposable } from 'vscode';
 import CredentialManager from './credentialManager';
-import { Settings } from './constants';
+import { extSuffix, Settings } from './constants';
 
 export class TwitchChatClient {
   private readonly _languageClient: LanguageClient;
@@ -132,7 +132,7 @@ export class TwitchChatClient {
   }
 
   private async startListening(token: string) {
-    const configuration = workspace.getConfiguration('twitchHighlighter');
+    const configuration = workspace.getConfiguration(extSuffix);
     const chatParams = {
       channels: configuration.get<string[]>(Settings.channels),
       username: configuration.get<string>(Settings.username),
@@ -141,8 +141,6 @@ export class TwitchChatClient {
       joinMessage: configuration.get<string>(Settings.joinMessage) || '',
       leaveMessage: configuration.get<string>(Settings.leaveMessage) || ''
     };
-    console.log(chatParams);
-    console.log(Settings.channels);
     this._languageClient.sendRequest('startchat', chatParams).then(
       result => {
         window.showInformationMessage(

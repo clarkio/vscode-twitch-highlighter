@@ -1,4 +1,4 @@
-export const cmdSuffix = 'twitchHighlighter';
+export const extSuffix = 'twitchHighlighter';
 
 export enum Settings {
   'channels' = 'channels',
