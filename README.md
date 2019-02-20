@@ -1,5 +1,7 @@
 # Twitch Line Highlighter VS Code Extension
 
+Testing the build real quick
+
 A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. etc. by sending a command in chat that will highlight the line of code they want you to check.
 
 ## Requirements
