@@ -40,8 +40,13 @@ suite("Extension Tests", function () {
   });
 
   // Defines a Mocha unit test
-  test("Extension loads in VSCode and is active", function () {
-    assert.equal(extension.isActive, true);
+  test("Extension loads in VSCode and is active", function (done) {
+    // Hopefully a 200ms timeout will allow the extension to activate within Windows
+    // otherwise we get a false result.
+    setTimeout(function () {
+      assert.equal(extension.isActive, true);
+      done();
+    }, 200);
   });
 
   test("constants.Commands exist in package.json", function () {

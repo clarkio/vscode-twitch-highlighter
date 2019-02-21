@@ -12,15 +12,21 @@
 
 import * as testRunner from 'vscode/lib/testrunner';
 
+const os = process.env.AGENT_OS || 'Developer';
+const date = new Date().toISOString().replace(/:/g,'-').replace(/\.\d+/, '');
+
+process.env.SUITE_NAME = `${os} Tests`;
+process.env.XUNIT_FILE = `TEST-RESULTS-${os}-${date}.xml`;
+
+console.log(`Suite Name: ${process.env.SUITE_NAME}`);
+console.log(`Test Results File: ${process.env.XUNIT_FILE}`);
+
 // You can directly control Mocha options by uncommenting the following lines
 // See https://github.com/mochajs/mocha/wiki/Using-mocha-programmatically#set-options for more info
 testRunner.configure({
   ui: 'tdd', 		// the TDD UI is being used in extension.test.ts (suite, test, etc.)
   useColors: true, // colored output from test results
-  reporter: 'xunit',
-  reporterOptions: {
-    output: '../TEST-RESULTS.xml'
-  }
+  reporter: 'spec-xunit-file'
 });
 
 module.exports = testRunner;
