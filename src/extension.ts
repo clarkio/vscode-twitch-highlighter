@@ -6,10 +6,11 @@ import * as path from 'path';
 import { Highlighter, Highlight } from './highlighter';
 import CredentialManager from './credentialManager';
 import {
-    TwitchHighlighterDataProvider,
-    HighlighterNode
+  TwitchHighlighterDataProvider,
+  HighlighterNode
 } from './twitchHighlighterTreeView';
 import { TwitchChatClient } from './twitchChatClient';
+import { Commands } from './constants';
 
 let highlightDecorationType: vscode.TextEditorDecorationType;
 const twitchHighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)
@@ -47,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
   twitchHighlighterStatusBar = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right
   );
-  twitchHighlighterStatusBar.command = 'twitchHighlighter.toggleChat';
+  twitchHighlighterStatusBar.command = Commands.toggleChat;
   twitchHighlighterStatusBar.tooltip = `Twitch Highlighter Extension`;
   context.subscriptions.push(twitchHighlighterStatusBar);
 
@@ -55,50 +56,18 @@ export function activate(context: vscode.ExtensionContext) {
   twitchHighlighterStatusBar.show();
 
   // #region command registrations
-  registerCommand(
-    context,
-    'twitchHighlighter.gotoHighlight',
-    gotoHighlightHandler
-  );
-  registerCommand(
-    context,
-    'twitchHighlighter.removeHighlight',
-    removeHighlightHandler
-  );
-  registerCommand(
-    context,
-    'twitchHighlighter.refreshTreeView',
-    refreshTreeViewHandler
-  );
-  registerCommand(
-    context,
-    'twitchHighlighter.removeTwitchClientId',
-    removeTwitchClientIdHandler
-  );
-  registerCommand(
-    context,
-    'twitchHighlighter.setTwitchPassword',
-    setTwitchTokenHandler
-  );
-  registerCommand(
-    context,
-    'twitchHighlighter.removeTwitchPassword',
-    removeTwitchPasswordHandler
-  );
-  registerCommand(context, 'twitchHighlighter.startChat', startChatHandler);
-  registerCommand(context, 'twitchHighlighter.stopChat', stopChatHandler);
-  registerCommand(context, 'twitchHighlighter.toggleChat', toggleChatHandler);
-  registerCommand(context, 'twitchHighlighter.highlight', highlightHandler);
-  registerCommand(
-    context,
-    'twitchHighlighter.unhighlightSpecific',
-    unhighlightSpecificHandler
-  );
-  registerCommand(
-    context,
-    'twitchHighlighter.unhighlightAll',
-    unhighlightAllHandler
-  );
+  registerCommand(context, Commands.highlight, highlightHandler);
+  registerCommand(context, Commands.gotoHighlight, gotoHighlightHandler);
+  registerCommand(context, Commands.removeHighlight, removeHighlightHandler);
+  registerCommand(context, Commands.unhighlightSpecific, unhighlightSpecificHandler);
+  registerCommand(context, Commands.unhighlightAll, unhighlightAllHandler);
+  registerCommand(context, Commands.refreshTreeView, refreshTreeViewHandler);
+  registerCommand(context, Commands.removeTwitchClientId, removeTwitchClientIdHandler);
+  registerCommand(context, Commands.setTwitchPassword, setTwitchTokenHandler);
+  registerCommand(context, Commands.removeTwitchPassword, removeTwitchPasswordHandler);
+  registerCommand(context, Commands.startChat, startChatHandler);
+  registerCommand(context, Commands.stopChat, stopChatHandler);
+  registerCommand(context, Commands.toggleChat, toggleChatHandler);
   // #endregion command registrations
 
   // #region command handlers
@@ -216,12 +185,12 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     let pickerOptions: Array<string> = new Array<string>();
-        highlighters.forEach(highlighter => {
-            pickerOptions = [
-                ...pickerOptions,
-                ...highlighter.getPickerDetails()
-            ];
-        });
+    highlighters.forEach(highlighter => {
+      pickerOptions = [
+        ...pickerOptions,
+        ...highlighter.getPickerDetails()
+      ];
+    });
 
     vscode.window.showQuickPick(pickerOptions).then(pickedOption => {
       if (!pickedOption) {
@@ -469,9 +438,9 @@ function removeHighlight(
 }
 
 function findHighlighter(fileName: string): Highlighter | undefined {
-    return highlighters.find(highlighter => {
-        return highlighter.editor.document.fileName === fileName;
-    });
+  return highlighters.find(highlighter => {
+    return highlighter.editor.document.fileName === fileName;
+  });
 }
 
 function getHighlightRange(startLine: number, endLine: number, doc: vscode.TextDocument) {
@@ -490,23 +459,31 @@ function getHighlightRange(startLine: number, endLine: number, doc: vscode.TextD
   return range;
 }
 
+/**
+ * Registers a command that can be invoked via a keyboard shortcut, a menu item, an action, or directly.
+ * @param context The Extension context
+ * @param name The unique name of the command
+ * @param handler The callback function for the command
+ * @param thisArgs The `this` context used when invoking the handler function.
+ */
 function registerCommand(
   context: vscode.ExtensionContext,
   name: string,
-  handler: (...params: any[]) => void
+  handler: (...args: any[]) => void,
+  thisArgs?: any
 ) {
-    let disposable = vscode.commands.registerCommand(name, handler);
-    context.subscriptions.push(disposable);
+  let disposable = vscode.commands.registerCommand(name, handler, thisArgs);
+  context.subscriptions.push(disposable);
 }
 
 function setupDecoratorType() {
-    const configuration = vscode.workspace.getConfiguration(
-        'twitchHighlighter'
-    );
-    highlightDecorationType = vscode.window.createTextEditorDecorationType({
-        backgroundColor: configuration.get<string>('highlightColor') || 'green',
-        border:
-            configuration.get<string>('highlightBorder') || '2px solid white',
-        color: configuration.get<string>('highlightFontColor') || 'white'
-    });
+  const configuration = vscode.workspace.getConfiguration(
+    'twitchHighlighter'
+  );
+  highlightDecorationType = vscode.window.createTextEditorDecorationType({
+    backgroundColor: configuration.get<string>('highlightColor') || 'green',
+    border:
+      configuration.get<string>('highlightBorder') || '2px solid white',
+    color: configuration.get<string>('highlightFontColor') || 'white'
+  });
 }
