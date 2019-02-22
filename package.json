@@ -79,6 +79,11 @@
       {
         "command": "twitchHighlighter.removeHighlight",
         "title": "Remove Highlight"
+      },
+      {
+        "command": "twitchHighlighter.unhighlight",
+        "title": "Unhighlight",
+        "category": "Twitch Highlighter"
       }
     ],
     "menus": {
@@ -197,7 +202,9 @@
     "typescript": "^2.6.1",
     "vscode": "^1.1.26",
     "webpack": "^4.29.4",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.2.3",
+    "mocha-junit-reporter": "^1.18.0",
+    "spec-xunit-file": "0.0.1-3"
   },
   "dependencies": {
     "twitch-js": "^1.2.17",
