@@ -103,6 +103,10 @@
         {
           "command": "twitchHighlighter.removeHighlight",
           "when": "false"
+        },
+        {
+          "command": "twitchHighlighter.unhighlight",
+          "when": "false"
         }
       ],
       "view/title": [
