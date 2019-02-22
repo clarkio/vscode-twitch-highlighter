@@ -13,11 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A setting to allow changes to font color within highlights ([#55](https://github.com/clarkio/vscode-twitch-highlighter/pull/55))
 - An .editorconfig file to keep styling consistent. ([#54](https://github.com/clarkio/vscode-twitch-highlighter/pull/54) thanks @parithon)
+- Arbitrary tests to get things started in that area ([#69](https://github.com/clarkio/vscode-twitch-highlighter/pull/69) thanks @parithon)
+- Use of webpack to significantly reduce the size of the extension and improve the install speed ([#66](https://github.com/clarkio/vscode-twitch-highlighter/pull/66) thanks @parithon)
 
 ### Changed
 
 - Client code with some refactoring to clean it up ([#57](https://github.com/clarkio/vscode-twitch-highlighter/pull/57) thanks @parithon)
 - Commands to use categories for grouping of them ([#63](https://github.com/clarkio/vscode-twitch-highlighter/pull/63) thanks @matthewkosloski)
+
+### Removed
+
+- Use of Twitch Glitch logo in the VS Code marketplace and in the activity bar icon. See PR for more details on why ([#65](https://github.com/clarkio/vscode-twitch-highlighter/pull/65) thanks @parithon)
 
 ## [Released]
 
