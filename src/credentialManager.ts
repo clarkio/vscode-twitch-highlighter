@@ -21,22 +21,15 @@ function getNodeModule<T>(moduleName: string): T | undefined {
   return undefined;
 }
 
-export interface TwitchCredentials {
-  clientId: string | null;
-  password: string | null;
-}
-
 export class CredentialManager {
   private static service: string = "vscode-twitch-highlighter";
   private static clientIdIdentifier: string = "twitchClientId";
   private static passwordIdentifier: string = "twitchToken";
   private static keytar: typeof keytartype | undefined = getNodeModule<typeof keytartype>('keytar');
 
-  public static async setClientId(value: string): Promise<void> {
-    if (CredentialManager.keytar && value !== null) {
-      await CredentialManager.keytar.setPassword(CredentialManager.service, CredentialManager.clientIdIdentifier, value);
-    }
-  }
+  /**
+   * @deprecated Included only so people can remove their previous Client ID.
+   */
   public static async deleteTwitchClientId(): Promise<boolean> {
     if (CredentialManager.keytar) {
       return await CredentialManager.keytar.deletePassword(CredentialManager.service, CredentialManager.clientIdIdentifier);
@@ -48,24 +41,18 @@ export class CredentialManager {
       await CredentialManager.keytar.setPassword(CredentialManager.service, CredentialManager.passwordIdentifier, value);
     }
   }
-  public static async deletePassword(): Promise<boolean> {
+  public static async deleteTwitchToken(): Promise<boolean> {
     if (CredentialManager.keytar) {
       return await CredentialManager.keytar.deletePassword(CredentialManager.service, CredentialManager.passwordIdentifier);
     }
     return false;
   }
-  public static getTwitchCredentials(): Promise<TwitchCredentials> {
-    return new Promise<TwitchCredentials>(async resolve => {
-      const clientId = await CredentialManager.getPassword(CredentialManager.clientIdIdentifier);
+  public static getTwitchToken(): Promise<string | null> {
+    return new Promise<string | null>(async resolve => {
       const password = await CredentialManager.getPassword(CredentialManager.passwordIdentifier);
-      const twitchCredential: TwitchCredentials = {
-        clientId,
-        password
-      };
-      resolve(twitchCredential);
+      resolve(password);
     });
   }
-
   private static async getPassword(account: string): Promise<string | null> {
     if (CredentialManager.keytar) {
       return await CredentialManager.keytar.getPassword(CredentialManager.service, account);
