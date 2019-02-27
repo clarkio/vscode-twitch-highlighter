@@ -43,6 +43,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Issues where commands were not registering. The cause was from node_modules not being included in the package.
 
-## [0.1.0] - 2019-02-01
+## 0.1.0 - 2019-02-01
 
 - Pre-release version to gather feedback from the community and help identify gaps.
+
+[0.1.4]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.3...0.1.4
+[0.1.3]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.2...0.1.3
+[0.1.2]: https://github.com/clarkio/vscode-twitch-highlighter/compare/b28e5041ac...0.1.2
