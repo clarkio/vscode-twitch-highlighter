@@ -25,13 +25,13 @@ export class Highlighter {
 
   getPickerDetails() {
     return this.highlights.map(highlight => {
-      return `${this.editor.document.fileName}, ${highlight.lineNumber}`;
+      return `${this.editor.document.fileName}, ${highlight.startLine}`;
     });
   }
 
   removeDecoration(lineNumber: number): Highlight[] {
     const highlightIndex = this.highlights.findIndex(highlight => {
-      return highlight.lineNumber === lineNumber;
+      return highlight.startLine <= lineNumber && highlight.endLine >= lineNumber;
     });
     if (highlightIndex > -1) {
       return this.highlights.splice(highlightIndex, 1);
@@ -43,7 +43,8 @@ export class Highlighter {
 export class Highlight {
   constructor(
     public decoration: { range: vscode.Range },
-    public lineNumber: number,
+    public startLine: number,
+    public endLine: number,
     public twitchUser?: string
   ) { }
 }
