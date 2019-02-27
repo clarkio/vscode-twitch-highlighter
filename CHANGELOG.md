@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5]
+
+## [Released]
+
 ## [0.1.4]
 
 ### Added
@@ -24,8 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Use of Twitch Glitch logo in the VS Code marketplace and in the activity bar icon. See PR for more details on why ([#65](https://github.com/clarkio/vscode-twitch-highlighter/pull/65) thanks @parithon)
-
-## [Released]
 
 ## [0.1.3] - 2019-02-07
 
