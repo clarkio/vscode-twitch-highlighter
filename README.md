@@ -6,6 +6,8 @@ Master Branch|vNext Branch
 
 A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. etc. by sending a command in chat that will highlight the line of code they want you to check.
 
+![Video](./resources/intro-vid.gif)
+
 ## Requirements
 
 In order to use this extension you will need the following things before going to the [Getting Started](#getting-started) section:
@@ -51,6 +53,16 @@ To highlight a line, use:
 To unhighlight a line, use:
 
         !line !<LineNumber>
+
+To highlight multiple lines, use the same syntax as above but include a range of lines to highlight:
+
+        !line <StartLineNumber>-<EndLineNumber>
+
+Additionally, you can also include comments:
+
+        !line <LineNumber> This is a comment
+
+![Multi-highlight example](./resources/multi-highlight-example.jpg)
 
 ## Extension Settings
 
