@@ -5,11 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Released]
 
 ## [0.1.5]
 
-## [Released]
+### Added
+
+- Ability to unhighlight on disconnect ([#67](https://github.com/clarkio/vscode-twitch-highlighter/pull/67) thanks @parithon)
+- Option to highlight multiple lines via one command as well as a comment message ([#68](https://github.com/clarkio/vscode-twitch-highlighter/pull/68) thanks @parithon)
+- DevOps badges to show status of development and production builds. Plus media to demonstrate the extension in use and a multi-line highlight example ([#75](https://github.com/clarkio/vscode-twitch-highlighter/pull/75) thanks @parithon)
 
 ## [0.1.4]
 
@@ -47,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Pre-release version to gather feedback from the community and help identify gaps.
 
+[0.1.5]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.4...0.1.5
 [0.1.4]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.3...0.1.4
 [0.1.3]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.2...0.1.3
 [0.1.2]: https://github.com/clarkio/vscode-twitch-highlighter/compare/b28e5041ac...0.1.2
