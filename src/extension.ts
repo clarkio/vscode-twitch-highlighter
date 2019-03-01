@@ -10,7 +10,7 @@ import {
   HighlighterNode
 } from './twitchHighlighterTreeView';
 import { TwitchChatClient } from './twitchChatClient';
-import { Commands } from './constants';
+import { extSuffix, Settings, Commands } from './constants';
 
 let highlightDecorationType: vscode.TextEditorDecorationType;
 const twitchHighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)
@@ -34,7 +34,9 @@ export function activate(context: vscode.ExtensionContext) {
   twitchChatClient.onUnhighlight = unhighlight;
   twitchChatClient.onConnected = () => setConnectionStatus(true);
   twitchChatClient.onConnecting = () => setConnectionStatus(false, true);
-  twitchChatClient.onDisconnected = () => setConnectionStatus(false);
+  twitchChatClient.onDisconnected = () => {
+    setConnectionStatus(false);
+  };
 
   twitchHighlighterTreeView = new TwitchHighlighterDataProvider(() => {
     return highlighters;
@@ -207,7 +209,26 @@ export function activate(context: vscode.ExtensionContext) {
     twitchChatClient.start(setTwitchTokenHandler);
   }
 
-  function stopChatHandler() {
+  async function stopChatHandler() {
+    const config = vscode.workspace.getConfiguration(extSuffix);
+    let unhighlightOnDisconnect = config.get<boolean>(Settings.unhighlightOnDisconnect);
+
+    if (highlighters.length > 0 && highlighters.some(h => h.highlights.length > 0) && !unhighlightOnDisconnect) {
+      const result = await vscode.window.showInformationMessage('Do you want to keep or remove the existing highlights when disconnecting from chat?', 'Always Remove', 'Remove', 'Keep');
+      if (result && result === 'Remove') {
+        unhighlightOnDisconnect = true;
+      }
+      if (result && result === 'Always Remove')
+      {
+        unhighlightOnDisconnect = true;
+        config.update(Settings.unhighlightOnDisconnect, true, true);
+      }
+    }
+
+    if (unhighlightOnDisconnect) {
+      unhighlightAllHandler();
+    }
+
     twitchChatClient.stop();
   }
 

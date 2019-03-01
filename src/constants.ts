@@ -8,6 +8,7 @@ export enum Settings {
   'announceBot' = 'announceBot',
   'joinMessage' = 'joinMessage',
   'leaveMessage' = 'leaveMessage',
+  'unhighlightOnDisconnect' = 'unhighlightOnDisconnect',
 }
 
 export enum Commands {
