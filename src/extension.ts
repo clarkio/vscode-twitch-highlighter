@@ -10,7 +10,8 @@ import {
   HighlighterNode
 } from './twitchHighlighterTreeView';
 import { TwitchChatClient } from './twitchChatClient';
-import { Commands } from './constants';
+import { isArray } from 'util';
+import { extSuffix, Settings, Commands } from './constants';
 
 let highlightDecorationType: vscode.TextEditorDecorationType;
 const twitchHighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)
@@ -25,6 +26,8 @@ let twitchHighlighterStatusBar: vscode.StatusBarItem;
 export function activate(context: vscode.ExtensionContext) {
   setupDecoratorType();
 
+  updateChannelsSetting();
+
   twitchChatClient = new TwitchChatClient(
     context.asAbsolutePath(path.join('out', 'twitchLanguageServer.js')),
     context.subscriptions
@@ -34,7 +37,9 @@ export function activate(context: vscode.ExtensionContext) {
   twitchChatClient.onUnhighlight = unhighlight;
   twitchChatClient.onConnected = () => setConnectionStatus(true);
   twitchChatClient.onConnecting = () => setConnectionStatus(false, true);
-  twitchChatClient.onDisconnected = () => setConnectionStatus(false);
+  twitchChatClient.onDisconnected = () => {
+    setConnectionStatus(false);
+  };
 
   twitchHighlighterTreeView = new TwitchHighlighterDataProvider(() => {
     return highlighters;
@@ -59,12 +64,24 @@ export function activate(context: vscode.ExtensionContext) {
   registerCommand(context, Commands.highlight, highlightHandler);
   registerCommand(context, Commands.gotoHighlight, gotoHighlightHandler);
   registerCommand(context, Commands.removeHighlight, removeHighlightHandler);
-  registerCommand(context, Commands.unhighlightSpecific, unhighlightSpecificHandler);
+  registerCommand(
+    context,
+    Commands.unhighlightSpecific,
+    unhighlightSpecificHandler
+  );
   registerCommand(context, Commands.unhighlightAll, unhighlightAllHandler);
   registerCommand(context, Commands.refreshTreeView, refreshTreeViewHandler);
-  registerCommand(context, Commands.removeTwitchClientId, removeTwitchClientIdHandler);
+  registerCommand(
+    context,
+    Commands.removeTwitchClientId,
+    removeTwitchClientIdHandler
+  );
   registerCommand(context, Commands.setTwitchPassword, setTwitchTokenHandler);
-  registerCommand(context, Commands.removeTwitchPassword, removeTwitchPasswordHandler);
+  registerCommand(
+    context,
+    Commands.removeTwitchPassword,
+    removeTwitchPasswordHandler
+  );
   registerCommand(context, Commands.startChat, startChatHandler);
   registerCommand(context, Commands.stopChat, stopChatHandler);
   registerCommand(context, Commands.toggleChat, toggleChatHandler);
@@ -166,7 +183,9 @@ export function activate(context: vscode.ExtensionContext) {
   function highlightHandler() {
     vscode.window
       .showInputBox({ prompt: 'Enter a line number' })
-      .then(lineString => highlight('self', +(lineString || 0), +(lineString || 0)));
+      .then(lineString =>
+        highlight('self', +(lineString || 0), +(lineString || 0))
+      );
   }
 
   function unhighlightAllHandler() {
@@ -186,10 +205,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     let pickerOptions: Array<string> = new Array<string>();
     highlighters.forEach(highlighter => {
-      pickerOptions = [
-        ...pickerOptions,
-        ...highlighter.getPickerDetails()
-      ];
+      pickerOptions = [...pickerOptions, ...highlighter.getPickerDetails()];
     });
 
     vscode.window.showQuickPick(pickerOptions).then(pickedOption => {
@@ -207,7 +223,36 @@ export function activate(context: vscode.ExtensionContext) {
     twitchChatClient.start(setTwitchTokenHandler);
   }
 
-  function stopChatHandler() {
+  async function stopChatHandler() {
+    const config = vscode.workspace.getConfiguration(extSuffix);
+    let unhighlightOnDisconnect = config.get<boolean>(
+      Settings.unhighlightOnDisconnect
+    );
+
+    if (
+      highlighters.length > 0 &&
+      highlighters.some(h => h.highlights.length > 0) &&
+      !unhighlightOnDisconnect
+    ) {
+      const result = await vscode.window.showInformationMessage(
+        'Do you want to keep or remove the existing highlights when disconnecting from chat?',
+        'Always Remove',
+        'Remove',
+        'Keep'
+      );
+      if (result && result === 'Remove') {
+        unhighlightOnDisconnect = true;
+      }
+      if (result && result === 'Always Remove') {
+        unhighlightOnDisconnect = true;
+        config.update(Settings.unhighlightOnDisconnect, true, true);
+      }
+    }
+
+    if (unhighlightOnDisconnect) {
+      unhighlightAllHandler();
+    }
+
     twitchChatClient.stop();
   }
 
@@ -274,7 +319,13 @@ export function deactivate(): Thenable<void> {
   return twitchChatClient.dispose();
 }
 
-function highlight(twitchUser: string, startLine: number, endLine: number, fileName?: string, comment?: string) {
+function highlight(
+  twitchUser: string,
+  startLine: number,
+  endLine: number,
+  fileName?: string,
+  comment?: string
+) {
   console.log(`highlight called.`);
   if (!startLine) {
     console.warn('A line number was not provided to highlight');
@@ -317,10 +368,19 @@ function highlight(twitchUser: string, startLine: number, endLine: number, fileN
 
   const decoration = {
     range,
-    hoverMessage: `From @${twitchUser === 'self' ? 'You' : twitchUser}${comment !== undefined ? `: ${comment}` : ''}`
+    hoverMessage: `From @${twitchUser === 'self' ? 'You' : twitchUser}${
+      comment !== undefined ? `: ${comment}` : ''
+    }`
   };
 
-  addHighlight(existingHighlighter, decoration, editor, startLine, endLine, twitchUser);
+  addHighlight(
+    existingHighlighter,
+    decoration,
+    editor,
+    startLine,
+    endLine,
+    twitchUser
+  );
 }
 
 function unhighlight(lineNumber: number, fileName?: string) {
@@ -443,7 +503,11 @@ function findHighlighter(fileName: string): Highlighter | undefined {
   });
 }
 
-function getHighlightRange(startLine: number, endLine: number, doc: vscode.TextDocument) {
+function getHighlightRange(
+  startLine: number,
+  endLine: number,
+  doc: vscode.TextDocument
+) {
   // prefix string with plus (+) to make string a number
   // well at least that's what codephobia says :P
   // const zeroIndexedLineNumber = +lineNumber - 1;
@@ -476,14 +540,24 @@ function registerCommand(
   context.subscriptions.push(disposable);
 }
 
+/**
+ * Used to upgrade the channels setting from an array of strings ['clarkio','parithon']
+ * to a string 'clarkio, parithon'.
+ */
+function updateChannelsSetting() {
+  const configuration = vscode.workspace.getConfiguration('twitchHighlighter');
+  const channels = configuration.get<string>('channels');
+  if (isArray(channels)) {
+    // Update the global settings
+    configuration.update('channels', channels.join(', '), true);
+  }
+}
+
 function setupDecoratorType() {
-  const configuration = vscode.workspace.getConfiguration(
-    'twitchHighlighter'
-  );
+  const configuration = vscode.workspace.getConfiguration('twitchHighlighter');
   highlightDecorationType = vscode.window.createTextEditorDecorationType({
     backgroundColor: configuration.get<string>('highlightColor') || 'green',
-    border:
-      configuration.get<string>('highlightBorder') || '2px solid white',
+    border: configuration.get<string>('highlightBorder') || '2px solid white',
     color: configuration.get<string>('highlightFontColor') || 'white'
   });
 }
