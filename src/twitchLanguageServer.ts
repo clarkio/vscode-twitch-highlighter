@@ -155,7 +155,7 @@ function getTwitchChatOptions(params: {
   password: string;
 }): tmi.ClientOptions {
   return {
-    channels: params.channels.split(','),
+    channels: params.channels.split(',').map(s => s.trim()),
     connection: {
       secure: true,
       reconnect: true,
