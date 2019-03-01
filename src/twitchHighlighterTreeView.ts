@@ -65,7 +65,7 @@ export class HighlighterNode extends vscode.TreeItem {
   public getHighlights(): HighlighterNode[] {
     const childrenNodes = new Array<HighlighterNode>();
     this.highlights.forEach((highlight: Highlight) => {
-      const label = `Line: ${highlight.lineNumber}`;
+      const label = `Line: ${highlight.startLine}`;
       const existingNode = childrenNodes.find(node => node.label === label);
       if (existingNode) {
         existingNode.highlights.push(highlight);
@@ -74,7 +74,7 @@ export class HighlighterNode extends vscode.TreeItem {
           new HighlighterNode(label, this.document, [highlight], undefined, {
             command: 'twitchHighlighter.gotoHighlight',
             title: '',
-            arguments: [highlight.lineNumber, this.document]
+            arguments: [highlight.startLine, this.document]
           })
         );
       }
