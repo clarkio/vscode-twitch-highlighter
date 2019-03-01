@@ -1,8 +1,8 @@
 {
   "name": "twitch-highlighter",
   "displayName": "Twitch Highlighter",
-  "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. etc. bysending a command in chat that will highlight the line of code they want you to check.",
-  "version": "0.1.4",
+  "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.",
+  "version": "0.1.5",
   "preview": true,
   "publisher": "clarkio",
   "engines": {
@@ -146,9 +146,9 @@
       "title": "Twitch Highlighter",
       "properties": {
         "twitchHighlighter.channels": {
-          "type": "array",
-          "default": [],
-          "description": "The channel name(s) to connect to on Twitch. Example: ['clarkio'], Another Example: ['clarkio', 'parithon']"
+          "type": "string",
+          "default": "",
+          "description": "A comma separated list of channel name(s) to connect to on Twitch. Example: 'clarkio', Another Example: 'clarkio, parithon'"
         },
         "twitchHighlighter.nickname": {
           "type": "string",
@@ -185,6 +185,11 @@
           "type": "string",
           "default": "Twitch Highlighter has left the building!",
           "description": "The message the bot will say when leaving a chat room"
+        },
+        "twitchHighlighter.unhighlightOnDisconnect": {
+          "type": "boolean",
+          "default": false,
+          "description": "Unhighlight all lines when disconnected from the chat service."
         }
       }
     }
