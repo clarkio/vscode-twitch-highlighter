@@ -7,6 +7,7 @@ import {
   InitializedParams,
   TextDocumentSyncKind
 } from 'vscode-languageserver/lib/main';
+import { Commands } from './constants';
 
 import * as tmi from 'twitch-js';
 
@@ -32,7 +33,7 @@ connection.onInitialized((params: InitializedParams) => {
 
 connection.listen();
 
-connection.onRequest('stopchat', async () => {
+connection.onRequest(Commands.stopChat, async () => {
   if (!ttvChatClient) {
     return false;
   }
@@ -52,7 +53,7 @@ connection.onRequest('stopchat', async () => {
     });
 });
 
-connection.onRequest('startchat', params => {
+connection.onRequest(Commands.startChat, params => {
   botparams = { ...params };
   ttvChatClient = new tmi.Client(getTwitchChatOptions(params));
   return ttvChatClient
@@ -123,7 +124,7 @@ function parseMessage(userName: string, message: string) {
   const vEndLine = endLine < startLine ? startLine : endLine;
 
   connection.sendNotification(
-    highlight ? 'highlight' : 'unhighlight',
+    highlight ? Commands.highlight : Commands.unhighlight,
     {
       twitchUser: userName,
       startLine: vStartLine,
