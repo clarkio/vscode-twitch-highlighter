@@ -146,9 +146,9 @@
       "title": "Twitch Highlighter",
       "properties": {
         "twitchHighlighter.channels": {
-          "type": "array",
-          "default": [],
-          "description": "The channel name(s) to connect to on Twitch. Example: ['clarkio'], Another Example: ['clarkio', 'parithon']"
+          "type": "string",
+          "default": "",
+          "description": "A comma seperated list of channel name(s) to connect to on Twitch. Example: 'clarkio', Another Example: 'clarkio, parithon'"
         },
         "twitchHighlighter.nickname": {
           "type": "string",

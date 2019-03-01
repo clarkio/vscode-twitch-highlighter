@@ -149,13 +149,13 @@ connection.onShutdown(() => {
 });
 
 function getTwitchChatOptions(params: {
-  channels: string[];
+  channels: string;
   username: string;
   clientId: string;
   password: string;
 }): tmi.ClientOptions {
   return {
-    channels: params.channels,
+    channels: params.channels.split(','),
     connection: {
       secure: true,
       reconnect: true,

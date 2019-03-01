@@ -11,6 +11,7 @@ import {
 } from './twitchHighlighterTreeView';
 import { TwitchChatClient } from './twitchChatClient';
 import { Commands } from './constants';
+import { isArray } from 'util';
 
 let highlightDecorationType: vscode.TextEditorDecorationType;
 const twitchHighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)
@@ -24,6 +25,8 @@ let twitchHighlighterStatusBar: vscode.StatusBarItem;
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
   setupDecoratorType();
+
+  updateChannelsSetting();
 
   twitchChatClient = new TwitchChatClient(
     context.asAbsolutePath(path.join('out', 'twitchLanguageServer.js')),
@@ -474,6 +477,19 @@ function registerCommand(
 ) {
   let disposable = vscode.commands.registerCommand(name, handler, thisArgs);
   context.subscriptions.push(disposable);
+}
+
+/**
+ * Used to upgrade the channels setting from an array of strings ['clarkio','parithon']
+ * to a string 'clarkio, parithon'.
+ */
+function updateChannelsSetting() {
+  const configuration = vscode.workspace.getConfiguration('twitchHighlighter');
+  const channels = configuration.get<string>('channels');
+  if (isArray(channels)) {
+    // Update the global settings
+    configuration.update('channels', channels.join(', '), true);
+  }
 }
 
 function setupDecoratorType() {
