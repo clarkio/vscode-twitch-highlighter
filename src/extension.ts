@@ -213,7 +213,7 @@ export function activate(context: vscode.ExtensionContext) {
     const config = vscode.workspace.getConfiguration(extSuffix);
     let unhighlightOnDisconnect = config.get<boolean>(Settings.unhighlightOnDisconnect);
 
-    if (highlighters.length > 0 && !unhighlightOnDisconnect) {
+    if (highlighters.length > 0 && highlighters.some(h => h.highlights.length > 0) && !unhighlightOnDisconnect) {
       const result = await vscode.window.showInformationMessage('Do you want to keep or remove the existing highlights when disconnecting from chat?', 'Always Remove', 'Remove', 'Keep');
       if (result && result === 'Remove') {
         unhighlightOnDisconnect = true;
