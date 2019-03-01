@@ -1,7 +1,7 @@
 {
   "name": "twitch-highlighter",
   "displayName": "Twitch Highlighter",
-  "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. etc. bysending a command in chat that will highlight the line of code they want you to check.",
+  "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.",
   "version": "0.1.5",
   "preview": true,
   "publisher": "clarkio",
@@ -148,7 +148,7 @@
         "twitchHighlighter.channels": {
           "type": "string",
           "default": "",
-          "description": "A comma seperated list of channel name(s) to connect to on Twitch. Example: 'clarkio', Another Example: 'clarkio, parithon'"
+          "description": "A comma separated list of channel name(s) to connect to on Twitch. Example: 'clarkio', Another Example: 'clarkio, parithon'"
         },
         "twitchHighlighter.nickname": {
           "type": "string",
