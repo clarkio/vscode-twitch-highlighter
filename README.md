@@ -1,6 +1,12 @@
 # Twitch Line Highlighter VS Code Extension
 
+Master Branch|vNext Branch
+---|---
+[![Master Status][MasterStatusLogo]][MasterStatusURL] | [![vNext Status][vNextStatusLogo]][vNextStatusURL]
+
 A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. etc. by sending a command in chat that will highlight the line of code they want you to check.
+
+![Video](./resources/intro-vid.gif)
 
 ## Requirements
 
@@ -48,6 +54,16 @@ To unhighlight a line, use:
 
         !line !<LineNumber>
 
+To highlight multiple lines, use the same syntax as above but include a range of lines to highlight:
+
+        !line <StartLineNumber>-<EndLineNumber>
+
+Additionally, you can also include comments:
+
+        !line <LineNumber> This is a comment
+
+![Multi-highlight example](./resources/multi-highlight-example.jpg)
+
 ## Extension Settings
 
 - `twitchHighlighter.channels`: The channel name(s) to connect to on Twitch.
@@ -80,3 +96,8 @@ Some of the code in this extension has been adapted from the [twitchlint extensi
 ## Release Notes
 
 See [CHANGELOG.md](CHANGELOG.md)
+
+[MasterStatusLogo]: https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_apis/build/status/Production%20Test%20&%20Build%20-%20VS%20Code%20Line%20Highlighter%20Extension?branchName=master
+[MasterStatusURL]: https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_build/latest?definitionId=23&branchName=master
+[vNextStatusLogo]: https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_apis/build/status/Development%20Test%20&%20Build%20-%20VS%20Code%20Line%20Highlighter%20Extension?branchName=vnext
+[vNextStatusURL]: https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_build/latest?definitionId=20&branchName=vnext
