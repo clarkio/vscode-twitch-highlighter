@@ -319,6 +319,15 @@ export function deactivate(): Thenable<void> {
   return twitchChatClient.dispose();
 }
 
+function checkLineNumbers(editor: vscode.TextEditor, line: number): number {
+  const lineNumbersSetting = vscode.workspace.getConfiguration('editor').get<string>('lineNumbers');
+  if (lineNumbersSetting === 'relative') {
+    const cursorPosition = editor.selection.active.line;
+    line += cursorPosition + 1;
+  }
+  return line;
+}
+
 function highlight(
   twitchUser: string,
   startLine: number,
@@ -327,7 +336,7 @@ function highlight(
   comment?: string
 ) {
   console.log(`highlight called.`);
-  if (!startLine) {
+  if (!startLine === undefined) {
     console.warn('A line number was not provided to highlight');
     return;
   }
@@ -337,6 +346,10 @@ function highlight(
     console.log('No active text editor is present.');
     return;
   }
+
+  // Adjust the numbers if the text editor is using 'relative' line numbers.
+  startLine = checkLineNumbers(editor, startLine);
+  endLine = checkLineNumbers(editor, endLine);
 
   const doc = editor.document;
   const existingHighlighter = highlighters.find(highlighter => {
@@ -370,7 +383,7 @@ function highlight(
     range,
     hoverMessage: `From @${twitchUser === 'self' ? 'You' : twitchUser}${
       comment !== undefined ? `: ${comment}` : ''
-    }`
+      }`
   };
 
   addHighlight(
@@ -385,7 +398,7 @@ function highlight(
 
 function unhighlight(lineNumber: number, fileName?: string) {
   console.log('unhighlight called.');
-  if (!lineNumber) {
+  if (!lineNumber === undefined) {
     vscode.window.showWarningMessage(
       'A line number was not provided to unhighlight.'
     );
@@ -402,6 +415,7 @@ function unhighlight(lineNumber: number, fileName?: string) {
       );
       return;
     }
+    lineNumber = checkLineNumbers(editor, lineNumber);
     currentDocumentFileName = editor.document.fileName;
   } else {
     const existingHighlighter = highlighters.find(highlighter => {

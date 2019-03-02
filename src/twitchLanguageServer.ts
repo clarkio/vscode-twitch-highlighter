@@ -105,9 +105,10 @@ function parseMessage(userName: string, message: string) {
    * !line 5-7 6 should be deleted
    * !line settings.json 5-7 6 should be deleted
    * !highlight 5
-   *
+   * !line -5..10 highlights 15 lines (-5 to 10) when using relative line numbers
+   * !line -5--5 highlights 1 line (-5 to -5) when using relative line numbers
    */
-  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.[\w]{1,}) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/;
+  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.?[\w]*) )?(\!)?(-?\d+)(?:(?:-{1}|\.{2})(-?\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/;
 
   const cmdopts = commandPattern.exec(message);
   if (!cmdopts) { return; }
