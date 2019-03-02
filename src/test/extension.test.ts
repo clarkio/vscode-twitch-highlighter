@@ -1,4 +1,4 @@
-import { extSuffix, Commands, Settings } from '../constants';
+import { extensionId, extSuffix, Commands, Settings } from '../constants';
 
 //
 // Note: This example test is leveraging the Mocha test framework.
@@ -30,16 +30,19 @@ suite("Extension Tests", function () {
 
   let extension: vscode.Extension<any>;
 
-  setup(function (done) {
-    const ext = vscode.extensions.getExtension('clarkio.twitch-highlighter');
+  setup(function () {
+    const ext = vscode.extensions.getExtension(extensionId);
     if (!ext) {
       throw new Error('Extension was not found.');
     }
     if (ext) { extension = ext; }
-    done();
   });
 
-  // Defines a Mocha unit test
+  /**
+   * Because we are waiting on a process to complete in the background
+   * we use the `done` function to inform mocha that this test run is
+   * complete.
+   */
   test("Extension loads in VSCode and is active", function (done) {
     // Hopefully a 200ms timeout will allow the extension to activate within Windows
     // otherwise we get a false result.

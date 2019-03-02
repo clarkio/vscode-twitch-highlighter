@@ -81,7 +81,7 @@ function onTtvChatMessage(channel: string, user: any, message: string) {
   parseMessage(userName, message);
 }
 
-function parseMessage(userName: string, message: string) {
+export function parseMessage(userName: string, message: string) {
 
   /**
    * Regex pattern to verify the command is a highlight command
@@ -108,7 +108,7 @@ function parseMessage(userName: string, message: string) {
    * !highlight 5
    *
    */
-  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.[\w]{1,}) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/;
+  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.?[\w]*) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/;
 
   const cmdopts = commandPattern.exec(message);
   if (!cmdopts) { return; }
@@ -123,16 +123,20 @@ function parseMessage(userName: string, message: string) {
   const vStartLine = endLine < startLine ? endLine : startLine;
   const vEndLine = endLine < startLine ? startLine : endLine;
 
+  const result = {
+    twitchUser: userName,
+    startLine: vStartLine,
+    endLine: vEndLine,
+    fileName,
+    comment
+  };
+
   connection.sendNotification(
     highlight ? Commands.highlight : Commands.unhighlight,
-    {
-      twitchUser: userName,
-      startLine: vStartLine,
-      endLine: vEndLine,
-      fileName,
-      comment
-    }
+    result
   );
+
+  return result;
 }
 
 connection.onShutdown(() => {
