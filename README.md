@@ -8,8 +8,6 @@ A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos
 
 ![Video](./resources/intro-vid.gif)
 
-![Video](./resources/intro-vid.gif)
-
 ## Requirements
 
 In order to use this extension you will need the following things before going to the [Getting Started](#getting-started) section:
