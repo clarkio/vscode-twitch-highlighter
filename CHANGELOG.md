@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.2.0]
+
+### Added
+
+- Highlights tree view in explorer and debug views ([83](https://github.com/clarkio/vscode-twitch-highlighter/pull/83) thanks @parithon)
+- More tests using test theory inputs ([79](https://github.com/clarkio/vscode-twitch-highlighter/pull/79) thanks @parithon)
+
+### Changed
+
+- Location of the button to connect/disconnect the highlight from the chat channel to the left ([83](https://github.com/clarkio/vscode-twitch-highlighter/pull/83) thanks @parithon). This was moved to follow the convention that most extensions which are app based add to the left side of the status bar and the right side is reserved more for editor formatting type actions.
+- Icon in activity to be hidden but can be shown via the setting `twitchHighlighter.showHighlightsInActivityBar` ([83](https://github.com/clarkio/vscode-twitch-highlighter/pull/83) thanks @parithon)
+
 ## [0.1.5]
 
 ### Added
@@ -51,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Pre-release version to gather feedback from the community and help identify gaps.
 
+[0.2.0]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.5...0.2.0
 [0.1.5]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.4...0.1.5
 [0.1.4]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.3...0.1.4
 [0.1.3]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.2...0.1.3

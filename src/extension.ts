@@ -51,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Creates the status bar toggle button
   twitchHighlighterStatusBar = vscode.window.createStatusBarItem(
-    vscode.StatusBarAlignment.Right
+    vscode.StatusBarAlignment.Left
   );
   twitchHighlighterStatusBar.command = Commands.toggleChat;
   twitchHighlighterStatusBar.tooltip = `Twitch Highlighter Extension`;
@@ -268,7 +268,7 @@ export function activate(context: vscode.ExtensionContext) {
   // #region vscode events
   vscode.workspace.onDidChangeConfiguration(
     event => {
-      if (event.affectsConfiguration('twitchHighlighter')) {
+      if (event.affectsConfiguration(extSuffix)) {
         setupDecoratorType();
       }
     },
@@ -545,19 +545,19 @@ function registerCommand(
  * to a string 'clarkio, parithon'.
  */
 function updateChannelsSetting() {
-  const configuration = vscode.workspace.getConfiguration('twitchHighlighter');
-  const channels = configuration.get<string>('channels');
+  const configuration = vscode.workspace.getConfiguration(extSuffix);
+  const channels = configuration.get<string>(Settings.channels);
   if (isArray(channels)) {
     // Update the global settings
-    configuration.update('channels', channels.join(', '), true);
+    configuration.update(Settings.channels, channels.join(', '), true);
   }
 }
 
 function setupDecoratorType() {
-  const configuration = vscode.workspace.getConfiguration('twitchHighlighter');
+  const configuration = vscode.workspace.getConfiguration(extSuffix);
   highlightDecorationType = vscode.window.createTextEditorDecorationType({
-    backgroundColor: configuration.get<string>('highlightColor') || 'green',
-    border: configuration.get<string>('highlightBorder') || '2px solid white',
-    color: configuration.get<string>('highlightFontColor') || 'white'
+    backgroundColor: configuration.get<string>(Settings.highlightColor) || 'green',
+    border: configuration.get<string>(Settings.highlightBorder) || '2px solid white',
+    color: configuration.get<string>(Settings.highlightFontColor) || 'white'
   });
 }

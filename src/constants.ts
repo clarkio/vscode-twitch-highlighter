@@ -1,3 +1,4 @@
+export const extensionId = 'clarkio.twitch-highlighter';
 export const extSuffix = 'twitchHighlighter';
 
 export enum Settings {
@@ -5,14 +6,17 @@ export enum Settings {
   'username' = 'nickname',
   'highlightColor' = 'highlightColor',
   'highlightBorder' = 'highlightBorder',
+  'highlightFontColor' = 'highlightFontColor',
   'announceBot' = 'announceBot',
   'joinMessage' = 'joinMessage',
   'leaveMessage' = 'leaveMessage',
   'unhighlightOnDisconnect' = 'unhighlightOnDisconnect',
+  'showHighlightsInActivityBar' = 'showHighlightsInActivityBar',
 }
 
 export enum Commands {
   'highlight' = 'twitchHighlighter.highlight',
+  'unhighlight' = 'twitchHighlighter.unhighlight',
   'unhighlightAll' = 'twitchHighlighter.unhighlightAll',
   'unhighlightSpecific' = 'twitchHighlighter.unhighlightSpecific',
   'startChat' = 'twitchHighlighter.startChat',

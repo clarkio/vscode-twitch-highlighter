@@ -6,7 +6,7 @@ import {
 } from 'vscode-languageclient';
 import { workspace, window, Disposable } from 'vscode';
 import CredentialManager from './credentialManager';
-import { extSuffix, Settings } from './constants';
+import { extSuffix, Settings, Commands } from './constants';
 
 export class TwitchChatClient {
   private readonly _languageClient: LanguageClient;
@@ -104,7 +104,7 @@ export class TwitchChatClient {
    * Stop the connection to Twitch IRC
    */
   public stop() {
-    this._languageClient.sendRequest('stopchat').then(
+    this._languageClient.sendRequest(Commands.stopChat).then(
       result => {
         if (!result) {
           window.showErrorMessage(
@@ -146,7 +146,7 @@ export class TwitchChatClient {
       joinMessage: configuration.get<string>(Settings.joinMessage) || '',
       leaveMessage: configuration.get<string>(Settings.leaveMessage) || ''
     };
-    this._languageClient.sendRequest('startchat', chatParams).then(
+    this._languageClient.sendRequest(Commands.startChat, chatParams).then(
       result => {
         window.showInformationMessage(
           'Twitch Highlighter: Chat Listener Connected.'
@@ -199,14 +199,14 @@ export class TwitchChatClient {
       window.showErrorMessage(params.message);
     });
 
-    this._languageClient.onNotification('highlight', (params: any) => {
+    this._languageClient.onNotification(Commands.highlight, (params: any) => {
       console.log('highlight requested.', params);
       if (this.onHighlight) {
         this.onHighlight(params.twitchUser, params.startLine, params.endLine, params.fileName, params.comment);
       }
     });
 
-    this._languageClient.onNotification('unhighlight', (params: any) => {
+    this._languageClient.onNotification(Commands.unhighlight, (params: any) => {
       console.log('unhighlight requested.', params);
       if (this.onUnhighlight) {
         this.onUnhighlight(params.endLine, params.fileName);
@@ -236,7 +236,7 @@ export class TwitchChatClient {
       documentSelector: ['*'],
       synchronize: {
         // Synchronize the setting section to the server
-        configurationSection: 'twitchHighlighter'
+        configurationSection: extSuffix
       }
     };
   }
