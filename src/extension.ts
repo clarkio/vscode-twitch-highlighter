@@ -51,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Creates the status bar toggle button
   twitchHighlighterStatusBar = vscode.window.createStatusBarItem(
-    vscode.StatusBarAlignment.Right
+    vscode.StatusBarAlignment.Left
   );
   twitchHighlighterStatusBar.command = Commands.toggleChat;
   twitchHighlighterStatusBar.tooltip = `Twitch Highlighter Extension`;
