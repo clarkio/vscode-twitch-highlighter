@@ -140,6 +140,12 @@
           "name": "Highlights"
         }
       ],
+      "debug": [
+        {
+          "id": "twitchHighlighterTreeView",
+          "name": "Highlights"
+        }
+      ],
       "twitchHighlighter-explorer": [
         {
           "id": "twitchHighlighterTreeView",
