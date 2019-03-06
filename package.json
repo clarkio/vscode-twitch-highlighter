@@ -207,7 +207,7 @@
         "twitchHighlighter.showHighlightsInActivityBar": {
           "type": "boolean",
           "default": false,
-          "description": "Show the Highlights activity bar."
+          "description": "Show the Highlights icon in the activity bar to display the tree view."
         }
       }
     }

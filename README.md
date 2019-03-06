@@ -4,7 +4,7 @@
 | ----------------------------------------------------- | -------------------------------------------------- |
 | [![Master Status][masterstatuslogo]][masterstatusurl] | [![vNext Status][vnextstatuslogo]][vnextstatusurl] |
 
-A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. etc. by sending a command in chat that will highlight the line of code they want you to check.
+A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.
 
 ![Video](./resources/intro-vid.gif)
 
@@ -73,6 +73,8 @@ Additionally, you can also include comments:
 * `twitchHighlighter.announceBot`: Whether or not the bot should announce its joining or leaving the chat room.
 * `twitchHighlighter.joinMessage`: The message the bot will say when joining a chat room
 * `twitchHighlighter.leaveMessage`: The message the bot will say when leaving a chat room
+
+* `twitchHighlighter.showHighlightsInActivityBar`: Show the Highlights icon in the activity bar to display the tree view.
 
 ## Attribution
 
