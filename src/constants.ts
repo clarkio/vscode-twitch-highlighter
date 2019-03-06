@@ -11,6 +11,7 @@ export enum Settings {
   'joinMessage' = 'joinMessage',
   'leaveMessage' = 'leaveMessage',
   'unhighlightOnDisconnect' = 'unhighlightOnDisconnect',
+  'showHighlightsInActivityBar' = 'showHighlightsInActivityBar',
 }
 
 export enum Commands {
