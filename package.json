@@ -134,10 +134,17 @@
       ]
     },
     "views": {
-      "twitchHighlighter-explorer": [
+      "explorer": [
         {
           "id": "twitchHighlighterTreeView",
           "name": "Highlights"
+        }
+      ],
+      "twitchHighlighter-explorer": [
+        {
+          "id": "twitchHighlighterTreeView",
+          "name": "Highlights",
+          "when": "config.twitchHighlighter.showHighlightsInActivityBar"
         }
       ]
     },
@@ -190,6 +197,11 @@
           "type": "boolean",
           "default": false,
           "description": "Unhighlight all lines when disconnected from the chat service."
+        },
+        "twitchHighlighter.showHighlightsInActivityBar": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show the Highlights activity bar."
         }
       }
     }
