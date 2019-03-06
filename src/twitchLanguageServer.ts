@@ -7,6 +7,7 @@ import {
   InitializedParams,
   TextDocumentSyncKind
 } from 'vscode-languageserver/lib/main';
+import { Commands } from './constants';
 
 import * as tmi from 'twitch-js';
 
@@ -32,7 +33,7 @@ connection.onInitialized((params: InitializedParams) => {
 
 connection.listen();
 
-connection.onRequest('stopchat', async () => {
+connection.onRequest(Commands.stopChat, async () => {
   if (!ttvChatClient) {
     return false;
   }
@@ -52,7 +53,7 @@ connection.onRequest('stopchat', async () => {
     });
 });
 
-connection.onRequest('startchat', params => {
+connection.onRequest(Commands.startChat, params => {
   botparams = { ...params };
   ttvChatClient = new tmi.Client(getTwitchChatOptions(params));
   return ttvChatClient
@@ -80,7 +81,7 @@ function onTtvChatMessage(channel: string, user: any, message: string) {
   parseMessage(userName, message);
 }
 
-function parseMessage(userName: string, message: string) {
+export function parseMessage(userName: string, message: string) {
 
   /**
    * Regex pattern to verify the command is a highlight command
@@ -107,7 +108,7 @@ function parseMessage(userName: string, message: string) {
    * !highlight 5
    *
    */
-  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.[\w]{1,}) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/;
+  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.?[\w]*) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/;
 
   const cmdopts = commandPattern.exec(message);
   if (!cmdopts) { return; }
@@ -122,16 +123,20 @@ function parseMessage(userName: string, message: string) {
   const vStartLine = endLine < startLine ? endLine : startLine;
   const vEndLine = endLine < startLine ? startLine : endLine;
 
+  const result = {
+    twitchUser: userName,
+    startLine: vStartLine,
+    endLine: vEndLine,
+    fileName,
+    comment
+  };
+
   connection.sendNotification(
-    highlight ? 'highlight' : 'unhighlight',
-    {
-      twitchUser: userName,
-      startLine: vStartLine,
-      endLine: vEndLine,
-      fileName,
-      comment
-    }
+    highlight ? Commands.highlight : Commands.unhighlight,
+    result
   );
+
+  return result;
 }
 
 connection.onShutdown(() => {
