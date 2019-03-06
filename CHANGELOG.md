@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Location of the button to connect/disconnect the highlight from the chat channel to the left ([83](https://github.com/clarkio/vscode-twitch-highlighter/pull/83) thanks @parithon)
+- Location of the button to connect/disconnect the highlight from the chat channel to the left ([83](https://github.com/clarkio/vscode-twitch-highlighter/pull/83) thanks @parithon). This was moved to follow the convention that most extensions which are app based add to the left side of the status bar and the right side is reserved more for editor formatting type actions.
 - Icon in activity to be hidden but can be shown via the setting `twitchHighlighter.showHighlightsInActivityBar` ([83](https://github.com/clarkio/vscode-twitch-highlighter/pull/83) thanks @parithon)
 
 ## [0.1.5]
