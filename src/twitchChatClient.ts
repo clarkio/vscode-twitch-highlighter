@@ -76,14 +76,14 @@ export class TwitchChatClient {
         if (!this.verifyToken(token, setTokenCallback)) {
           return;
         }
+        if (token === null) {
+          return;
+        }
         window.showInformationMessage(
           'Twitch Highlighter: Starting Chat Listener...'
         );
         if (this.onConnecting) {
           this.onConnecting();
-        }
-        if (token === null) {
-          return;
         }
         this.startListening(token);
       })
