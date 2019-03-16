@@ -12,6 +12,7 @@ export enum Settings {
   'leaveMessage' = 'leaveMessage',
   'unhighlightOnDisconnect' = 'unhighlightOnDisconnect',
   'showHighlightsInActivityBar' = 'showHighlightsInActivityBar',
+  'requiredBadges' = 'requiredBadges'
 }
 
 export enum Commands {

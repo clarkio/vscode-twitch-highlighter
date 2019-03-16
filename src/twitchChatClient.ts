@@ -144,7 +144,8 @@ export class TwitchChatClient {
       password: token,
       announce: configuration.get<boolean>(Settings.announceBot) || false,
       joinMessage: configuration.get<string>(Settings.joinMessage) || '',
-      leaveMessage: configuration.get<string>(Settings.leaveMessage) || ''
+      leaveMessage: configuration.get<string>(Settings.leaveMessage) || '',
+      requiredBadges: configuration.get<string>(Settings.requiredBadges),
     };
     this._languageClient.sendRequest(Commands.startChat, chatParams).then(
       result => {

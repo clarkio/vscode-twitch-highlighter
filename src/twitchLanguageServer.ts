@@ -11,6 +11,15 @@ import { Commands } from './constants';
 
 import * as tmi from 'twitch-js';
 
+interface IBadges {
+  [key: string]: string | undefined;
+  broadcaster?: string;
+  moderator?: string;
+  subscriber?: string;
+  vip?: string;
+}
+
+let requiredBadges: string[];
 let botparams: { announce: boolean; joinMessage: string; leaveMessage: string };
 let ttvChatClient: tmi.Client;
 let connection: IConnection = createConnection(
@@ -56,6 +65,7 @@ connection.onRequest(Commands.stopChat, async () => {
 connection.onRequest(Commands.startChat, params => {
   botparams = { ...params };
   ttvChatClient = new tmi.Client(getTwitchChatOptions(params));
+  requiredBadges = params.requiredBadges.split(',').map((badge: string) => badge.trim()).filter((badge: string) => badge !== '');
   return ttvChatClient
     .connect()
     .then(() => {
@@ -78,10 +88,11 @@ function onTtvChatJoin(channel: string, username: string, self: boolean) {
 
 function onTtvChatMessage(channel: string, user: any, message: string) {
   const userName = user['display-name'] || user.username;
-  parseMessage(userName, message);
+  const badges = user['badges'];
+  parseMessage(userName, message, badges);
 }
 
-export function parseMessage(userName: string, message: string) {
+export function parseMessage(userName: string, message: string, badges: IBadges) {
 
   /**
    * Regex pattern to verify the command is a highlight command
@@ -108,6 +119,17 @@ export function parseMessage(userName: string, message: string) {
    * !highlight 5
    *
    */
+
+  if (requiredBadges.length > 0 && (badges.broadcaster && badges.broadcaster !== '1')) {
+    // Check to ensure the user has a required badge
+    const canContinue = requiredBadges.some(badge => badges[badge] === '1');
+    // Bail if the user does not have the required badge
+    if (!canContinue) {
+      console.log(`${userName} does not have a required badge to use the highlight command.`);
+      return;
+    }
+  }
+
   const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.?[\w]*) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/;
 
   const cmdopts = commandPattern.exec(message);

@@ -208,6 +208,11 @@
           "type": "boolean",
           "default": false,
           "description": "Show the Highlights icon in the activity bar to display the tree view."
+        },
+        "twitchHighlighter.requiredBadges": {
+          "type": "string",
+          "default": "",
+          "description": "A comma seperated list of badges required to use the highlighter command. Example: moderator, subscriber, vip"
         }
       }
     }
