@@ -60,12 +60,12 @@
       },
       {
         "command": "twitchHighlighter.setTwitchPassword",
-        "title": "Set Password",
+        "title": "Set Password (Token)",
         "category": "Twitch Highlighter"
       },
       {
         "command": "twitchHighlighter.removeTwitchPassword",
-        "title": "Remove Password",
+        "title": "Remove Password (Token)",
         "category": "Twitch Highlighter"
       },
       {
