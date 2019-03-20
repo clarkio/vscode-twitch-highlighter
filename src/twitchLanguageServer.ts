@@ -120,7 +120,7 @@ export function parseMessage(userName: string, message: string, badges: IBadges)
    *
    */
 
-  if (requiredBadges.length > 0 && (badges.broadcaster && badges.broadcaster !== '1')) {
+  if (requiredBadges && requiredBadges.length > 0 && (badges.broadcaster && badges.broadcaster !== '1')) {
     // Check to ensure the user has a required badge
     const canContinue = requiredBadges.some(badge => badges[badge] === '1');
     // Bail if the user does not have the required badge
