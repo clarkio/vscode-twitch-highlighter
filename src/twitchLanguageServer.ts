@@ -78,10 +78,25 @@ function onTtvChatJoin(channel: string, username: string, self: boolean) {
 
 function onTtvChatMessage(channel: string, user: any, message: string) {
   const userName = user['display-name'] || user.username;
-  parseMessage(userName, message);
+  parseMessage(channel, userName, message);
 }
 
-export function parseMessage(userName: string, message: string) {
+export function parseMessage(channel:string, userName: string, message: string) {
+
+  /**
+   * Regex pattern to verify the command is a highlight command without
+   * any arguments. This will send a 'howto' message back on chat to
+   * inform the users how to use the highlight command.
+   *
+   * Matches:
+   *
+   * !line
+   */
+  const commandOnlyPattern = /^!(?:line|highlight)$/;
+  if (commandOnlyPattern.exec(message)) {
+    ttvChatClient.say(channel, '/me To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment>');
+    return;
+  }
 
   /**
    * Regex pattern to verify the command is a highlight command
