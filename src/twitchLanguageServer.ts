@@ -92,7 +92,7 @@ export function parseMessage(channel:string, userName: string, message: string) 
    *
    * !line
    */
-  const commandOnlyPattern = /^!(?:line|highlight)$/;
+  const commandOnlyPattern = /^!(?:line|highlight)$/i;
   if (commandOnlyPattern.exec(message)) {
     ttvChatClient.say(channel, '/me To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment>');
     return;
@@ -123,7 +123,7 @@ export function parseMessage(channel:string, userName: string, message: string) 
    * !highlight 5
    *
    */
-  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.?[\w]*) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/;
+  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.?[\w]*) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/i;
 
   const cmdopts = commandPattern.exec(message);
   if (!cmdopts) { return; }
