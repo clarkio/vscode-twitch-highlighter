@@ -81,7 +81,7 @@ suite('twitchLanguageServer Tests', function() {
     ];
 
     theories.forEach(({twitchUser, message, startLine, endLine, fileName, comment}) => {
-      const result = parseMessage(twitchUser, message, {});
+      const result = parseMessage('#clarkio', twitchUser, message, {});
       assert.ok(result);
       if (result) {
         assert.equal(result.twitchUser, twitchUser);

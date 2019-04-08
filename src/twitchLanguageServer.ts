@@ -89,10 +89,10 @@ function onTtvChatJoin(channel: string, username: string, self: boolean) {
 function onTtvChatMessage(channel: string, user: any, message: string) {
   const userName = user['display-name'] || user.username;
   const badges = user['badges'];
-  parseMessage(userName, message, badges);
+  parseMessage(channel, userName, message, badges);
 }
 
-export function parseMessage(userName: string, message: string, badges: IBadges) {
+export function parseMessage(channel: string, userName: string, message: string, badges: IBadges) {
 
   /**
    * Regex pattern to verify the command is a highlight command
