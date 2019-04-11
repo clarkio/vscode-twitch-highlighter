@@ -28,4 +28,5 @@ export enum Commands {
   'refreshTreeView' = 'twitchHighlighter.refreshTreeView',
   'gotoHighlight' = 'twitchHighlighter.gotoHighlight',
   'removeHighlight' = 'twitchHighlighter.removeHighlight',
+  'removeBannedHighlights' = 'twitchHighlighter.removeBannedHighlights'
 }

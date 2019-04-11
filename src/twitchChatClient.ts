@@ -59,6 +59,12 @@ export class TwitchChatClient {
    */
   public onDisconnected?: () => void;
 
+
+  /**
+   * Called when a user is banned in chat
+   */
+  public onBannedUser?: (bannedUserName: string) => void;
+
   /**
    * Retrieves the connection status.
    */
@@ -210,6 +216,12 @@ export class TwitchChatClient {
       console.log('unhighlight requested.', params);
       if (this.onUnhighlight) {
         this.onUnhighlight(params.endLine, params.fileName);
+      }
+    });
+
+    this._languageClient.onNotification(Commands.removeBannedHighlights, (bannedUserName: string) => {
+      if (this.onBannedUser) {
+        this.onBannedUser(bannedUserName);
       }
     });
   }

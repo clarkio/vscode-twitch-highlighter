@@ -61,6 +61,7 @@ connection.onRequest(Commands.startChat, params => {
     .then(() => {
       ttvChatClient.on('join', onTtvChatJoin);
       ttvChatClient.on('chat', onTtvChatMessage);
+      ttvChatClient.on('ban', onTtvBanUser);
       return;
     })
     .catch((error: any) => {
@@ -79,6 +80,10 @@ function onTtvChatJoin(channel: string, username: string, self: boolean) {
 function onTtvChatMessage(channel: string, user: any, message: string) {
   const userName = user['display-name'] || user.username;
   parseMessage(userName, message);
+}
+
+function onTtvBanUser(channel: string, userName: string, reason: string, userstate: any) {
+  connection.sendNotification(Commands.removeBannedHighlights, userName.toLocaleLowerCase());
 }
 
 export function parseMessage(userName: string, message: string) {
