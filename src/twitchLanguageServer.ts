@@ -7,7 +7,7 @@ import {
   InitializedParams,
   TextDocumentSyncKind
 } from 'vscode-languageserver/lib/main';
-import { Commands } from './constants';
+import { Commands, InternalCommands } from './constants';
 
 import * as tmi from 'twitch-js';
 
@@ -61,6 +61,7 @@ connection.onRequest(Commands.startChat, params => {
     .then(() => {
       ttvChatClient.on('join', onTtvChatJoin);
       ttvChatClient.on('chat', onTtvChatMessage);
+      ttvChatClient.on('ban', onTtvBanUser);
       return;
     })
     .catch((error: any) => {
@@ -81,8 +82,19 @@ function onTtvChatMessage(channel: string, user: any, message: string) {
   parseMessage(userName, message);
 }
 
-export function parseMessage(userName: string, message: string) {
+function onTtvBanUser(
+  channel: string,
+  userName: string,
+  reason: string,
+  userstate: any
+) {
+  connection.sendNotification(
+    InternalCommands.removeBannedHighlights,
+    userName.toLocaleLowerCase()
+  );
+}
 
+export function parseMessage(userName: string, message: string) {
   /**
    * Regex pattern to verify the command is a highlight command
    * groups the different sections of the command.
@@ -111,7 +123,9 @@ export function parseMessage(userName: string, message: string) {
   const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.?[\w]*) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/;
 
   const cmdopts = commandPattern.exec(message);
-  if (!cmdopts) { return; }
+  if (!cmdopts) {
+    return;
+  }
 
   const fileName: string = cmdopts[1] || cmdopts[5];
   const highlight: boolean = cmdopts[2] === undefined;

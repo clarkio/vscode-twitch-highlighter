@@ -35,6 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   twitchChatClient.onHighlight = highlight;
   twitchChatClient.onUnhighlight = unhighlight;
+  twitchChatClient.onBannedUser = handleBannedUser;
   twitchChatClient.onConnected = () => setConnectionStatus(true);
   twitchChatClient.onConnecting = () => setConnectionStatus(false, true);
   twitchChatClient.onDisconnected = () => {
@@ -132,6 +133,14 @@ export function activate(context: vscode.ExtensionContext) {
         );
         console.error(reason);
       });
+  }
+
+  /**
+   * This function handles removing any highlights that were created from a user that was banned in chat
+   * @param bannedUserName name of the user that was banned in the chat
+   */
+  function handleBannedUser(bannedUserName: string) {
+    removeHighlight(bannedUserName);
   }
 
   async function setTwitchTokenHandler(): Promise<boolean> {
@@ -370,7 +379,7 @@ function highlight(
     range,
     hoverMessage: `From @${twitchUser === 'self' ? 'You' : twitchUser}${
       comment !== undefined ? `: ${comment}` : ''
-    }`
+      }`
   };
 
   addHighlight(
@@ -479,20 +488,33 @@ function addHighlight(
   twitchHighlighterTreeView.refresh();
 }
 
+function removeHighlight(username: string): void;
+function removeHighlight(lineNumber: number, fileName: string, deferRefresh?: boolean): void;
 function removeHighlight(
-  lineNumber: number,
-  fileName: string,
+  searchQuery: string | number,
+  fileName?: string,
   deferRefresh?: boolean
 ) {
-  const existingHighlight = findHighlighter(fileName);
-  if (!existingHighlight) {
-    console.warn(`Highlight not found so can't unhighlight the line from file`);
-    return;
+  if (isNaN(Number(searchQuery))) {
+    const username = searchQuery as string;
+    highlighters.forEach(highlighter => highlighter.removeDecorations(username));
+  }
+  // the searchQuery is a number (lineNumber)
+  else {
+    if (!fileName) { return; } // the fileName should always be truthy, but tslint generates warnings.
+
+    const existingHighlight = findHighlighter(fileName);
+    if (!existingHighlight) {
+      console.warn(`Highlight not found so can't unhighlight the line from file`);
+      return;
+    }
+
+    const lineNumber = searchQuery as number;
+    existingHighlight.removeDecoration(lineNumber);
   }
 
-  existingHighlight.removeDecoration(lineNumber);
-  triggerUpdateDecorations();
   if (!deferRefresh) {
+    triggerUpdateDecorations();
     twitchHighlighterTreeView.refresh();
   }
 }
