@@ -212,7 +212,7 @@
         "twitchHighlighter.requiredBadges": {
           "type": "string",
           "default": "",
-          "description": "A comma seperated list of badges required to use the highlighter command. Leave blank for no requirement. Example: moderator, subscriber, vip. *Requires the bot to be reconnected to take effect."
+          "description": "A comma seperated list of badges required to use the highlighter command. The user must have at least one of these badges to use the command. Leave blank for no requirement. Example: moderator, subscriber, vip. *Requires the bot to be reconnected to take effect."
         }
       }
     }

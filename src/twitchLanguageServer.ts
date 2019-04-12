@@ -129,7 +129,7 @@ export function parseMessage(channel: string, userName: string, message: string,
     const canContinue = requiredBadges.some(badge => badges[badge] === '1');
     // Bail if the user does not have the required badge
     if (!canContinue) {
-      console.warn(`${userName} does not have a required badge to use the highlight command.`);
+      console.warn(`${userName} does not have any of the required badges to use the highlight command.`);
       return;
     }
   }
