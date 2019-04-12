@@ -11,7 +11,7 @@ export enum Settings {
   'joinMessage' = 'joinMessage',
   'leaveMessage' = 'leaveMessage',
   'unhighlightOnDisconnect' = 'unhighlightOnDisconnect',
-  'showHighlightsInActivityBar' = 'showHighlightsInActivityBar',
+  'showHighlightsInActivityBar' = 'showHighlightsInActivityBar'
 }
 
 export enum Commands {
@@ -27,5 +27,9 @@ export enum Commands {
   'removeTwitchPassword' = 'twitchHighlighter.removeTwitchPassword',
   'refreshTreeView' = 'twitchHighlighter.refreshTreeView',
   'gotoHighlight' = 'twitchHighlighter.gotoHighlight',
-  'removeHighlight' = 'twitchHighlighter.removeHighlight',
+  'removeHighlight' = 'twitchHighlighter.removeHighlight'
+}
+
+export enum InternalCommands {
+  'removeBannedHighlights' = 'twitchHighlighter.removeBannedHighlights'
 }
