@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.2.1]
+
+### Added
+
+- Template for issues ([90](https://github.com/clarkio/vscode-twitch-highlighter/pull/90) thanks @yoannfleurydev)
+- Functionality to listen for ban events and remove highlights from banned users in Twitch chat ([99](https://github.com/clarkio/vscode-twitch-highlighter/pull/99) thanks @mpjme)
+
+### Changed
+
+- Updated README to remove duplicate animated gif ([85](https://github.com/clarkio/vscode-twitch-highlighter/pull/85) thanks @parithon)
+- Switched from twitch-js library to tmi.js ([97](https://github.com/clarkio/vscode-twitch-highlighter/pull/97) thanks @parithon)
+
+### Fixed
+
+- Inaccurate status in status bar when a token is not provided on initial start up ([91](https://github.com/clarkio/vscode-twitch-highlighter/pull/91) thanks @parithon)
+
 ## [0.2.0]
 
 ### Added
@@ -63,6 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Pre-release version to gather feedback from the community and help identify gaps.
 
+[0.2.1]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.5...0.2.0
 [0.1.5]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.4...0.1.5
 [0.1.4]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.3...0.1.4
