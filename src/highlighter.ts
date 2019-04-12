@@ -38,6 +38,11 @@ export class Highlighter {
     }
     return this.highlights;
   }
+
+  removeDecorations(username: string): Highlight[] {
+    this.highlights = this.highlights.filter(highlight => highlight.twitchUser !== username);
+    return this.highlights;
+  }
 }
 
 export class Highlight {
