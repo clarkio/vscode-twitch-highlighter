@@ -191,7 +191,7 @@ export class TwitchChatClient {
         .then(async action => {
           if (action) {
             // The user did not click the 'cancel' button.
-            // Set the password when null, if the result is false
+            // Set the token when null, if the result is false
             // (i.e. user cancelled) then cancel the connection
             if (token === null && !(await setTokenCallback())) {
               return;
