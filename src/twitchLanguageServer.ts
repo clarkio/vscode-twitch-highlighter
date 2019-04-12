@@ -9,7 +9,7 @@ import {
 } from 'vscode-languageserver/lib/main';
 import { Commands, InternalCommands } from './constants';
 
-import * as tmi from 'twitch-js';
+import * as tmi from 'tmi.js';
 
 let botparams: { announce: boolean; joinMessage: string; leaveMessage: string };
 let ttvChatClient: tmi.Client;
@@ -38,7 +38,7 @@ connection.onRequest(Commands.stopChat, async () => {
     return false;
   }
   if (botparams.announce && botparams.leaveMessage !== '') {
-    await ttvChatClient.channels.forEach((channel: string) => {
+    await ttvChatClient.getChannels().forEach((channel: string) => {
       ttvChatClient.say(channel, botparams.leaveMessage);
     });
   }
@@ -53,22 +53,19 @@ connection.onRequest(Commands.stopChat, async () => {
     });
 });
 
-connection.onRequest(Commands.startChat, params => {
+connection.onRequest(Commands.startChat, async params => {
   botparams = { ...params };
-  ttvChatClient = new tmi.Client(getTwitchChatOptions(params));
-  return ttvChatClient
-    .connect()
-    .then(() => {
-      ttvChatClient.on('join', onTtvChatJoin);
-      ttvChatClient.on('chat', onTtvChatMessage);
-      ttvChatClient.on('ban', onTtvBanUser);
-      return;
-    })
-    .catch((error: any) => {
-      console.error('There was an issue connecting to Twitch');
-      console.error(error);
-      throw error;
-    });
+  ttvChatClient = tmi.Client(getTwitchChatOptions(params));
+  try {
+    await ttvChatClient.connect();
+    ttvChatClient.on('join', onTtvChatJoin);
+    ttvChatClient.on('chat', onTtvChatMessage);
+    ttvChatClient.on('ban', onTtvBanUser);
+  } catch (error) {
+    console.error('There was an issue connecting to Twitch');
+    console.error(error);
+    throw error;
+  }
 });
 
 function onTtvChatJoin(channel: string, username: string, self: boolean) {
@@ -77,24 +74,23 @@ function onTtvChatJoin(channel: string, username: string, self: boolean) {
   }
 }
 
-function onTtvChatMessage(channel: string, user: any, message: string) {
+function onTtvChatMessage(
+  channel: string,
+  user: tmi.ChatUserstate,
+  message: string
+) {
   const userName = user['display-name'] || user.username;
   parseMessage(userName, message);
 }
 
-function onTtvBanUser(
-  channel: string,
-  userName: string,
-  reason: string,
-  userstate: any
-) {
+function onTtvBanUser(channel: string, userName: string, reason: string) {
   connection.sendNotification(
     InternalCommands.removeBannedHighlights,
     userName.toLocaleLowerCase()
   );
 }
 
-export function parseMessage(userName: string, message: string) {
+export function parseMessage(userName: string | undefined, message: string) {
   /**
    * Regex pattern to verify the command is a highlight command
    * groups the different sections of the command.
@@ -166,13 +162,12 @@ connection.onShutdown(() => {
       console.error(error);
     });
 });
-
 function getTwitchChatOptions(params: {
   channels: string;
   username: string;
   clientId: string;
   password: string;
-}): tmi.ClientOptions {
+}): tmi.Options {
   return {
     channels: params.channels.split(',').map(s => s.trim()),
     connection: {
