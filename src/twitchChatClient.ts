@@ -155,7 +155,8 @@ export class TwitchChatClient {
       password: token,
       announce: configuration.get<boolean>(Settings.announceBot) || false,
       joinMessage: configuration.get<string>(Settings.joinMessage) || '',
-      leaveMessage: configuration.get<string>(Settings.leaveMessage) || ''
+      leaveMessage: configuration.get<string>(Settings.leaveMessage) || '',
+      usageTip: configuration.get<string>(Settings.usageTip) || '',
     };
     this._languageClient.sendRequest(Commands.startChat, chatParams).then(
       result => {

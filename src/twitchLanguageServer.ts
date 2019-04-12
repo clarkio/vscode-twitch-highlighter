@@ -11,7 +11,7 @@ import { Commands, InternalCommands } from './constants';
 
 import * as tmi from 'tmi.js';
 
-let botparams: { announce: boolean; joinMessage: string; leaveMessage: string };
+let botparams: { announce: boolean; joinMessage: string; leaveMessage: string; usageTip: string; };
 let ttvChatClient: tmi.Client;
 let connection: IConnection = createConnection(
   new IPCMessageReader(process),
@@ -79,7 +79,7 @@ function onTtvChatMessage(
   user: tmi.ChatUserstate,
   message: string
 ) {
-  const userName = user['display-name'] || user.username;
+  const userName = user['display-name'] || user.username || "unknown";
   parseMessage(channel, userName, message);
 }
 
@@ -103,7 +103,9 @@ export function parseMessage(channel:string, userName: string, message: string) 
    */
   const commandOnlyPattern = /^!(?:line|highlight)$/i;
   if (commandOnlyPattern.exec(message)) {
-    ttvChatClient.say(channel, '/me To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment>');
+    if (botparams.usageTip && botparams.usageTip.length > 0) {
+      ttvChatClient.say(channel, `/me ${botparams.usageTip}`);
+    }
     return;
   }
 
