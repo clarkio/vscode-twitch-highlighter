@@ -7,16 +7,12 @@ import {
   InitializedParams,
   TextDocumentSyncKind
 } from 'vscode-languageserver/lib/main';
-import { Commands } from './constants';
+import { Commands, InternalCommands } from './constants';
 
-import * as tmi from 'twitch-js';
+import * as tmi from 'tmi.js';
 
-interface IBadges {
+interface IBadges extends tmi.Badges {
   [key: string]: string | undefined;
-  broadcaster?: string;
-  moderator?: string;
-  subscriber?: string;
-  vip?: string;
 }
 
 let requiredBadges: string[];
@@ -47,7 +43,7 @@ connection.onRequest(Commands.stopChat, async () => {
     return false;
   }
   if (botparams.announce && botparams.leaveMessage !== '') {
-    await ttvChatClient.channels.forEach((channel: string) => {
+    await ttvChatClient.getChannels().forEach((channel: string) => {
       ttvChatClient.say(channel, botparams.leaveMessage);
     });
   }
@@ -62,22 +58,20 @@ connection.onRequest(Commands.stopChat, async () => {
     });
 });
 
-connection.onRequest(Commands.startChat, params => {
+connection.onRequest(Commands.startChat, async params => {
   botparams = { ...params };
-  ttvChatClient = new tmi.Client(getTwitchChatOptions(params));
+  ttvChatClient = tmi.Client(getTwitchChatOptions(params));
   requiredBadges = params.requiredBadges.split(',').map((badge: string) => badge.trim()).filter((badge: string) => badge !== '');
-  return ttvChatClient
-    .connect()
-    .then(() => {
-      ttvChatClient.on('join', onTtvChatJoin);
-      ttvChatClient.on('chat', onTtvChatMessage);
-      return;
-    })
-    .catch((error: any) => {
-      console.error('There was an issue connecting to Twitch');
-      console.error(error);
-      throw error;
-    });
+  try {
+    await ttvChatClient.connect();
+    ttvChatClient.on('join', onTtvChatJoin);
+    ttvChatClient.on('chat', onTtvChatMessage);
+    ttvChatClient.on('ban', onTtvBanUser);
+  } catch (error) {
+    console.error('There was an issue connecting to Twitch');
+    console.error(error);
+    throw error;
+  }
 });
 
 function onTtvChatJoin(channel: string, username: string, self: boolean) {
@@ -86,14 +80,24 @@ function onTtvChatJoin(channel: string, username: string, self: boolean) {
   }
 }
 
-function onTtvChatMessage(channel: string, user: any, message: string) {
-  const userName = user['display-name'] || user.username;
-  const badges = user['badges'];
-  parseMessage(channel, userName, message, badges);
+function onTtvChatMessage(
+  channel: string,
+  user: tmi.ChatUserstate,
+  message: string
+) {
+  const userName = user['display-name'] || user.username || 'unknown';
+  const badges = user['badges'] || {};
+  parseMessage(channel, userName, message, badges as IBadges);
+}
+
+function onTtvBanUser(channel: string, userName: string, reason: string) {
+  connection.sendNotification(
+    InternalCommands.removeBannedHighlights,
+    userName.toLocaleLowerCase()
+  );
 }
 
 export function parseMessage(channel: string, userName: string, message: string, badges: IBadges) {
-
   /**
    * Regex pattern to verify the command is a highlight command
    * groups the different sections of the command.
@@ -133,7 +137,9 @@ export function parseMessage(channel: string, userName: string, message: string,
   const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.?[\w]*) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/;
 
   const cmdopts = commandPattern.exec(message);
-  if (!cmdopts) { return; }
+  if (!cmdopts) {
+    return;
+  }
 
   const fileName: string = cmdopts[1] || cmdopts[5];
   const highlight: boolean = cmdopts[2] === undefined;
@@ -174,13 +180,12 @@ connection.onShutdown(() => {
       console.error(error);
     });
 });
-
 function getTwitchChatOptions(params: {
   channels: string;
   username: string;
   clientId: string;
   password: string;
-}): tmi.ClientOptions {
+}): tmi.Options {
   return {
     channels: params.channels.split(',').map(s => s.trim()),
     connection: {

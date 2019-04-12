@@ -28,5 +28,9 @@ export enum Commands {
   'removeTwitchPassword' = 'twitchHighlighter.removeTwitchPassword',
   'refreshTreeView' = 'twitchHighlighter.refreshTreeView',
   'gotoHighlight' = 'twitchHighlighter.gotoHighlight',
-  'removeHighlight' = 'twitchHighlighter.removeHighlight',
+  'removeHighlight' = 'twitchHighlighter.removeHighlight'
+}
+
+export enum InternalCommands {
+  'removeBannedHighlights' = 'twitchHighlighter.removeBannedHighlights'
 }

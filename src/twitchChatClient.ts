@@ -6,7 +6,7 @@ import {
 } from 'vscode-languageclient';
 import { workspace, window, Disposable } from 'vscode';
 import CredentialManager from './credentialManager';
-import { extSuffix, Settings, Commands } from './constants';
+import { extSuffix, Settings, Commands, InternalCommands } from './constants';
 
 export class TwitchChatClient {
   private readonly _languageClient: LanguageClient;
@@ -39,7 +39,13 @@ export class TwitchChatClient {
    * this.onHighlight(params.twitchUser, params.startLine, params.endLine, params.fileName, params.comments);
    */
 
-  public onHighlight?: (twitchUser: string, startLine: number, endLine: number, fileName?: string, comments?: string) => void;
+  public onHighlight?: (
+    twitchUser: string,
+    startLine: number,
+    endLine: number,
+    fileName?: string,
+    comments?: string
+  ) => void;
   /**
    * Called when an unhighlight request is made from chat
    * @param lineNumber The line number to unhighlight, the entire highlight is removed if the lineNumber exists in the highlight range.
@@ -58,6 +64,11 @@ export class TwitchChatClient {
    * Called when the chat client is disconnected
    */
   public onDisconnected?: () => void;
+
+  /**
+   * Called when a user is banned in chat
+   */
+  public onBannedUser?: (bannedUserName: string) => void;
 
   /**
    * Retrieves the connection status.
@@ -203,7 +214,13 @@ export class TwitchChatClient {
     this._languageClient.onNotification(Commands.highlight, (params: any) => {
       console.log('highlight requested.', params);
       if (this.onHighlight) {
-        this.onHighlight(params.twitchUser, params.startLine, params.endLine, params.fileName, params.comment);
+        this.onHighlight(
+          params.twitchUser,
+          params.startLine,
+          params.endLine,
+          params.fileName,
+          params.comment
+        );
       }
     });
 
@@ -213,6 +230,15 @@ export class TwitchChatClient {
         this.onUnhighlight(params.endLine, params.fileName);
       }
     });
+
+    this._languageClient.onNotification(
+      InternalCommands.removeBannedHighlights,
+      (bannedUserName: string) => {
+        if (this.onBannedUser) {
+          this.onBannedUser(bannedUserName);
+        }
+      }
+    );
   }
 
   private getServerOptions(serverModule: string): ServerOptions {
