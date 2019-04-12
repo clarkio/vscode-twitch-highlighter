@@ -11,11 +11,11 @@ import { Commands, InternalCommands } from './constants';
 
 import * as tmi from 'tmi.js';
 
-interface IBadges extends tmi.Badges {
+export interface IBadges extends tmi.Badges {
   [key: string]: string | undefined;
 }
 
-let requiredBadges: string[];
+export let requiredBadges: string[] = [];
 let botparams: { announce: boolean; joinMessage: string; leaveMessage: string };
 let ttvChatClient: tmi.Client;
 let connection: IConnection = createConnection(

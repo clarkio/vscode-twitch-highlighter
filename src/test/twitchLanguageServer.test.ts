@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { parseMessage } from '../twitchLanguageServer';
+import { IBadges, requiredBadges, parseMessage } from '../twitchLanguageServer';
 
 interface Theory {
   twitchUser: string;
@@ -8,6 +8,9 @@ interface Theory {
   endLine: number;
   fileName?: string;
   comment?: string;
+  requireBadges?: string[];
+  badges?: IBadges;
+  shouldFail?: boolean;
 }
 
 suite('twitchLanguageServer Tests', function() {
@@ -77,12 +80,37 @@ suite('twitchLanguageServer Tests', function() {
         endLine: 15,
         fileName: 'settings.js',
         comment: 'comment'
+      },
+      {
+        twitchUser: 'moderator',
+        message: '!line 5',
+        startLine: 5,
+        endLine: 5,
+        requireBadges: ['moderator'],
+        badges: {
+          moderator: '1'
+        }
+      },
+      {
+        twitchUser: 'nonmoderator',
+        message: '!line 5',
+        startLine: 5,
+        endLine: 5,
+        requireBadges: ['moderator'],
+        shouldFail: true
       }
+
     ];
 
-    theories.forEach(({twitchUser, message, startLine, endLine, fileName, comment}) => {
-      const result = parseMessage('#clarkio', twitchUser, message, {});
-      assert.ok(result);
+    theories.forEach(({twitchUser, message, startLine, endLine, fileName, comment, requireBadges, badges, shouldFail}) => {
+      if (requireBadges) {
+        requiredBadges.push(...requireBadges);
+      }
+      const result = parseMessage('#clarkio', twitchUser, message, badges || {});
+
+      // If the 'shouldFail' flag is true, then the result should be undefined.
+      assert.ok(shouldFail ? !result : result);
+
       if (result) {
         assert.equal(result.twitchUser, twitchUser);
         assert.equal(result.startLine, startLine);
