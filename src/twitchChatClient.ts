@@ -152,7 +152,7 @@ export class TwitchChatClient {
     const chatParams = {
       channels: configuration.get<string[]>(Settings.channels),
       username: configuration.get<string>(Settings.username),
-      password: token,
+      token: token,
       announce: configuration.get<boolean>(Settings.announceBot) || false,
       joinMessage: configuration.get<string>(Settings.joinMessage) || '',
       leaveMessage: configuration.get<string>(Settings.leaveMessage) || ''

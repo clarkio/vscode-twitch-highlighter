@@ -166,7 +166,7 @@ function getTwitchChatOptions(params: {
   channels: string;
   username: string;
   clientId: string;
-  password: string;
+  token: string;
 }): tmi.Options {
   return {
     channels: params.channels.split(',').map(s => s.trim()),
@@ -180,7 +180,7 @@ function getTwitchChatOptions(params: {
         !params.username || params.username === ''
           ? undefined
           : params.username,
-      password: params.password
+      password: params.token
     },
     options: {
       debug: true /* True if you want DEBUG messages in your terminal; false otherwise */
