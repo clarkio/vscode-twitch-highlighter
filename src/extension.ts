@@ -77,11 +77,11 @@ export function activate(context: vscode.ExtensionContext) {
     Commands.removeTwitchClientId,
     removeTwitchClientIdHandler
   );
-  registerCommand(context, Commands.setTwitchPassword, setTwitchTokenHandler);
+  registerCommand(context, Commands.setTwitchToken, setTwitchTokenHandler);
   registerCommand(
     context,
-    Commands.removeTwitchPassword,
-    removeTwitchPasswordHandler
+    Commands.removeTwitchToken,
+    removeTwitchTokenHandler
   );
   registerCommand(context, Commands.startChat, startChatHandler);
   registerCommand(context, Commands.stopChat, stopChatHandler);
@@ -156,34 +156,34 @@ export function activate(context: vscode.ExtensionContext) {
     await CredentialManager.setPassword(value)
       .then(() => {
         vscode.window.showInformationMessage(
-          `Twitch Chat password saved in your keychain`
+          `Twitch Chat token saved in your keychain`
         );
       })
       .catch(reason => {
         vscode.window.showInformationMessage(
-          `Failed to set Twitch Chat password`
+          `Failed to set Twitch Chat token`
         );
         console.error(
-          'An error occured while saving your password to the keychain'
+          'An error occured while saving your token to the keychain'
         );
         console.error(reason);
       });
     return true;
   }
 
-  function removeTwitchPasswordHandler() {
+  function removeTwitchTokenHandler() {
     CredentialManager.deleteTwitchToken()
       .then((value: boolean) => {
         vscode.window.showInformationMessage(
-          `Twitch Chat password removed from your keychain`
+          `Twitch Chat token removed from your keychain`
         );
       })
       .catch(reason => {
         vscode.window.showInformationMessage(
-          `Failed to remove the Twitch Chat password`
+          `Failed to remove the Twitch Chat token`
         );
         console.error(
-          'An error occured while removing your password from the keychain'
+          'An error occured while removing your token from the keychain'
         );
         console.error(reason);
       });

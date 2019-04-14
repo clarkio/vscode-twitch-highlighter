@@ -59,13 +59,13 @@
         "category": "Twitch Highlighter"
       },
       {
-        "command": "twitchHighlighter.setTwitchPassword",
-        "title": "Set Password",
+        "command": "twitchHighlighter.setTwitchToken",
+        "title": "Set Token",
         "category": "Twitch Highlighter"
       },
       {
-        "command": "twitchHighlighter.removeTwitchPassword",
-        "title": "Remove Password",
+        "command": "twitchHighlighter.removeTwitchToken",
+        "title": "Remove Token",
         "category": "Twitch Highlighter"
       },
       {
