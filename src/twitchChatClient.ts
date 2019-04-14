@@ -152,7 +152,7 @@ export class TwitchChatClient {
     const chatParams = {
       channels: configuration.get<string[]>(Settings.channels),
       username: configuration.get<string>(Settings.username),
-      password: token,
+      token: token,
       announce: configuration.get<boolean>(Settings.announceBot) || false,
       joinMessage: configuration.get<string>(Settings.joinMessage) || '',
       leaveMessage: configuration.get<string>(Settings.leaveMessage) || '',
@@ -192,7 +192,7 @@ export class TwitchChatClient {
         .then(async action => {
           if (action) {
             // The user did not click the 'cancel' button.
-            // Set the password when null, if the result is false
+            // Set the token when null, if the result is false
             // (i.e. user cancelled) then cancel the connection
             if (token === null && !(await setTokenCallback())) {
               return;
