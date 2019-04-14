@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.2.2]
+
+### Added
+
+- Bot response to just `!line` in chat with instructions on how to use it ([96](https://github.com/clarkio/vscode-twitch-highlighter/pull/96) thanks @parithon)
+
+### Changed
+
+- Replaced all UI text and naming in code for "password" with "token" as that is more accurate to its use ([92](https://github.com/clarkio/vscode-twitch-highlighter/pull/92) thanks @parithon)
+
 ## [0.2.1]
 
 ### Added
@@ -79,6 +89,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Pre-release version to gather feedback from the community and help identify gaps.
 
+[0.2.2]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.2.1...0.2.2
 [0.2.1]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.5...0.2.0
 [0.1.5]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.1.4...0.1.5
