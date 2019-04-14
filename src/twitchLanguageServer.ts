@@ -11,7 +11,12 @@ import { Commands, InternalCommands } from './constants';
 
 import * as tmi from 'tmi.js';
 
-let botparams: { announce: boolean; joinMessage: string; leaveMessage: string; usageTip: string; };
+let botparams: {
+  announce: boolean;
+  joinMessage: string;
+  leaveMessage: string;
+  usageTip: string;
+};
 let ttvChatClient: tmi.Client;
 let connection: IConnection = createConnection(
   new IPCMessageReader(process),
@@ -79,7 +84,7 @@ function onTtvChatMessage(
   user: tmi.ChatUserstate,
   message: string
 ) {
-  const userName = user['display-name'] || user.username || "unknown";
+  const userName = user['display-name'] || user.username || 'unknown';
   parseMessage(channel, userName, message);
 }
 
@@ -90,8 +95,11 @@ function onTtvBanUser(channel: string, userName: string, reason: string) {
   );
 }
 
-export function parseMessage(channel:string, userName: string, message: string) {
-
+export function parseMessage(
+  channel: string,
+  userName: string,
+  message: string
+) {
   /**
    * Regex pattern to verify the command is a highlight command without
    * any arguments. This will send a 'howto' message back on chat to
@@ -109,7 +117,6 @@ export function parseMessage(channel:string, userName: string, message: string) 
     return;
   }
 
-export function parseMessage(userName: string | undefined, message: string) {
   /**
    * Regex pattern to verify the command is a highlight command
    * groups the different sections of the command.
