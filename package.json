@@ -208,6 +208,11 @@
           "type": "boolean",
           "default": false,
           "description": "Show the Highlights icon in the activity bar to display the tree view."
+        },
+        "twitchHighlighter.usageTip": {
+          "type": "string",
+          "default": "💡 To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment>",
+          "description": "A tip shared by the bot when a user chats: '!line'."
         }
       }
     }
