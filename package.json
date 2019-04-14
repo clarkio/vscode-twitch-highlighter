@@ -2,7 +2,7 @@
   "name": "twitch-highlighter",
   "displayName": "Twitch Highlighter",
   "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "preview": true,
   "publisher": "clarkio",
   "engines": {
@@ -230,7 +230,7 @@
     "ts-loader": "^5.3.3",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1",
-    "vscode": "^1.1.26",
+    "vscode": "^1.1.33",
     "webpack": "^4.29.4",
     "webpack-cli": "^3.2.3"
   },
