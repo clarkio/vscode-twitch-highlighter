@@ -11,7 +11,12 @@ import { Commands, InternalCommands } from './constants';
 
 import * as tmi from 'tmi.js';
 
-let botparams: { announce: boolean; joinMessage: string; leaveMessage: string };
+let botparams: {
+  announce: boolean;
+  joinMessage: string;
+  leaveMessage: string;
+  usageTip: string;
+};
 let ttvChatClient: tmi.Client;
 let connection: IConnection = createConnection(
   new IPCMessageReader(process),
@@ -79,8 +84,8 @@ function onTtvChatMessage(
   user: tmi.ChatUserstate,
   message: string
 ) {
-  const userName = user['display-name'] || user.username;
-  parseMessage(userName, message);
+  const userName = user['display-name'] || user.username || 'unknown';
+  parseMessage(channel, userName, message);
 }
 
 function onTtvBanUser(channel: string, userName: string, reason: string) {
@@ -90,7 +95,28 @@ function onTtvBanUser(channel: string, userName: string, reason: string) {
   );
 }
 
-export function parseMessage(userName: string | undefined, message: string) {
+export function parseMessage(
+  channel: string,
+  userName: string,
+  message: string
+) {
+  /**
+   * Regex pattern to verify the command is a highlight command without
+   * any arguments. This will send a 'howto' message back on chat to
+   * inform the users how to use the highlight command.
+   *
+   * Matches:
+   *
+   * !line
+   */
+  const commandOnlyPattern = /^!(?:line|highlight)$/i;
+  if (commandOnlyPattern.exec(message)) {
+    if (botparams.usageTip && botparams.usageTip.length > 0) {
+      ttvChatClient.say(channel, `/me ${botparams.usageTip}`);
+    }
+    return;
+  }
+
   /**
    * Regex pattern to verify the command is a highlight command
    * groups the different sections of the command.
@@ -116,7 +142,7 @@ export function parseMessage(userName: string | undefined, message: string) {
    * !highlight 5
    *
    */
-  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.?[\w]*) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/;
+  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.?[\w]*) )?(\!)?(\d+)(?:-{1}(\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/i;
 
   const cmdopts = commandPattern.exec(message);
   if (!cmdopts) {
@@ -166,7 +192,7 @@ function getTwitchChatOptions(params: {
   channels: string;
   username: string;
   clientId: string;
-  password: string;
+  token: string;
 }): tmi.Options {
   return {
     channels: params.channels.split(',').map(s => s.trim()),
@@ -180,7 +206,7 @@ function getTwitchChatOptions(params: {
         !params.username || params.username === ''
           ? undefined
           : params.username,
-      password: params.password
+      password: params.token
     },
     options: {
       debug: true /* True if you want DEBUG messages in your terminal; false otherwise */

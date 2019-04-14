@@ -76,6 +76,8 @@ Additionally, you can also include comments:
 
 * `twitchHighlighter.showHighlightsInActivityBar`: Show the Highlights icon in the activity bar to display the tree view.
 
+* `twitchHighlighter.usageTip`: A tip shared by the bot when a user chats: '!line'.
+
 ## Attribution
 
 Some of the code in this extension has been adapted from the [twitchlint extension](https://github.com/irth/twitchlint) built by [@irth](https://github.com/irth)

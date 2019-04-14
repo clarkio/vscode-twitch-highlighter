@@ -11,7 +11,8 @@ export enum Settings {
   'joinMessage' = 'joinMessage',
   'leaveMessage' = 'leaveMessage',
   'unhighlightOnDisconnect' = 'unhighlightOnDisconnect',
-  'showHighlightsInActivityBar' = 'showHighlightsInActivityBar'
+  'showHighlightsInActivityBar' = 'showHighlightsInActivityBar',
+  'usageTip' = 'usageTip'
 }
 
 export enum Commands {
@@ -23,8 +24,8 @@ export enum Commands {
   'stopChat' = 'twitchHighlighter.stopChat',
   'toggleChat' = 'twitchHighlighter.toggleChat',
   'removeTwitchClientId' = 'twitchHighlighter.removeTwitchClientId',
-  'setTwitchPassword' = 'twitchHighlighter.setTwitchPassword',
-  'removeTwitchPassword' = 'twitchHighlighter.removeTwitchPassword',
+  'setTwitchToken' = 'twitchHighlighter.setTwitchToken',
+  'removeTwitchToken' = 'twitchHighlighter.removeTwitchToken',
   'refreshTreeView' = 'twitchHighlighter.refreshTreeView',
   'gotoHighlight' = 'twitchHighlighter.gotoHighlight',
   'removeHighlight' = 'twitchHighlighter.removeHighlight'
