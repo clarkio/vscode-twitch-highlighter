@@ -109,6 +109,7 @@ export function parseMessage(channel:string, userName: string, message: string) 
     return;
   }
 
+export function parseMessage(userName: string | undefined, message: string) {
   /**
    * Regex pattern to verify the command is a highlight command
    * groups the different sections of the command.
