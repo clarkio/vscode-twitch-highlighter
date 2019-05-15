@@ -58,7 +58,6 @@ suite('twitchServer Tests unit tests', function () {
     chatParams.announce = false;
     const server = new TwitchServer(chatParams, sendNotificationSpy);
     const twitchClientSaySpy = sinon.spy(server.twitchClient, 'say');
-    // server.onTwitchChatUserJoined('fakechannel', 'fakeuser', true);
     twitchClientSaySpy.notCalled.should.be.true;
   });
 
@@ -155,7 +154,7 @@ suite('twitchServer Tests unit tests', function () {
     sendNotificationSpy.calledWith(InternalCommands.removeBannedHighlights, 'fakeuser').should.be.true;
   });
 
-  suite('testing parseMessage theories', function () {
+  suite('testing parseMessage theories (regex assumptions)', function () {
     const chatParams: IChatParams = {
       channels: 'fakeone,faketwo',
       username: 'fakebot',
