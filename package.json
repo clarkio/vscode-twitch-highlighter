@@ -20,7 +20,7 @@
     "url": "https://github.com/clarkio/vscode-twitch-highlighter.git"
   },
   "license": "MIT",
-  "main": "./out/extension.js",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -219,18 +219,23 @@
   },
   "scripts": {
     "vscode:prepublish": "webpack --config webpack.config.js --mode production",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "compile": "webpack --config webpack.config.js --mode development",
+    "watch": "webpack --config webpack.config.js --mode development --watch",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    "test-compile": "tsc -p ./",
+    "test": "npm run test-compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.7",
     "@types/keytar": "^4.0.1",
     "@types/mocha": "^2.2.42",
     "@types/node": "^8.10.39",
+    "@types/sinon": "^7.0.11",
     "@types/tmi.js": "^1.4.0",
+    "chai": "^4.2.0",
     "clean-webpack-plugin": "^1.0.1",
     "mocha-junit-reporter": "^1.18.0",
+    "sinon": "^7.3.2",
     "spec-xunit-file": "0.0.1-3",
     "ts-loader": "^5.3.3",
     "tslint": "^5.8.0",

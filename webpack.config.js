@@ -7,11 +7,11 @@ module.exports = {
   target: 'node',
   entry: {
     extension: './src/extension.ts',
-    twitchLanguageServer: './src/twitchLanguageServer.ts',
+    'lsp-server': './src/lsp-server.ts',
   },
   devtool: 'source-map',
   plugins: [
-    new CleanWebpackPlugin(['out'])
+    new CleanWebpackPlugin(['dist'])
   ],
   module: {
     rules: [
@@ -30,7 +30,7 @@ module.exports = {
     extensions: ['.ts', '.js']
   },
   output: {
-    path: path.resolve(__dirname, 'out'),
+    path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
     libraryTarget: 'commonjs2',
     devtoolModuleFilenameTemplate: '../[resource-path]'

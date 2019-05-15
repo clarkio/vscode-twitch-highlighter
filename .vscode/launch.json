@@ -15,7 +15,7 @@
         "--disable-extensions"
       ],
       "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "npm: watch"
+      //"preLaunchTask": "npm: watch"
     },
     {
       "type": "node",
@@ -37,7 +37,7 @@
         "--disable-extensions"
       ],
       "outFiles": ["${workspaceFolder}/out/test/**/*.js"],
-      "preLaunchTask": "npm: watch"
+      "preLaunchTask": "npm: test-compile"
     }
   ],
   "compounds": [

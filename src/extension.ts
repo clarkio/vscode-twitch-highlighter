@@ -29,7 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
   updateChannelsSetting();
 
   twitchChatClient = new TwitchChatClient(
-    context.asAbsolutePath(path.join('out', 'twitchLanguageServer.js')),
+    context.asAbsolutePath(path.join('out', 'lsp-server.js')),
     context.subscriptions
   );
 
