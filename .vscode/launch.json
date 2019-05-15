@@ -15,7 +15,7 @@
         "--disable-extensions"
       ],
       "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      //"preLaunchTask": "npm: watch"
+      "preLaunchTask": "npm: watch"
     },
     {
       "type": "node",
