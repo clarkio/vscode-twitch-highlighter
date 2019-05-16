@@ -6,7 +6,7 @@ import {
   TextDocumentSyncKind
 } from 'vscode-languageserver/lib/main';
 
-import { Commands } from './constants';
+import { Commands } from './enums';
 import { TwitchServer } from './server';
 
 let connection: IConnection = createConnection(

@@ -4,7 +4,7 @@ import { expect, should } from 'chai';
 import * as sinon from 'sinon';
 
 import { TwitchServer } from '../server';
-import { Commands, InternalCommands } from '../constants';
+import { Commands, InternalCommands } from '../enums';
 
 // Initialize the 'should' prototype on all objects
 should();
@@ -123,7 +123,7 @@ suite('twitchServer Tests unit tests', function () {
     const server = new TwitchServer(chatParams, sendNotificationSpy);
     server.twitchClient.emit('chat', 'fakechannel', { username: 'fakeuser' }, '!line !5', false);
     sendNotificationSpy.calledOnce.should.be.true;
-    sendNotificationSpy.calledWith(Commands.unhighlight, {
+    sendNotificationSpy.calledWith(InternalCommands.unhighlight, {
       twitchUser: 'fakeuser',
       startLine: 5,
       endLine: 5,

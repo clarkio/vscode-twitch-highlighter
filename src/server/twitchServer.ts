@@ -1,6 +1,6 @@
 import * as tmi from 'tmi.js';
 
-import { InternalCommands, Commands } from '../constants';
+import { InternalCommands, Commands } from '../enums';
 
 export interface ITmiOptions {
   channels: string;
@@ -112,7 +112,7 @@ export class TwitchServer {
     };
 
     this._sendNotification(
-      highlight ? Commands.highlight : Commands.unhighlight,
+      highlight ? Commands.highlight : InternalCommands.unhighlight,
       result
     );
 

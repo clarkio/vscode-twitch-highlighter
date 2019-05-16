@@ -6,7 +6,8 @@ import {
 } from 'vscode-languageclient';
 import { workspace, window, Disposable } from 'vscode';
 import CredentialManager from './credentialManager';
-import { extSuffix, Settings, Commands, InternalCommands } from './constants';
+import { extSuffix} from './constants';
+import { Settings, Commands, InternalCommands } from './enums';
 
 export class TwitchChatClient {
   private readonly _languageClient: LanguageClient;
@@ -224,7 +225,7 @@ export class TwitchChatClient {
       }
     });
 
-    this._languageClient.onNotification(Commands.unhighlight, (params: any) => {
+    this._languageClient.onNotification(InternalCommands.unhighlight, (params: any) => {
       console.log('unhighlight requested.', params);
       if (this.onUnhighlight) {
         this.onUnhighlight(params.endLine, params.fileName);
