@@ -70,36 +70,4 @@ suite("Extension Tests", function () {
     });
   });
 
-  // test("constants.Commands exist in package.json", function () {
-  //   const commandCollection: ICommand[] = extension.packageJSON.contributes.commands;
-  //   for (let command in Commands) {
-  //     const result = commandCollection.some(c => c.command === Commands[command]);
-  //     result.should.be.true;
-  //   }
-  // });
-
-  // test("constants.Settings exist in package.json", function () {
-  //   const config: IConfiguration = extension.packageJSON.contributes.configuration;
-  //   const properties = Object.keys(config.properties);
-  //   for (let setting in Settings) {
-  //     const result = properties.some(property => property === `${extSuffix}.${Settings[setting]}`);
-  //     result.should.be.true;
-  //   }
-  // });
-
-  // test('package.json commands registered in extension', function (done) {
-  //   const commandStrings: string[] = extension.packageJSON.contributes.commands.map((c: ICommand) => c.command);
-
-  //   vscode.commands.getCommands(true)
-  //     .then((allCommands: string[]) => {
-  //       const commands: string[] = allCommands.filter(c => c.startsWith(`${extSuffix}.`));
-  //       commands.forEach(command => {
-  //         const result = commandStrings.some(c => c === command);
-  //         assert.ok(result);
-  //       });
-  //       done();
-  //     });
-
-  // });
-
 });
