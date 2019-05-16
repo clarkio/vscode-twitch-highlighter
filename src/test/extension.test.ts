@@ -51,6 +51,7 @@ suite("Extension Tests", function () {
     if (!ext) {
       throw new Error('Extension was not found.');
     }
+    if (ext) { extension = ext; }
     const commands = ext.packageJSON.contributes.commands.map((c: ICommand) => c.command);
     commands.forEach((command: string) => {
       test(`${command} should be registered`, function(done) {
