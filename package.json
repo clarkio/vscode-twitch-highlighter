@@ -236,6 +236,7 @@
     "webpack-cli": "^3.2.3"
   },
   "dependencies": {
+    "8": "0.0.1",
     "tmi.js": "^1.4.2",
     "vscode-languageclient": "^5.2.1",
     "vscode-languageserver": "^5.2.1"

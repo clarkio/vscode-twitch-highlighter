@@ -11,12 +11,13 @@
 // a possible error to the callback or null if none.
 
 import * as testRunner from 'vscode/lib/testrunner';
+import * as path from 'path';
 
 const os = process.env.AGENT_OS || 'Developer';
 const date = new Date().toISOString().replace(/:/g,'-').replace(/\.\d+/, '');
 
 process.env.SUITE_NAME = `${os} Tests`;
-process.env.XUNIT_FILE = `TEST-RESULTS-${os}-${date}.xml`;
+process.env.XUNIT_FILE = path.join(__dirname, 'results', `TEST-RESULTS-${os}-${date}.xml`);
 
 console.log(`Suite Name: ${process.env.SUITE_NAME}`);
 console.log(`Test Results File: ${process.env.XUNIT_FILE}`);
