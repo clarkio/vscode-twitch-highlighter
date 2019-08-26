@@ -11,5 +11,8 @@ export enum Commands {
   'removeTwitchToken' = 'twitchHighlighter.removeTwitchToken',
   'refreshTreeView' = 'twitchHighlighter.refreshTreeView',
   'gotoHighlight' = 'twitchHighlighter.gotoHighlight',
-  'removeHighlight' = 'twitchHighlighter.removeHighlight'
+  'removeHighlight' = 'twitchHighlighter.removeHighlight',
+  'requestHighlight' = 'twitchHighlighter.requestHighlight',
+  'requestUnhighlight' = 'twitchHighlighter.requestUnhighlight',
+  'requestUnhighlightAll' = 'twitchHighlighter.requestUnhighlightAll'
 }

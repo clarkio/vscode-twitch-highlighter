@@ -13,6 +13,7 @@ import { TwitchChatClient } from './twitchChatClient';
 import { isArray } from 'util';
 import { extSuffix } from './constants';
 import { Commands, Settings } from "./enums";
+import { App } from './app';
 
 let highlightDecorationType: vscode.TextEditorDecorationType;
 const twitchHighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)
@@ -25,6 +26,9 @@ let twitchHighlighterStatusBar: vscode.StatusBarItem;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  const app = new App();
+  app.intialize(context);
+
   setupDecoratorType();
 
   updateChannelsSetting();
@@ -320,6 +324,8 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions
   );
   // #endregion
+
+  return app.API;
 }
 
 export function deactivate(): Thenable<void> {
