@@ -10,6 +10,8 @@
     "lib": [
       "es6"
     ],
+    "declaration": true,
+    "declarationDir": "types",
     "sourceMap": true,
     "rootDir": "src",
     /* Strict Type-Checking Option */
