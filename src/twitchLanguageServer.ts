@@ -7,7 +7,7 @@ import {
   InitializedParams,
   TextDocumentSyncKind
 } from 'vscode-languageserver/lib/main';
-import { Commands, InternalCommands } from './constants';
+import { Commands, InternalCommands } from "./enums";
 
 import * as tmi from 'tmi.js';
 

@@ -6,7 +6,8 @@ import {
 } from 'vscode-languageclient';
 import { workspace, window, Disposable } from 'vscode';
 import CredentialManager from './credentialManager';
-import { extSuffix, Settings, Commands, InternalCommands } from './constants';
+import { extSuffix } from './constants';
+import { Commands, InternalCommands, Settings } from "./enums";
 
 export class TwitchChatClient {
   private readonly _languageClient: LanguageClient;

@@ -11,7 +11,8 @@ import {
 } from './twitchHighlighterTreeView';
 import { TwitchChatClient } from './twitchChatClient';
 import { isArray } from 'util';
-import { extSuffix, Settings, Commands } from './constants';
+import { extSuffix } from './constants';
+import { Commands, Settings } from "./enums";
 
 let highlightDecorationType: vscode.TextEditorDecorationType;
 const twitchHighlighterStatusBarIcon: string = '$(plug)'; // The octicon to use for the status bar icon (https://octicons.github.com/)

@@ -1,4 +1,6 @@
-import { extensionId, extSuffix, Commands, Settings } from '../constants';
+import { extensionId, extSuffix } from '../constants';
+import { Settings } from "../enums";
+import { Commands } from "../enums";
 
 //
 // Note: This example test is leveraging the Mocha test framework.
