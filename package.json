@@ -112,14 +112,14 @@
       "view/title": [
         {
           "command": "twitchHighlighter.refreshTreeView",
-          "when": "view == twitchHighlighterTreeView",
+          "when": "view == twitchHighlighterTreeView || view == twitchHighlighterTreeView-explorer || view == twitchHighlighterTreeView-debug",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
           "command": "twitchHighlighter.removeHighlight",
-          "when": "view == twitchHighlighterTreeView",
+          "when": "view == twitchHighlighterTreeView || view == twitchHighlighterTreeView-explorer || view == twitchHighlighterTreeView-debug",
           "group": "edit"
         }
       ]
@@ -136,13 +136,13 @@
     "views": {
       "explorer": [
         {
-          "id": "twitchHighlighterTreeView",
+          "id": "twitchHighlighterTreeView-explorer",
           "name": "Highlights"
         }
       ],
       "debug": [
         {
-          "id": "twitchHighlighterTreeView",
+          "id": "twitchHighlighterTreeView-debug",
           "name": "Highlights"
         }
       ],
