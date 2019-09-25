@@ -45,8 +45,22 @@ export function activate(context: vscode.ExtensionContext) {
   twitchHighlighterTreeView = new TwitchHighlighterDataProvider(() => {
     return highlighters;
   });
+
+  // TreeView registration for the Highlighter Panel
   vscode.window.registerTreeDataProvider(
     'twitchHighlighterTreeView',
+    twitchHighlighterTreeView
+  );
+
+  // TreeView registration for the Explorer Panel
+  vscode.window.registerTreeDataProvider(
+    'twitchHighlighterTreeView-explorer',
+    twitchHighlighterTreeView
+  );
+
+  // TreeView registration for the Debug Panel
+  vscode.window.registerTreeDataProvider(
+    'twitchHighlighterTreeView-debug',
     twitchHighlighterTreeView
   );
 
@@ -111,6 +125,7 @@ export function activate(context: vscode.ExtensionContext) {
       removeHighlight(v.lineNumber, v.fileName, true)
     );
     twitchHighlighterTreeView.refresh();
+    triggerUpdateDecorations();
   }
 
   function refreshTreeViewHandler() {
