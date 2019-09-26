@@ -18,9 +18,11 @@ import {
 import { log } from '../logger';
 import { keytar } from "../common";
 import { LogLevel, KeytarKeys, Configuration, Settings } from "../enums";
+import { API } from './api';
 
 interface IBadges extends Badges {
   [key: string]: string | undefined;
+  follower: string;
 }
 
 export interface ChatClientMessageReceivedEvent {
@@ -129,6 +131,7 @@ export class ChatClient implements Disposable {
     }
 
     const badges = userState.badges as IBadges || {};
+    badges.follower = await API.isUserFollowingChannel(userState.id!, channel) === true ? '1' : '0';
 
     if (this.requiredBadges.length > 0 && !badges.broadcaster) {
       // Check to ensure the user has a required badge
