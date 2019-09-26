@@ -3,6 +3,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
+import { CredentialManager } from './credentialManager';
+
 import { App } from './app';
 import { TwitchChatService } from './ttvchat';
 
@@ -13,7 +15,11 @@ let ttvchat: TwitchChatService;
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-  const outputChannel = vscode.window.createOutputChannel('Line Highlighter');
+  // Remove the older credentials if they exist.
+  CredentialManager.deleteTwitchToken();
+  CredentialManager.deleteTwitchClientId();
+
+  const outputChannel = vscode.window.createOutputChannel('Twitch Line Highlighter');
 
   app = new App(outputChannel);
   ttvchat = new TwitchChatService(app.API, outputChannel);
