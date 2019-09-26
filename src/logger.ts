@@ -51,7 +51,7 @@ export class Logger {
     const { hours, minutes, seconds } = getTime();
     const log = `[${hours}:${minutes}:${seconds}] ${message}`;
 
-    captains[level](log, optionalParams);
+    captains[level](log, ...optionalParams);
 
     if (this._channel && level !== LogLevel.Debug) {
       this._channel.appendLine(log);

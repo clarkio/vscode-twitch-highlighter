@@ -108,7 +108,7 @@ export class HighlightManager {
   public Clear(service?: string) {
     if (service) {
       this.highlightCollection.forEach(hc => {
-        const highlightsToRemove = hc.highlights.filter(h => h.userName.indexOf(`@${service}`) > 0);
+        const highlightsToRemove = hc.highlights.filter(h => h.userName.indexOf(`${service}:`) > -1);
         highlightsToRemove.forEach(h => {
           this.Remove(hc.fileName, h.userName, h.startLine, true);
         });

@@ -1,5 +1,5 @@
 export declare enum Configuration {
-    "sectionIdentifier" = "vscode-line-highlighter.configuration",
+    "sectionIdentifier" = "twitchHighlighter",
     "highlightBackgroundColor" = "highlightBackgroundColor",
     "highlightForegroundColor" = "highlightForegroundColor",
     "highlightBorderStyle" = "highlightBorderStyle",

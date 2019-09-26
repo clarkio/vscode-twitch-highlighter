@@ -9,5 +9,6 @@ export enum Settings {
   'leaveMessage' = 'leaveMessage',
   'unhighlightOnDisconnect' = 'unhighlightOnDisconnect',
   'showHighlightsInActivityBar' = 'showHighlightsInActivityBar',
-  'usageTip' = 'usageTip'
+  'usageTip' = 'usageTip',
+  'requiredBadges' = 'requiredBadges'
 }

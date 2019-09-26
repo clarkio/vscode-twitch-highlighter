@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import { HighlighterAPI } from './api';
-import { Commands, LogLevel, Configuration } from './enums';
+import { Commands, LogLevel, Configuration, Settings } from './enums';
 import { Logger, log } from './logger';
 import {
   HighlightManager,
@@ -9,23 +9,24 @@ import {
   HighlightTreeDataProvider
 } from './highlight';
 
-export class App {
+export class App implements vscode.Disposable {
   private readonly _highlightManager: HighlightManager;
   private readonly _highlightTreeDataProvider: HighlightTreeDataProvider;
   private log: log;
   private highlightDecorationType: vscode.TextEditorDecorationType;
   private currentDocument?: vscode.TextDocument;
+  private config?: vscode.WorkspaceConfiguration;
 
-  constructor() {
-    const outputChannel = vscode.window.createOutputChannel('Line Highlighter');
-    this.log = new Logger(outputChannel, this).log;
+  constructor(outputChannel?: vscode.OutputChannel) {
+    this.log = new Logger(outputChannel).log;
+    this.config = vscode.workspace.getConfiguration(Configuration.sectionIdentifier);
     this.highlightDecorationType = this.createTextEditorDecorationType();
     this._highlightManager = new HighlightManager();
-    this._highlightTreeDataProvider = new HighlightTreeDataProvider(this._highlightManager.GetHighlightCollection.bind(this));
+    this._highlightTreeDataProvider = new HighlightTreeDataProvider(this._highlightManager.GetHighlightCollection.bind(this._highlightManager));
   }
 
   public intialize(context: vscode.ExtensionContext) {
-    this.log(LogLevel.Debug, 'Initializing line highlighter...');
+    this.log('Initializing line highlighter...');
 
     context.subscriptions.push(
       this._highlightManager.onHighlightChanged(this.onHighlightChangedHandler, this),
@@ -53,7 +54,7 @@ export class App {
       vscode.commands.registerCommand(Commands.requestUnhighlightAll, this.requestUnhighlightAllHandler, this)
     );
 
-    this.log(LogLevel.Debug, 'Initialized line highlighter...');
+    this.log('Initialized line highlighter.');
   }
 
   public API: HighlighterAPI = {
@@ -78,6 +79,9 @@ export class App {
     }
   };
 
+  public async dispose() {
+  }
+
   private onDidChangeTextDocumentHandler(event: vscode.TextDocumentChangeEvent): void {
     if (event.document.languageId === 'Log') {
       return;
@@ -98,6 +102,7 @@ export class App {
     if (!event.affectsConfiguration(Configuration.sectionIdentifier)) {
       return;
     }
+    this.config = vscode.workspace.getConfiguration(Configuration.sectionIdentifier);
     this.highlightDecorationType = this.createTextEditorDecorationType();
     this.refresh();
   }
