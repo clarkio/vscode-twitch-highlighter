@@ -1,4 +1,4 @@
-import { EventEmitter, Event, env, Uri, window } from 'vscode';
+import { EventEmitter, Event, env, Uri, window, extensions } from 'vscode';
 import { v4 } from 'uuid';
 import * as path from 'path';
 import { readFileSync } from 'fs';
@@ -9,6 +9,7 @@ import { log } from '../logger';
 import { keytar } from '../common';
 import { KeytarKeys, TwitchKeys, LogLevel } from '../enums';
 import { API } from './api';
+import { extensionId } from '../constants';
 
 export class AuthenticationService {
   private readonly _onAuthStatusChanged: EventEmitter<boolean> = new EventEmitter();
@@ -67,7 +68,9 @@ export class AuthenticationService {
   }
 
   private createServer(state: string) {
-    const file = readFileSync(path.join(__dirname, "/login/index.htm"));
+    const filePath = path.join(extensions.getExtension(extensionId)!.extensionPath, 'out', 'ttvchat', 'login', 'index.htm');
+    this.log(LogLevel.Debug, `Starting login server using filePath: ${filePath}.`);
+    const file = readFileSync(filePath);
     if (file) {
       const server = http.createServer(async (req, res) => {
         const mReq = url.parse(req.url!, true);

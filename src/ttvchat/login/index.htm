@@ -3,14 +3,6 @@
 <head>
     <script type="text/javascript">
         window.onload = function () {
-            if (window.location.pathname === '/oauth') {
-                window.location.href = 'complete';
-                return;
-            }
-            if (window.location.pathname === '/complete') {
-                window.close();
-                return;
-            }
             window.location.href = 'oauth?' + window.location.hash.replace('#', '');
         };
     </script>
