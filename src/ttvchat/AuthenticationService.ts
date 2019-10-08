@@ -7,7 +7,7 @@ import * as url from 'url';
 
 import { log } from '../logger';
 import { keytar } from '../common';
-import { KeytarKeys, TwitchKeys, LogLevel, Configuration, Settings } from '../enums';
+import { KeytarKeys, TwitchKeys, LogLevel } from '../enums';
 import { API } from './api';
 import { extensionId } from '../constants';
 
@@ -16,14 +16,7 @@ export class AuthenticationService {
   public readonly onAuthStatusChanged: Event<boolean> = this._onAuthStatusChanged.event;
   private port: number = 5544;
 
-  constructor(private log: log) {
-    this.getConfiguration();
-    workspace.onDidChangeConfiguration(e => {
-      if (e.affectsConfiguration(Configuration.sectionIdentifier)) {
-        this.getConfiguration();
-      }
-    });
-  }
+  constructor(private log: log) {}
 
   public async initialize() {
     if (keytar) {
@@ -73,11 +66,6 @@ export class AuthenticationService {
       keytar.deletePassword(KeytarKeys.service, KeytarKeys.userLogin);
     }
     this._onAuthStatusChanged.fire(false);
-  }
-
-  private getConfiguration() {
-    const config = workspace.getConfiguration(Configuration.sectionIdentifier);
-    this.port = config.get<number>(Settings.ttvAuthPort) || 5544;
   }
 
   private createServer(state: string) {

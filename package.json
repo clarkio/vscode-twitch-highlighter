@@ -227,12 +227,6 @@
           "type": "string",
           "default": "💡 To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment>",
           "description": "A tip shared by the bot when a user chats: '!line'."
-        },
-        "twitchHighlighter.ttvAuthPort": {
-          "type": "integer",
-          "default": 5544,
-          "pattern": "1024-49151",
-          "errorMessage": "You must specify a port between 1024 and 49151."
         }
       }
     }
