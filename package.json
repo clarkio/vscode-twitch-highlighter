@@ -43,7 +43,7 @@
       },
       {
         "command": "twitchHighlighter.unhighlightAll",
-        "title": "Unhighlight All",
+        "title": "Remove All Highlights",
         "category": "Twitch Highlighter"
       },
       {
