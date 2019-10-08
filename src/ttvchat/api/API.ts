@@ -8,7 +8,7 @@ export class API {
     const result = await new Promise<boolean>((resolve, reject) => {
       request.get(url, {
         headers: {
-          'Authorization': `Bearer token`,
+          'Authorization': `Bearer ${token}`,
           'Accept': 'application/json'
         }
       }, (err: any, response: any, body: any) => {
