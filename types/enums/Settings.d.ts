@@ -10,5 +10,6 @@ export declare enum Settings {
     'unhighlightOnDisconnect' = "unhighlightOnDisconnect",
     'showHighlightsInActivityBar' = "showHighlightsInActivityBar",
     'usageTip' = "usageTip",
-    'requiredBadges' = "requiredBadges"
+    'requiredBadges' = "requiredBadges",
+    'ttvAuthPort' = "ttvAuthPort"
 }

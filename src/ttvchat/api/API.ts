@@ -3,12 +3,11 @@ import * as request from 'request';
 import { TwitchKeys } from '../../enums';
 
 export class API {
-  public static async isUserFollowingChannel(userId: string, channel: string, token: string) {
+  public static async isUserFollowingChannel(userId: string, channel: string) {
     const url = `https://api.twitch.tv/helix/users/followers?from_id=${userId}&to_name=${channel}`;
     const result = await new Promise<boolean>((resolve, reject) => {
       request.get(url, {
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Accept': 'application/json'
         }
       }, (err: any, response: any, body: any) => {
