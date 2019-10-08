@@ -1,4 +1,4 @@
-import { EventEmitter, Event, env, Uri, window, extensions } from 'vscode';
+import { EventEmitter, Event, env, Uri, window, extensions, workspace } from 'vscode';
 import { v4 } from 'uuid';
 import * as path from 'path';
 import { readFileSync } from 'fs';
@@ -7,15 +7,23 @@ import * as url from 'url';
 
 import { log } from '../logger';
 import { keytar } from '../common';
-import { KeytarKeys, TwitchKeys, LogLevel } from '../enums';
+import { KeytarKeys, TwitchKeys, LogLevel, Configuration, Settings } from '../enums';
 import { API } from './api';
 import { extensionId } from '../constants';
 
 export class AuthenticationService {
   private readonly _onAuthStatusChanged: EventEmitter<boolean> = new EventEmitter();
   public readonly onAuthStatusChanged: Event<boolean> = this._onAuthStatusChanged.event;
+  private port: number = 5544;
 
-  constructor(private log: log) {}
+  constructor(private log: log) {
+    this.getConfiguration();
+    workspace.onDidChangeConfiguration(e => {
+      if (e.affectsConfiguration(Configuration.sectionIdentifier)) {
+        this.getConfiguration();
+      }
+    });
+  }
 
   public async initialize() {
     if (keytar) {
@@ -38,7 +46,7 @@ export class AuthenticationService {
         const state = v4();
         this.createServer(state);
         env.openExternal(Uri.parse(`https://id.twitch.tv/oauth2/authorize?client_id=${TwitchKeys.clientId}` +
-          `&redirect_uri=http://localhost:5544` +
+          `&redirect_uri=http://localhost:${this.port}` +
           `&response_type=token&scope=${TwitchKeys.scope}` +
           `&force_verify=true` +
           `&state=${state}`));
@@ -65,6 +73,11 @@ export class AuthenticationService {
       keytar.deletePassword(KeytarKeys.service, KeytarKeys.userLogin);
     }
     this._onAuthStatusChanged.fire(false);
+  }
+
+  private getConfiguration() {
+    const config = workspace.getConfiguration(Configuration.sectionIdentifier);
+    this.port = config.get<number>(Settings.ttvAuthPort) || 5544;
   }
 
   private createServer(state: string) {
@@ -113,7 +126,7 @@ export class AuthenticationService {
         }
       });
 
-      server.listen('5544', (err: any) => {
+      server.listen(this.port, (err: any) => {
         this.log(LogLevel.Error, err);
       });
     }
