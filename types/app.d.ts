@@ -1,0 +1,31 @@
+import * as vscode from 'vscode';
+import { HighlighterAPI } from './api';
+export declare class App implements vscode.Disposable {
+    private readonly _highlightManager;
+    private readonly _highlightTreeDataProvider;
+    private log;
+    private highlightDecorationType;
+    private currentDocument?;
+    private config?;
+    constructor(outputChannel?: vscode.OutputChannel);
+    intialize(context: vscode.ExtensionContext): void;
+    API: HighlighterAPI;
+    dispose(): Promise<void>;
+    private onDidChangeTextDocumentHandler;
+    private onDidChangeConfigurationHandler;
+    private onDidChangeVisibleTextEditorsHandler;
+    private onDidChangeActiveTextEditorHandler;
+    private refreshTreeviewHandler;
+    private createTextEditorDecorationType;
+    private refresh;
+    private onHighlightChangedHandler;
+    private readonly isActiveTextEditor;
+    private highlightHandler;
+    private unhighlightHandler;
+    private unhighlightSpecificHandler;
+    private unhighlightAllHandler;
+    private gotoHighlightHandler;
+    private requestHighlightHandler;
+    private requestUnhighlightHandler;
+    private requestUnhighlightAllHandler;
+}
