@@ -1,28 +1,29 @@
 {
   "compilerOptions": {
-    "types": [
-      "node",
-      "mocha"
-    ],
     "module": "commonjs",
     "target": "es6",
     "outDir": "out",
     "lib": [
-      "es6"
+      "es6",
+      "es2017"
     ],
+    "declaration": true,
+    "declarationDir": "types",
     "sourceMap": true,
     "rootDir": "src",
     /* Strict Type-Checking Option */
-    "strict": true /* enable all strict type-checking options */,
+    "strict": true, /* enable all strict type-checking options */
     /* Additional Checks */
-    "noUnusedLocals": true /* Report errors on unused locals. */,
+    // "noUnusedLocals": true /* Report errors on unused locals. */,
     // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
     // "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
     // "noUnusedParameters": true,  /* Report errors on unused parameters. */
     "skipLibCheck": true /* Skip type checking of all declaration files */
   },
   "exclude": [
+    "node-modules",
     ".vscode-test",
+    "types",
     "out"
   ]
 }

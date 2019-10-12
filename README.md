@@ -90,7 +90,7 @@ Some of the code in this extension has been adapted from the [twitchlint extensi
 
 See [CHANGELOG.md](CHANGELOG.md)
 
-[masterstatuslogo]: https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_apis/build/status/Production%20Test%20&%20Build%20-%20VS%20Code%20Line%20Highlighter%20Extension?branchName=master
-[masterstatusurl]: https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_build/latest?definitionId=23&branchName=master
-[vnextstatuslogo]: https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_apis/build/status/Development%20Test%20&%20Build%20-%20VS%20Code%20Line%20Highlighter%20Extension?branchName=vnext
-[vnextstatusurl]: https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_build/latest?definitionId=20&branchName=vnext
+[masterstatuslogo]: https://clarkcode.visualstudio.com/vscode-twitch-highlighter-extension/_apis/build/status/Production%20Test%20&%20Build%20-%20VS%20Code%20Line%20Highlighter%20Extension?branchName=master
+[masterstatusurl]: https://clarkcode.visualstudio.com/vscode-twitch-highlighter-extension/_build/latest?definitionId=23&branchName=master
+[vnextstatuslogo]: https://clarkcode.visualstudio.com/vscode-twitch-highlighter-extension/_apis/build/status/Development%20Test%20&%20Build%20-%20VS%20Code%20Line%20Highlighter%20Extension?branchName=vnext
+[vnextstatusurl]: https://clarkcode.visualstudio.com/vscode-twitch-highlighter-extension/_build/latest?definitionId=20&branchName=vnext
