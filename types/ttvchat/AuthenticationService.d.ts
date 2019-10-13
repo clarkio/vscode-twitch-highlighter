@@ -9,6 +9,5 @@ export declare class AuthenticationService {
     initialize(): Promise<void>;
     signInHandler(): Promise<void>;
     signOutHandler(): Promise<void>;
-    private getConfiguration;
     private createServer;
 }

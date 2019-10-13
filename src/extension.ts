@@ -34,3 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() {
   ttvchat.dispose();
 }
+
+export const editorHasDecorations = () => {
+  return true;
+}

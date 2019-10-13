@@ -11,5 +11,6 @@ export declare enum Commands {
     'signIn' = "twitchHighlighter.signIn",
     'signOut' = "twitchHighlighter.signOut",
     'connect' = "twitchHighlighter.connect",
-    'disconnect' = "twitchHighlighter.disconnect"
+    'disconnect' = "twitchHighlighter.disconnect",
+    'contextMenuUnhighlight' = "twitchHighlighter.context.unhighlight"
 }
