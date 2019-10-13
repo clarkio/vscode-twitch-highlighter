@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.5.1]
+
+### Added
+
+- Context menu support to remove highlights. You can now remove highlights by right-clicking on them. Additionally, you can remove all highlights by right-clicking the editor tab.
+
 ## [0.5.0]
 
 ### Rewrite
