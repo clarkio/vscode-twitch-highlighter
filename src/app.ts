@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import { HighlighterAPI, IHighlightRequested, IUnhighlightRequested, IUnhighlightAllRequested } from './api';
-import { Commands, LogLevel, Configuration, Settings } from './enums';
+import { Commands, LogLevel, Configuration, Settings, AppContexts } from './enums';
 import { Logger, log } from './logger';
 import {
   HighlightManager,
@@ -56,7 +56,9 @@ export class App implements vscode.Disposable {
 
       vscode.commands.registerCommand(Commands.requestHighlight, this.requestHighlightHandler, this),
       vscode.commands.registerCommand(Commands.requestUnhighlight, this.requestUnhighlightHandler, this),
-      vscode.commands.registerCommand(Commands.requestUnhighlightAll, this.requestUnhighlightAllHandler, this)
+      vscode.commands.registerCommand(Commands.requestUnhighlightAll, this.requestUnhighlightAllHandler, this),
+
+      vscode.commands.registerCommand(Commands.contextMenuUnhighlight, this.contextMenuUnhighlightHandler, this)
     );
 
     this.log('Initialized line highlighter.');
@@ -126,6 +128,23 @@ export class App implements vscode.Disposable {
     }
   }
 
+  /**
+   * Sets the 'editorHasHighlights' to true or false.
+   * The 'editorHasHighlights' context is used to determine if the
+   * 'Remove Highlight' and 'Remove All Highlights' context menu items
+   * are visible or not.
+   */
+  private setEditorHasHighlightsContext() {
+    if (vscode.window.activeTextEditor) {
+      const editor = vscode.window.activeTextEditor;
+      if (this._highlightManager.GetDecorations(editor.document.fileName).length > 0) {
+        vscode.commands.executeCommand('setContext', AppContexts.editorHasHighlights, true);
+      } else {
+        vscode.commands.executeCommand('setContext', AppContexts.editorHasHighlights, false);
+      }
+    }
+  }
+
   private onDidChangeActiveTextEditorHandler(editor?: vscode.TextEditor): void {
     if (editor) {
       this.currentDocument = editor.document;
@@ -133,6 +152,7 @@ export class App implements vscode.Disposable {
     else {
       this.currentDocument = undefined;
     }
+    this.setEditorHasHighlightsContext();
   }
 
   private refreshTreeviewHandler(): void {
@@ -154,6 +174,7 @@ export class App implements vscode.Disposable {
   }
 
   private refresh(): void {
+    this.setEditorHasHighlightsContext();
     vscode.window.visibleTextEditors.forEach(te => {
       te.setDecorations(
         this.highlightDecorationType,
@@ -292,5 +313,12 @@ export class App implements vscode.Disposable {
   private requestUnhighlightAllHandler(service: string, callerId?: string): void {
     this._highlightManager.Clear(service);
     this._onUnhighlightAllRequested.fire({service, callerId});
+  }
+
+  private contextMenuUnhighlightHandler() {
+    if (vscode.window.activeTextEditor) {
+      const lineNumber = vscode.window.activeTextEditor.selection.active.line;
+      this._highlightManager.Remove(vscode.window.activeTextEditor.document, 'self', lineNumber + 1);
+    }
   }
 }

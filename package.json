@@ -2,7 +2,7 @@
   "name": "twitch-highlighter",
   "displayName": "Twitch Highlighter",
   "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "preview": true,
   "publisher": "clarkio",
   "engines": {
@@ -84,6 +84,11 @@
         "command": "twitchHighlighter.disconnect",
         "title": "Stop Listening to Chat",
         "category": "Twitch Highlighter"
+      },
+      {
+        "command": "twitchHighlighter.context.unhighlight",
+        "title": "Remove Highlight",
+        "category": "Twitch Highlighter"
       }
     ],
     "menus": {
@@ -111,6 +116,10 @@
         {
           "command": "twitchHighlighter.requestUnhighlightAll",
           "when": "false"
+        },
+        {
+          "command": "twitchHighlighter.context.unhighlight",
+          "when": "false"
         }
       ],
       "view/title": [
@@ -125,6 +134,20 @@
           "command": "twitchHighlighter.unhighlight",
           "when": "view == twitchHighlighterTreeView || view == twitchHighlighterTreeView-explorer || view == twitchHighlighterTreeView-debug",
           "group": "edit"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "twitchHighlighter.context.unhighlight",
+          "group": "1_modification",
+          "when": "editorHasHighlights"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "twitchHighlighter.unhighlightAll",
+          "group": "3_open",
+          "when": "editorHasHighlights"
         }
       ]
     },

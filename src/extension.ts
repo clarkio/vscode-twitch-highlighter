@@ -39,3 +39,7 @@ export function deactivate() {
   ttvchat.dispose();
   liveshare.dispose();
 }
+
+export const editorHasDecorations = () => {
+  return true;
+}

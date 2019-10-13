@@ -17,6 +17,13 @@ export declare class App implements vscode.Disposable {
     private onDidChangeTextDocumentHandler;
     private onDidChangeConfigurationHandler;
     private onDidChangeVisibleTextEditorsHandler;
+    /**
+     * Sets the 'editorHasHighlights' to true or false.
+     * The 'editorHasHighlights' context is used to determine if the
+     * 'Remove Highlight' and 'Remove All Highlights' context menu items
+     * are visible or not.
+     */
+    private setEditorHasHighlightsContext;
     private onDidChangeActiveTextEditorHandler;
     private refreshTreeviewHandler;
     private createTextEditorDecorationType;
@@ -31,4 +38,5 @@ export declare class App implements vscode.Disposable {
     private requestHighlightHandler;
     private requestUnhighlightHandler;
     private requestUnhighlightAllHandler;
+    private contextMenuUnhighlightHandler;
 }
