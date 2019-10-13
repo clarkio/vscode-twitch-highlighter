@@ -7,9 +7,11 @@ import { CredentialManager } from './credentialManager';
 
 import { App } from './app';
 import { TwitchChatService } from './ttvchat';
+import { LiveShareService } from './liveshare';
 
 let app: App;
 let ttvchat: TwitchChatService;
+let liveshare: LiveShareService;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -23,6 +25,8 @@ export function activate(context: vscode.ExtensionContext) {
 
   app = new App(outputChannel);
   ttvchat = new TwitchChatService(app.API, outputChannel);
+  liveshare = new LiveShareService(app.API, outputChannel);
+
 
   app.intialize(context);
   ttvchat.initialize(context);
@@ -33,4 +37,5 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
   ttvchat.dispose();
+  liveshare.dispose();
 }

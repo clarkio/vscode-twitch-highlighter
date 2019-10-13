@@ -3,6 +3,9 @@ import { HighlighterAPI } from './api';
 export declare class App implements vscode.Disposable {
     private readonly _highlightManager;
     private readonly _highlightTreeDataProvider;
+    private readonly _onHighlightRequested;
+    private readonly _onUnhighlightRequested;
+    private readonly _onUnhighlightAllRequested;
     private log;
     private highlightDecorationType;
     private currentDocument?;

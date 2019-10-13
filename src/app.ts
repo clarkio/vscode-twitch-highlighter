@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { HighlighterAPI } from './api';
+import { HighlighterAPI, IHighlightRequested, IUnhighlightRequested, IUnhighlightAllRequested } from './api';
 import { Commands, LogLevel, Configuration, Settings } from './enums';
 import { Logger, log } from './logger';
 import {
@@ -8,10 +8,15 @@ import {
   HighlightTreeItem,
   HighlightTreeDataProvider
 } from './highlight';
+import { EventEmitter } from 'events';
 
 export class App implements vscode.Disposable {
   private readonly _highlightManager: HighlightManager;
   private readonly _highlightTreeDataProvider: HighlightTreeDataProvider;
+  private readonly _onHighlightRequested: vscode.EventEmitter<IHighlightRequested> = new vscode.EventEmitter();
+  private readonly _onUnhighlightRequested: vscode.EventEmitter<IUnhighlightRequested> = new vscode.EventEmitter();
+  private readonly _onUnhighlightAllRequested: vscode.EventEmitter<IUnhighlightAllRequested> = new vscode.EventEmitter();
+
   private log: log;
   private highlightDecorationType: vscode.TextEditorDecorationType;
   private currentDocument?: vscode.TextDocument;
@@ -76,7 +81,10 @@ export class App implements vscode.Disposable {
     },
     requestUnhighlightAll(service: string) {
       vscode.commands.executeCommand(Commands.requestUnhighlightAll, service);
-    }
+    },
+    onHighlightRequested: this._onHighlightRequested.event,
+    onUnhighlightRequested: this._onUnhighlightRequested.event,
+    onUnhighlightAllRequested: this._onUnhighlightAllRequested.event
   };
 
   public async dispose() {
@@ -259,7 +267,7 @@ export class App implements vscode.Disposable {
     }
   }
 
-  private requestHighlightHandler(service: string, userName: string, startLine: number, endLine?: number, comments?: string): void {
+  private requestHighlightHandler(service: string, userName: string, startLine: number, endLine?: number, comments?: string, callerId?: string): void {
     const editor = vscode.window.activeTextEditor;
     if (!this.isActiveTextEditor) {
       this.log(LogLevel.Warning, `Could not highlight the line requested by ${service}:${userName}`);
@@ -267,9 +275,10 @@ export class App implements vscode.Disposable {
       return;
     }
     this._highlightManager.Add(editor!.document, `${service}:${userName}`, startLine, endLine || startLine, comments);
+    this._onHighlightRequested.fire({service, userName, startLine, endLine, comments, callerId});
   }
 
-  private requestUnhighlightHandler(service: string, userName: string, lineNumber: number): void {
+  private requestUnhighlightHandler(service: string, userName: string, lineNumber: number, callerId?: string): void {
     const editor = vscode.window.activeTextEditor;
     if (!this.isActiveTextEditor) {
       this.log(LogLevel.Warning, `Could not unhighlight the line requested by ${service}:${userName}`);
@@ -277,9 +286,11 @@ export class App implements vscode.Disposable {
       return;
     }
     this._highlightManager.Remove(editor!.document, `${service}:${userName}`, lineNumber);
+    this._onUnhighlightRequested.fire({service, userName, lineNumber, callerId});
   }
 
-  private requestUnhighlightAllHandler(service: string): void {
+  private requestUnhighlightAllHandler(service: string, callerId?: string): void {
     this._highlightManager.Clear(service);
+    this._onUnhighlightAllRequested.fire({service, callerId});
   }
 }
