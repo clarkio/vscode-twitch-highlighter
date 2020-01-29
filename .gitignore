@@ -1,5 +1,5 @@
 out
 node_modules
-types
+types/*.d.ts
 .vscode-test/
 *.vsix

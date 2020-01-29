@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": ".",
+    "emitDeclarationOnly": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "../src/api.ts"
+  ]
+}
