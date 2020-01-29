@@ -259,6 +259,7 @@
     "compile": "copyfiles -au 1 ./src/**/*.htm out/ && tsc -p ./",
     "watch": "copyfiles -au 1 ./src/**/*.htm out/ && tsc --watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
+    "buildtypes": "tsc -p ./types",
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
