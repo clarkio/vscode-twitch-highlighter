@@ -59,8 +59,8 @@ export class ChatClient implements Disposable {
 
   public async connect() {
     if (keytar && this.config && !this.isConnected) {
-      const accessToken = await keytar.getPassword(KeytarKeys.service, KeytarKeys.account);
-      const login = await keytar.getPassword(KeytarKeys.service, KeytarKeys.userLogin);
+      const accessToken = await keytar.getPassword(KeytarKeys.ttvchat_service, KeytarKeys.ttvchat_account);
+      const login = await keytar.getPassword(KeytarKeys.ttvchat_service, KeytarKeys.ttvchat_userLogin);
       if (accessToken && login) {
         this.channel = this.config.get<string>(Settings.channels) || login;
         const opts: Options = {
@@ -146,7 +146,7 @@ export class ChatClient implements Disposable {
     message = message.toLocaleLowerCase().trim();
 
     if (message.startsWith('!line') || message.startsWith('!highlight')) {
-      // message = message.replace('!line', '').replace('!highlight', '').trim();
+      message = message.replace('!line', '').replace('!highlight', '').trim();
       if (message.length === 0) {
         this.sendMessage('💡 To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment>');
         return;

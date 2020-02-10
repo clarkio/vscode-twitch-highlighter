@@ -16,6 +16,10 @@ export class TwitchChatService implements vscode.Disposable {
   private chatClientStatusBarItem: vscode.StatusBarItem;
   private chatClient: ChatClient;
   private config?: vscode.WorkspaceConfiguration;
+  private signInCommand: vscode.Disposable;
+  private signOutCommand: vscode.Disposable;
+  private connectCommand: vscode.Disposable;
+  private disconnectCommand: vscode.Disposable;
 
   constructor(api: HighlighterAPI, outputChannel: vscode.OutputChannel) {
     this.log = new Logger(outputChannel).log;
@@ -37,6 +41,12 @@ export class TwitchChatService implements vscode.Disposable {
     this.chatClientStatusBarItem.text = `$(plug) disconnected`;
     this.chatClientStatusBarItem.command = Commands.connect;
     this.chatClientStatusBarItem.tooltip = 'Twitch Line Highlighter Chat Bot';
+
+    this.signInCommand = vscode.commands.registerCommand(Commands.signIn, this._authenticationService.signInHandler, this._authenticationService);
+    this.signOutCommand = vscode.commands.registerCommand(Commands.signOut, this.onSignOutHandler, this);
+
+    this.connectCommand = vscode.commands.registerCommand(Commands.connect, this.chatClient.connect, this.chatClient);
+    this.disconnectCommand = vscode.commands.registerCommand(Commands.disconnect, this.chatClient.disconnect, this.chatClient);
   }
 
   public async initialize(context: vscode.ExtensionContext): Promise<void> {
@@ -45,19 +55,17 @@ export class TwitchChatService implements vscode.Disposable {
     context.subscriptions.push(
       this.loginStatusBarItem,
       this.chatClientStatusBarItem,
+      this.signInCommand,
+      this.signOutCommand,
+      this.connectCommand,
+      this.disconnectCommand,
 
       vscode.workspace.onDidChangeConfiguration(this.onDidChangeConfigurationHandler, this),
 
       this._authenticationService.onAuthStatusChanged(this.onAuthStatusChangedHandler, this),
 
       this.chatClient.onChatClientConnected(this.onChatClientConnectedHandler, this),
-      this.chatClient.onChatClientMessageReceived(this.onChatClientMessageReceivedHandler, this),
-
-      vscode.commands.registerCommand(Commands.signIn, this._authenticationService.signInHandler, this._authenticationService),
-      vscode.commands.registerCommand(Commands.signOut, this.onSignOutHandler, this),
-
-      vscode.commands.registerCommand(Commands.connect, this.chatClient.connect, this.chatClient),
-      vscode.commands.registerCommand(Commands.disconnect, this.chatClient.disconnect, this.chatClient)
+      this.chatClient.onChatClientMessageReceived(this.onChatClientMessageReceivedHandler, this)
     );
 
 
@@ -124,5 +132,11 @@ export class TwitchChatService implements vscode.Disposable {
 
   public async dispose() {
     await this.chatClient.disconnect();
+    this.loginStatusBarItem.dispose();
+    this.chatClientStatusBarItem.dispose();
+    this.signInCommand.dispose();
+    this.signOutCommand.dispose();
+    this.connectCommand.dispose();
+    this.disconnectCommand.dispose();
   }
 }

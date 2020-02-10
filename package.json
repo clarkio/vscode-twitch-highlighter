@@ -89,6 +89,16 @@
         "command": "twitchHighlighter.context.unhighlight",
         "title": "Remove Highlight",
         "category": "Twitch Highlighter"
+      },
+      {
+        "command": "twitchHighlighter.youtubeConnect",
+        "title": "YouTube: Connect",
+        "category": "Twitch Highlighter"
+      },
+      {
+        "command": "twitchHighlighter.youtubeDisconnect",
+        "title": "YouTube: Disconnect",
+        "category": "Twitch Highlighter"
       }
     ],
     "menus": {
@@ -250,6 +260,21 @@
           "type": "string",
           "default": "💡 To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment>",
           "description": "A tip shared by the bot when a user chats: '!line'."
+        },
+        "twitchHighlighter.enabledClients": {
+          "type": "array",
+          "default": ["twitch", "youtube"],
+          "markdownDescription": "A list of chat clients to enable in vscode.",
+          "items": {
+            "type": "string",
+            "pattern": "(twitch|youtube)",
+            "errorMessage": "Expected one of the following: twitch or youtube."
+          }
+        },
+        "twitchHighlighter.youtubeChannelId": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Your YouTube channel id. See [Find your YouTube user & channel IDs](https://support.google.com/youtube/answer/3250431?hl=en)"
         }
       }
     }
@@ -286,6 +311,7 @@
     "request": "^2.88.0",
     "tmi.js": "^1.4.2",
     "url": "^0.11.0",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "youtube-chat": "^1.0.2"
   }
 }

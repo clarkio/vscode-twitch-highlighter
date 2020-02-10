@@ -20,8 +20,8 @@ export class AuthenticationService {
 
   public async initialize() {
     if (keytar) {
-      const accessToken = await keytar.getPassword(KeytarKeys.service, KeytarKeys.account);
-      const userLogin = await keytar.getPassword(KeytarKeys.service, KeytarKeys.userLogin);
+      const accessToken = await keytar.getPassword(KeytarKeys.ttvchat_service, KeytarKeys.ttvchat_account);
+      const userLogin = await keytar.getPassword(KeytarKeys.ttvchat_service, KeytarKeys.ttvchat_userLogin);
 
       if (accessToken && userLogin) {
         await API.validateToken(accessToken);
@@ -34,7 +34,7 @@ export class AuthenticationService {
 
   public async signInHandler() {
     if (keytar) {
-      const accessToken = await keytar.getPassword(KeytarKeys.service, KeytarKeys.account);
+      const accessToken = await keytar.getPassword(KeytarKeys.ttvchat_service, KeytarKeys.ttvchat_account);
       if (!accessToken) {
         const state = v4();
         this.createServer(state);
@@ -55,15 +55,15 @@ export class AuthenticationService {
 
   public async signOutHandler() {
     if (keytar) {
-      const token = await keytar.getPassword(KeytarKeys.service, KeytarKeys.account);
+      const token = await keytar.getPassword(KeytarKeys.ttvchat_service, KeytarKeys.ttvchat_account);
       if (token) {
         const revoked = await API.revokeToken(token);
         if (revoked) {
           window.showInformationMessage('Twitch token revoked successfully');
         }
       }
-      keytar.deletePassword(KeytarKeys.service, KeytarKeys.account);
-      keytar.deletePassword(KeytarKeys.service, KeytarKeys.userLogin);
+      keytar.deletePassword(KeytarKeys.ttvchat_service, KeytarKeys.ttvchat_account);
+      keytar.deletePassword(KeytarKeys.ttvchat_service, KeytarKeys.ttvchat_userLogin);
     }
     this._onAuthStatusChanged.fire(false);
   }
@@ -98,8 +98,8 @@ export class AuthenticationService {
 
           const validationResult = await API.validateToken(q.access_token);
           if (keytar && validationResult.valid) {
-            keytar.setPassword(KeytarKeys.service, KeytarKeys.account, q.access_token);
-            keytar.setPassword(KeytarKeys.service, KeytarKeys.userLogin, validationResult.login);
+            keytar.setPassword(KeytarKeys.ttvchat_service, KeytarKeys.ttvchat_account, q.access_token);
+            keytar.setPassword(KeytarKeys.ttvchat_service, KeytarKeys.ttvchat_userLogin, validationResult.login);
             this._onAuthStatusChanged.fire(true);
           }
         }

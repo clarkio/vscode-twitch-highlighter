@@ -3,5 +3,7 @@ export enum Configuration {
   "highlightBackgroundColor" = "highlightBackgroundColor",
   "highlightForegroundColor" = "highlightForegroundColor",
   "highlightBorderStyle" = "highlightBorderStyle",
-  "showActivityBar" = "showActivityBar"
+  "showActivityBar" = "showActivityBar",
+  "enabledClients" = "enabledClients",
+  "youtubeChannelId" = "youtubeChannelId"
 }
