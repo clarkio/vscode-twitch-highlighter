@@ -78,7 +78,7 @@ export class AuthenticationService {
         const mReqPath = mReq.pathname;
 
         if (mReqPath === '/') {
-          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
           res.end(file);
         }
         else if (mReqPath === '/oauth') {
@@ -93,18 +93,18 @@ export class AuthenticationService {
             return;
           }
 
-          res.writeHead(200);
-          res.end(file);
-
           const validationResult = await API.validateToken(q.access_token);
           if (keytar && validationResult.valid) {
             keytar.setPassword(KeytarKeys.service, KeytarKeys.account, q.access_token);
             keytar.setPassword(KeytarKeys.service, KeytarKeys.userLogin, validationResult.login);
             this._onAuthStatusChanged.fire(true);
           }
+
+          res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
+          res.end(file);
         }
         else if (mReqPath === '/complete') {
-          res.writeHead(200);
+          res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
           res.end(file);
           setTimeout(() => server.close(), 3000);
         }
