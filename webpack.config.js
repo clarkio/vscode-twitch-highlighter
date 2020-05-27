@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -13,10 +13,12 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: [
-    new CleanWebpackPlugin(['out']),
-    new CopyPlugin([
-      { from: 'src/ttvchat/login', to: 'ttvchat/login' }
-    ])
+    new CleanWebpackPlugin(),
+    new CopyPlugin({
+      patterns: [
+        { from: 'src/ttvchat/login', to: 'ttvchat/login' }
+      ]
+    })
   ],
   module: {
     rules: [
