@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
-
-import { HighlighterAPI } from '../index';
-import { AuthenticationService } from './AuthenticationService';
-import { Logger, log } from '../logger';
 import { Commands, Configuration, Settings } from '../enums';
-import { ChatClient, ChatClientMessageReceivedEvent } from './ChatClient';
+import { HighlighterAPI } from '../index';
+import { log, Logger } from '../logger';
 import { parseMessage } from '../utils';
+import { AuthenticationService } from './AuthenticationService';
+import { ChatClient, ChatClientMessageReceivedEvent } from './ChatClient';
+
 
 export class TwitchChatService implements vscode.Disposable {
   private readonly _api: HighlighterAPI;
@@ -34,7 +34,7 @@ export class TwitchChatService implements vscode.Disposable {
     this.loginStatusBarItem.tooltip = 'Twitch Line Highlighter Login';
 
     this.chatClientStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-    this.chatClientStatusBarItem.text = `$(plug) disconnected`;
+    this.chatClientStatusBarItem.text = `$(plug) Disconnected`;
     this.chatClientStatusBarItem.command = Commands.connect;
     this.chatClientStatusBarItem.tooltip = 'Twitch Line Highlighter Chat Bot';
   }
@@ -89,12 +89,14 @@ export class TwitchChatService implements vscode.Disposable {
 
   private onChatClientConnectedHandler(isConnected: boolean) {
     if (isConnected) {
-      this.chatClientStatusBarItem.text = '$(plug) connected';
+      this.chatClientStatusBarItem.text = '$(plug) Connected';
       this.chatClientStatusBarItem.command = Commands.disconnect;
+      this.chatClientStatusBarItem.tooltip = 'Line Highlighter is connected to the chat room. Click to disconnect.';
     }
     else {
-      this.chatClientStatusBarItem.text = '$(plug) disconnected';
+      this.chatClientStatusBarItem.text = '$(plug) Disconnected';
       this.chatClientStatusBarItem.command = Commands.connect;
+      this.chatClientStatusBarItem.tooltip = 'Line Highlighter is not connected to the chat room. Click to connect.';
       const unhighlightOnDisconnect = this.config!.get<boolean>(Settings.unhighlightOnDisconnect) || false;
       if (unhighlightOnDisconnect) {
         this._api.requestUnhighlightAll('twitch');
