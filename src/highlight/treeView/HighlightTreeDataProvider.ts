@@ -8,7 +8,7 @@ import {
 import{ basename } from 'path';
 
 import { HighlightTreeItem } from "./HighlightTreeItem";
-import { HighlightCollection } from "../highlightManager";
+import { HighlightCollection } from "../HighlightManager";
 import { naturalCompare } from '../../utils';
 
 export class HighlightTreeDataProvider implements TreeDataProvider<HighlightTreeItem> {
