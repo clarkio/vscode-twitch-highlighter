@@ -24,12 +24,21 @@ export class AuthenticationService {
       const userLogin = await keytar.getPassword(KeytarKeys.service, KeytarKeys.userLogin);
 
       if (accessToken && userLogin) {
-        await API.validateToken(accessToken);
-        this._onAuthStatusChanged.fire(true);
+        // Twitch access tokens should be validated on a recurring interval.
+        await this.validateToken(accessToken);
         return;
       }
     }
     this._onAuthStatusChanged.fire(false);
+  }
+
+  // https://dev.twitch.tv/docs/authentication#validating-requests
+  public async validateToken(accessToken: string) {
+    await API.validateToken(accessToken);
+    this._onAuthStatusChanged.fire(true);
+    this.log("Twitch access token has been validated.");
+    const hour = 1000 * 60 * 60
+    setInterval(this.validateToken, hour, accessToken); // Validate the token each hour
   }
 
   public async signInHandler() {

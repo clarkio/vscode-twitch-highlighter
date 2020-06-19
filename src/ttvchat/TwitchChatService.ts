@@ -76,7 +76,6 @@ export class TwitchChatService implements vscode.Disposable {
 
   private onAuthStatusChangedHandler(signedIn: boolean) {
     if (signedIn) {
-      vscode.window.showInformationMessage('Twitch token has been saved.');
       this.loginStatusBarItem.hide();
       this.chatClientStatusBarItem.show();
     }
