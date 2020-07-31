@@ -29,7 +29,7 @@ export class TwitchChatService implements vscode.Disposable {
     this._authenticationService.signOutHandler.bind(this._authenticationService);
 
     this.loginStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-    this.loginStatusBarItem.text = `$(sign-in) twitch`;
+    this.loginStatusBarItem.text = `$(sign-in) Twitch`;
     this.loginStatusBarItem.command = Commands.signIn;
     this.loginStatusBarItem.tooltip = 'Twitch Line Highlighter Login';
 
