@@ -1,22 +1,22 @@
-import { EventEmitter, Event, env, Uri, window, extensions, workspace } from 'vscode';
-import { v4 } from 'uuid';
-import * as path from 'path';
 import { readFileSync } from 'fs';
 import * as http from 'http';
+import * as path from 'path';
 import * as url from 'url';
-
-import { log } from '../logger';
+import { v4 } from 'uuid';
+import { env, Event, EventEmitter, extensions, Uri, window } from 'vscode';
 import { keytar } from '../common';
-import { KeytarKeys, TwitchKeys, LogLevel } from '../enums';
-import { API } from './api';
 import { extensionId } from '../constants';
+import { KeytarKeys, LogLevel, TwitchKeys } from '../enums';
+import { log } from '../logger';
+import { API } from './api';
+
 
 export class AuthenticationService {
   private readonly _onAuthStatusChanged: EventEmitter<boolean> = new EventEmitter();
   public readonly onAuthStatusChanged: Event<boolean> = this._onAuthStatusChanged.event;
   private port: number = 5544;
 
-  constructor(private log: log) {}
+  constructor(private log: log) { }
 
   public async initialize() {
     if (keytar) {
@@ -37,7 +37,7 @@ export class AuthenticationService {
     await API.validateToken(accessToken);
     this._onAuthStatusChanged.fire(true);
     this.log("Twitch access token has been validated.");
-    const hour = 1000 * 60 * 60
+    const hour = 1000 * 60 * 60;
     setInterval(this.validateToken, hour, accessToken); // Validate the token each hour
   }
 
@@ -47,6 +47,7 @@ export class AuthenticationService {
       if (!accessToken) {
         const state = v4();
         this.createServer(state);
+
         env.openExternal(Uri.parse(`https://id.twitch.tv/oauth2/authorize?client_id=${TwitchKeys.clientId}` +
           `&redirect_uri=http://localhost:${this.port}` +
           `&response_type=token&scope=${TwitchKeys.scope}` +
@@ -82,7 +83,7 @@ export class AuthenticationService {
     this.log(LogLevel.Debug, `Starting login server using filePath: ${filePath}.`);
     const file = readFileSync(filePath);
     if (file) {
-      const server = http.createServer(async (req, res) => {
+      const server = http.createServer(async (req: any, res: any) => {
         const mReq = url.parse(req.url!, true);
         const mReqPath = mReq.pathname;
 

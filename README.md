@@ -28,11 +28,12 @@ In order to use this extension you will need the following things before going t
 4. Find the `Twitch Highlighter: Channels` setting and enter the name of the channel(s) to which you'd like the extension to connect. Example: `clarkio` If you'd like to connect to more than one channel separate them by commas `,`. Example: `clarkio,parithon`
 5. Save your changes and close that tab. Go back to the Settings UI tab.
 6. Find the `Nickname` setting. If you are using your own account for the chat bot then enter your account username as the value here. If you created a separate account use that username. Save your changes.
-7. In the status bar, click the "Disconnected" button. After clicking it, you'll see a notification that the extension is missing Twitch Credentials.
-8. Click the "Set Credentials" button
-9. You'll now see a prompt in the top middle of VS Code asking you to enter your Twitch Client Id. This is what you copied and saved from earlier. Copy and paste the value into this prompt and press `Enter`
-10. Next you'll be prompted to enter your Twitch token. This is the secret you copied and saved from earlier. It should be a value prefixed with `oauth:`. Copy and paste the secret into this prompt and press `Enter`
-11. Click the `Disconnected` button and you should see notifications indicating the extension is starting and finally started listening to the Twitch chat.
+7. Make sure you're logged in to the Twitch account you wish to authorize the highlighter bot to access in your default browser.
+8. In the status bar, click the "Twitch" button. After clicking it, you'll see a notification that the extension wants to open a URL.
+9. Choose the "Open" option which should open a new tab of your default browser.
+10. Read through the permissions that are being requested for use of this bot/extension and choose "Authorize"
+11. You should then be notified that you can close the browser/tab
+12. Go back to VS Code and you should now see "Disconnected" in the status bar. Click on it to Connect the bot to chat and start listening for highlight commands.
 
 ## Twitch Commands
 
