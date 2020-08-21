@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [0.5.1]
+
+### Added
+
+- Context menu support to remove highlights. You can now remove highlights by right-clicking on them. Additionally, you can remove all highlights by right-clicking the editor tab.
+
+## [0.5.0]
+
+### Rewrite
+
+This is a complete rewrite of the extension. The extension now has an API that others may use to build add-on extensions to extend to other chat services like Youtube or Mixer.
+
 ## [0.2.3]
 
 ### Fixed
@@ -94,6 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Pre-release version to gather feedback from the community and help identify gaps.
 
+[0.5.0]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.2.3...0.5.0
 [0.2.3]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.2.2...0.2.3
 [0.2.2]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.2.1...0.2.2
 [0.2.1]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.2.0...0.2.1
