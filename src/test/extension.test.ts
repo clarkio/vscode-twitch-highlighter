@@ -1,4 +1,6 @@
-import { extensionId, extSuffix, Commands, Settings } from '../constants';
+import { extensionId, extSuffix } from '../constants';
+import { Settings } from "../enums";
+import { Commands } from "../enums";
 
 //
 // Note: This example test is leveraging the Mocha test framework.
@@ -24,6 +26,10 @@ interface IConfiguration {
   title: string;
   properties: any;
 }
+
+export type EnumIndexer = {
+  [Key: string]: string
+};
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("Extension Tests", function () {
@@ -55,7 +61,7 @@ suite("Extension Tests", function () {
   test("constants.Commands exist in package.json", function () {
     const commandCollection: ICommand[] = extension.packageJSON.contributes.commands;
     for (let command in Commands) {
-      const result = commandCollection.some(c => c.command === Commands[command]);
+      const result = commandCollection.some(c => c.command === (Commands as any)[command]);
       assert.ok(result);
     }
   });
@@ -64,7 +70,7 @@ suite("Extension Tests", function () {
     const config: IConfiguration = extension.packageJSON.contributes.configuration;
     const properties = Object.keys(config.properties);
     for (let setting in Settings) {
-      const result = properties.some(property => property === `${extSuffix}.${Settings[setting]}`);
+      const result = properties.some(property => property === `${extSuffix}.${(Settings as any)[setting]}`);
       assert.ok(result);
     }
   });

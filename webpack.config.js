@@ -1,17 +1,24 @@
 'use strict';
 
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   target: 'node',
   entry: {
     extension: './src/extension.ts',
-    twitchLanguageServer: './src/twitchLanguageServer.ts',
+    ttvchat: './src/ttvchat/index.ts',
+    test: './src/test'
   },
   devtool: 'source-map',
   plugins: [
-    new CleanWebpackPlugin(['out'])
+    new CleanWebpackPlugin(),
+    new CopyPlugin({
+      patterns: [
+        { from: 'src/ttvchat/login', to: 'ttvchat/login' }
+      ]
+    })
   ],
   module: {
     rules: [
