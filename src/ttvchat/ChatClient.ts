@@ -1,24 +1,21 @@
 import {
-  EventEmitter,
-  Event,
-  Disposable,
-  workspace,
-  WorkspaceConfiguration,
-  ExtensionContext,
-  ConfigurationChangeEvent,
-  OutputChannel
-} from 'vscode';
-import {
-  Client,
-  Options,
-  ChatUserstate,
-  Badges
+  Badges, ChatUserstate, Client,
+  Options
 } from "tmi.js";
+import {
+  ConfigurationChangeEvent, Disposable, Event, EventEmitter,
 
-import { log } from '../logger';
+
+
+
+  ExtensionContext, workspace,
+  WorkspaceConfiguration
+} from 'vscode';
 import { keytar } from "../common";
-import { LogLevel, KeytarKeys, Configuration, Settings } from "../enums";
+import { Configuration, KeytarKeys, LogLevel, Settings } from "../enums";
+import { log } from '../logger';
 import { API } from './api';
+
 
 interface IBadges extends Badges {
   [key: string]: string | undefined;
@@ -45,7 +42,7 @@ export class ChatClient implements Disposable {
   private leaveMessage: string = "";
   private requiredBadges: string[] = [];
 
-  constructor(private log: log) {}
+  constructor(private log: log) { }
 
   public initialize(context: ExtensionContext) {
     this.config = workspace.getConfiguration(Configuration.sectionIdentifier);
@@ -159,7 +156,7 @@ export class ChatClient implements Disposable {
   }
 
   private async onDidChangeConfigurationHandler(event: ConfigurationChangeEvent) {
-    if (event.affectsConfiguration(Configuration.sectionIdentifier)) {
+    if (event.affectsConfiguration(Configuration.sectionIdentifier) && this.isConnected) {
       await this.disconnect();
       await this.connect();
     }
