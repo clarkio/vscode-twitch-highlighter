@@ -4,10 +4,6 @@ import {
 } from "tmi.js";
 import {
   ConfigurationChangeEvent, Disposable, Event, EventEmitter,
-
-
-
-
   ExtensionContext, workspace,
   WorkspaceConfiguration
 } from 'vscode';
