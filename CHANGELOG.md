@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## [1.0.2]
+
+### Security
+- Addressed dependency from security audit for package `bl`: [bl npm advisory](https://npmjs.com/advisories/1555)
+
+## [1.0.1]
+
+### Fixed
+- Reading of extension settings by name: [commit](https://github.com/clarkio/vscode-twitch-highlighter/commit/5b6844bd999d5eefb5ec186f76510b0a62704d4e)
+
 ## [1.0.0]
 First full release and no longer in preview!
 
@@ -128,6 +138,8 @@ This is a complete rewrite of the extension. The extension now has an API that o
 
 - Pre-release version to gather feedback from the community and help identify gaps.
 
+[1.0.2]: https://github.com/clarkio/vscode-twitch-highlighter/compare/1.0.1...1.0.2
+[1.0.1]: https://github.com/clarkio/vscode-twitch-highlighter/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.5.1...1.0.0
 [0.5.1]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.2.3...0.5.0

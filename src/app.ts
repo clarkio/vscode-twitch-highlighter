@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
-
 import { HighlighterAPI } from './api';
-import { Commands, LogLevel, Configuration, Settings, AppContexts } from './enums';
-import { Logger, log } from './logger';
+import { AppContexts, Commands, Configuration, LogLevel, Settings } from './enums';
 import {
   HighlightManager,
-  HighlightTreeItem,
-  HighlightTreeDataProvider
+
+  HighlightTreeDataProvider, HighlightTreeItem
 } from './highlight';
+import { log, Logger } from './logger';
+
 
 export class App implements vscode.Disposable {
   private readonly _highlightManager: HighlightManager;
@@ -159,9 +159,9 @@ export class App implements vscode.Disposable {
     }
 
     return vscode.window.createTextEditorDecorationType({
-      backgroundColor: configuration.get<string>(Configuration.highlightBackgroundColor) || 'green',
-      border: configuration.get<string>(Configuration.highlightBorderStyle) || '2px solid white',
-      color: configuration.get<string>(Configuration.highlightForegroundColor) || 'white'
+      backgroundColor: configuration.get<string>(Settings.highlightColor) || 'green',
+      border: configuration.get<string>(Settings.highlightBorder) || '2px solid white',
+      color: configuration.get<string>(Settings.highlightFontColor) || 'white'
     });
   }
 
@@ -183,8 +183,8 @@ export class App implements vscode.Disposable {
   private get isActiveTextEditor(): boolean {
     const editor = vscode.window.activeTextEditor;
     return (editor !== undefined &&
-            editor.document.languageId !== 'log' &&
-            editor.document.getText().length > 0);
+      editor.document.languageId !== 'log' &&
+      editor.document.getText().length > 0);
   }
 
   private async highlightHandler(): Promise<void> {
@@ -204,7 +204,7 @@ export class App implements vscode.Disposable {
         this._highlightManager.Add(editor!.document, 'self', +(value || 0));
       }
     }
-    catch ( err ) {
+    catch (err) {
       this.log(LogLevel.Error, err);
     }
 
@@ -232,7 +232,7 @@ export class App implements vscode.Disposable {
           this._highlightManager.Remove(fileName, 'self', +(lineNumber));
         }
       }
-      catch ( err ) {
+      catch (err) {
         this.log(LogLevel.Error, err);
       }
     }
@@ -249,7 +249,7 @@ export class App implements vscode.Disposable {
     let pickerOptions: Array<string> = new Array<string>();
     const highlights = this._highlightManager.GetHighlightDetails();
     highlights.forEach(highlight => {
-      pickerOptions = [ ...pickerOptions, highlight ];
+      pickerOptions = [...pickerOptions, highlight];
     });
 
     try {
@@ -261,7 +261,7 @@ export class App implements vscode.Disposable {
       const [pickedFile, lineNumber] = pickedOption.split(': ');
       this._highlightManager.Remove(pickedFile, 'self', +(lineNumber));
     }
-    catch ( err ) {
+    catch (err) {
       this.log(LogLevel.Error, err);
     }
   }

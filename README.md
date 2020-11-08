@@ -12,8 +12,6 @@ In order to use this extension you will need the following things before going t
 
 - An installed version of [VS Code](https://code.visualstudio.com)
 - A Twitch account for yourself or a separate one to be used as a chat bot ([sign up here](https://www.twitch.tv/signup))
-- While logged in as your own account or as a separate account go to this site to generate a token for the chat bot: http://www.twitchapps.com/tmi
-  - Save this token temporarily in a safe place as you will need it later in the [Getting Started](#getting-started) section.
 
 ## Getting Started
 
