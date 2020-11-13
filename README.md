@@ -10,12 +10,12 @@ A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos
 
 In order to use this extension you will need the following things before going to the [Getting Started](#getting-started) section:
 
-- An installed version of [VS Code](https://code.visualstudio.com)
+- An installed version of [VS Code](https://code.visualstudio.com/?WT.mc_id=academic-0000-brcl)
 - A Twitch account for yourself or a separate one to be used as a chat bot ([sign up here](https://www.twitch.tv/signup))
 
 ## Getting Started
 
-1. Install the extension from the [marketplace](https://marketplace.visualstudio.com/items?itemName=clarkio.twitch-highlighter)
+1. Install the extension from the [marketplace](https://marketplace.visualstudio.com/items?itemName=clarkio.twitch-highlighter&WT.mc_id=academic-0000-brcl)
 2. Open your VS Code settings
 
    - Keyboard shortcut: `CTRL/CMD + ,`
