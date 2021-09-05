@@ -1,4 +1,7 @@
 # Twitch Line Highlighter VS Code Extension
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Build Status](https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_apis/build/status/Production%20Test%20%26%20Build%20-%20VS%20Code%20Line%20Highlighter%20Extension?branchName=refs%2Fpull%2F125%2Fmerge)](https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_build/latest?definitionId=23&branchName=refs%2Fpull%2F125%2Fmerge)
 
@@ -86,3 +89,23 @@ Some of the code in this extension has been adapted from the [twitchlint extensi
 ## Release Notes
 
 See [CHANGELOG.md](CHANGELOG.md)
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/parithon"><img src="https://avatars.githubusercontent.com/u/8602418?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Anthony Conrad (parithon)</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=parithon" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
