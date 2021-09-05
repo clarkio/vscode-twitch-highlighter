@@ -1,6 +1,6 @@
 # Twitch Line Highlighter VS Code Extension
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Build Status](https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_apis/build/status/Production%20Test%20%26%20Build%20-%20VS%20Code%20Line%20Highlighter%20Extension?branchName=refs%2Fpull%2F125%2Fmerge)](https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_build/latest?definitionId=23&branchName=refs%2Fpull%2F125%2Fmerge)
@@ -101,6 +101,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/parithon"><img src="https://avatars.githubusercontent.com/u/8602418?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Anthony Conrad (parithon)</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=parithon" title="Code">💻</a></td>
     <td align="center"><a href="https://matthewkosloski.me/"><img src="https://avatars.githubusercontent.com/u/1219553?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matthew Kosloski</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=MatthewKosloski" title="Code">💻</a></td>
+    <td align="center"><a href="http://blog.yoannfleury.dev"><img src="https://avatars.githubusercontent.com/u/3920615?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Yoann Fleury</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=yoannfleurydev" title="Code">💻</a></td>
   </tr>
 </table>
 
