@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "parithon",
+      "name": "Anthony Conrad (parithon)",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8602418?v=4",
+      "profile": "https://github.com/parithon",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "vscode-twitch-highlighter",
+  "projectOwner": "clarkio",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
