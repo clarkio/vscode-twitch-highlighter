@@ -22,6 +22,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "yoannfleurydev",
+      "name": "Yoann Fleury",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3920615?v=4",
+      "profile": "http://blog.yoannfleury.dev",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
