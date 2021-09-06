@@ -49,6 +49,7 @@ export class API {
         }
       });
     });
+    
     return result;
   }
   public static async revokeToken(token: string) {

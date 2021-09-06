@@ -1,6 +1,9 @@
 # Twitch Line Highlighter VS Code Extension
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-[![Build Status](https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_apis/build/status/Production%20Test%20%26%20Build%20-%20VS%20Code%20Line%20Highlighter%20Extension?branchName=refs%2Fpull%2F125%2Fmerge)](https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_build/latest?definitionId=23&branchName=refs%2Fpull%2F125%2Fmerge)
+[![Build Status](https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_apis/build/status/Production%20Test%20%26%20Build%20-%20VS%20Code%20Line%20Highlighter%20Extension?branchName=master)](https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_build/latest?definitionId=23&branchName=master)
 
 A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.
 
@@ -10,12 +13,12 @@ A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos
 
 In order to use this extension you will need the following things before going to the [Getting Started](#getting-started) section:
 
-- An installed version of [VS Code](https://code.visualstudio.com)
+- An installed version of [VS Code](https://code.visualstudio.com/?WT.mc_id=academic-0000-brcl)
 - A Twitch account for yourself or a separate one to be used as a chat bot ([sign up here](https://www.twitch.tv/signup))
 
 ## Getting Started
 
-1. Install the extension from the [marketplace](https://marketplace.visualstudio.com/items?itemName=clarkio.twitch-highlighter)
+1. Install the extension from the [marketplace](https://marketplace.visualstudio.com/items?itemName=clarkio.twitch-highlighter&WT.mc_id=academic-0000-brcl)
 2. Open your VS Code settings
 
    - Keyboard shortcut: `CTRL/CMD + ,`
@@ -86,3 +89,25 @@ Some of the code in this extension has been adapted from the [twitchlint extensi
 ## Release Notes
 
 See [CHANGELOG.md](CHANGELOG.md)
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/parithon"><img src="https://avatars.githubusercontent.com/u/8602418?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Anthony Conrad (parithon)</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=parithon" title="Code">💻</a></td>
+    <td align="center"><a href="https://matthewkosloski.me/"><img src="https://avatars.githubusercontent.com/u/1219553?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matthew Kosloski</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=MatthewKosloski" title="Code">💻</a></td>
+    <td align="center"><a href="http://blog.yoannfleury.dev"><img src="https://avatars.githubusercontent.com/u/3920615?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Yoann Fleury</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=yoannfleurydev" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

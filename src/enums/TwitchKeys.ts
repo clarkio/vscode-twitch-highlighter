@@ -1,4 +1,4 @@
 export enum TwitchKeys {
-  "clientId" = "hhxtni83sibk1278lmv6bwye1pnurt",
-  "scope" = "chat:read chat:edit"
+  "clientId" = "83juwb58ggj9s7l7nf9ngyill70tem",
+  "scope" = "chat:read chat:edit",
 }
