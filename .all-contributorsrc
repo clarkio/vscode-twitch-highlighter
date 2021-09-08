@@ -1,0 +1,42 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "parithon",
+      "name": "Anthony Conrad (parithon)",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8602418?v=4",
+      "profile": "https://github.com/parithon",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "MatthewKosloski",
+      "name": "Matthew Kosloski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1219553?v=4",
+      "profile": "https://matthewkosloski.me/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "yoannfleurydev",
+      "name": "Yoann Fleury",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3920615?v=4",
+      "profile": "http://blog.yoannfleury.dev",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "vscode-twitch-highlighter",
+  "projectOwner": "clarkio",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
