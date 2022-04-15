@@ -6,7 +6,9 @@
 [![Discord](https://img.shields.io/discord/421902136457035777)](https://discord.gg/xB95beJ)
 [![Twitch Status](https://img.shields.io/twitch/status/clarkio)](https://twitch.tv/clarkio)
 [![Build Status](https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_apis/build/status/Production%20Test%20%26%20Build%20-%20VS%20Code%20Line%20Highlighter%20Extension?branchName=master)](https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_build/latest?definitionId=23&branchName=master)
-  
+<br>
+[![Twitter Follow](https://img.shields.io/twitter/follow/_clarkio?style=social)](https://twitter.com/intent/follow?screen_name=_clarkio)
+
 </div>
 
 A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.
