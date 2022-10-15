@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import { parseMessage } from '../utils';
+import { parseMessage } from '../../utils';
 
 interface Theory {
   message: string;
