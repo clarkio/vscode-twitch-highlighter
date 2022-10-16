@@ -1,7 +1,7 @@
-import { TreeItem, TreeItemCollapsibleState, Command } from "vscode";
+import { TreeItem, TreeItemCollapsibleState, Command } from 'vscode';
 
-import { Highlight } from "../Highlight";
-import { Commands } from "../../enums";
+import { Highlight } from '../Highlight';
+import { Commands } from '../../enums';
 
 export class HighlightTreeItem extends TreeItem {
   constructor(
@@ -14,6 +14,7 @@ export class HighlightTreeItem extends TreeItem {
     super(label, collapsibleState);
   }
 
+  // @ts-ignore
   public get description(): string {
     if (this.highlights.length > 0) {
       return `Highlights: ${this.highlights.length}`;
@@ -21,21 +22,32 @@ export class HighlightTreeItem extends TreeItem {
     return '';
   }
 
-  public get HighlightTreeItems(): HighlightTreeItem[] {
+  public get highlightTreeItems(): HighlightTreeItem[] {
     const children = new Array<HighlightTreeItem>();
-    this.highlights.forEach(highlight => {
-      const label = `Line: ${highlight.endLine > highlight.startLine ? `${highlight.startLine} - ${highlight.endLine}` : `${highlight.startLine}`}`;
-      const existingItem = children.find(item => item.label === label);
+    this.highlights.forEach((highlight) => {
+      const label = `Line: ${
+        highlight.endLine > highlight.startLine
+          ? `${highlight.startLine} - ${highlight.endLine}`
+          : `${highlight.startLine}`
+      }`;
+      const existingItem = children.find((item) => item.label === label);
       if (existingItem) {
         existingItem.highlights.push(highlight);
-      }
-      else {
+      } else {
         const command: Command = {
           command: Commands.gotoHighlight,
           title: '',
-          arguments: [highlight.startLine, this.fileName]
+          arguments: [highlight.startLine, this.fileName],
         };
-        children.push(new HighlightTreeItem(label, this.fileName, [highlight], TreeItemCollapsibleState.None, command));
+        children.push(
+          new HighlightTreeItem(
+            label,
+            this.fileName,
+            [highlight],
+            TreeItemCollapsibleState.None,
+            command
+          )
+        );
       }
     });
     return children;

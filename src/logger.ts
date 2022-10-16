@@ -3,7 +3,7 @@ import { OutputChannel } from 'vscode';
 import { LogLevel } from './enums';
 import { isEnum } from './utils';
 
-export type log = {
+export type Log = {
   (message: string, ...optionalParams: any[]): void;
   (level: LogLevel, message?: string, ...optionalParams: any[]): void;
 };
@@ -17,22 +17,25 @@ export class Logger {
   }
 
   public log(message: string, ...optionalParams: any[]): void;
-  public log(levelOrMessage: LogLevel | string, message?: string, ...optionalParams: any[]): void {
+  public log(
+    levelOrMessage: LogLevel | string,
+    message?: string,
+    ...optionalParams: any[]
+  ): void {
     const captains: any = console;
 
     let level;
     if (isEnum(levelOrMessage, LogLevel)) {
       level = levelOrMessage;
-    }
-    else {
-      level = LogLevel.Information;
+    } else {
+      level = LogLevel.information;
       message = levelOrMessage;
     }
 
     const getTime = (): {
-      hours: string,
-      minutes: string,
-      seconds: string
+      hours: string;
+      minutes: string;
+      seconds: string;
     } => {
       const date = new Date();
       const hours = date.getHours();
@@ -44,7 +47,7 @@ export class Logger {
       return {
         hours: prefix(hours),
         minutes: prefix(minutes),
-        seconds: prefix(seconds)
+        seconds: prefix(seconds),
       };
     };
 
@@ -53,7 +56,7 @@ export class Logger {
 
     captains[level](log, ...optionalParams);
 
-    if (this._channel && level !== LogLevel.Debug) {
+    if (this._channel && level !== LogLevel.debug) {
       this._channel.appendLine(log);
     }
   }

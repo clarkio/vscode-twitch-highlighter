@@ -10,68 +10,66 @@ interface Theory {
   comment?: string;
 }
 
-suite('Utils Tests', function() {
-
+suite('Utils Tests', function () {
   test('Ensure parseMessage returns expected results', () => {
-
     const theories: Theory[] = [
       {
         message: '!line 5',
         startLine: 5,
-        endLine: 5
+        endLine: 5,
       },
       {
         message: '!line settings.js 5',
         startLine: 5,
         endLine: 5,
-        fileName: 'settings.js'
+        fileName: 'settings.js',
       },
       {
         message: '!line settings 5',
         startLine: 5,
         endLine: 5,
-        fileName: 'settings'
+        fileName: 'settings',
       },
       {
         message: '!line 5 settings.js',
         startLine: 5,
         endLine: 5,
-        fileName: 'settings.js'
+        fileName: 'settings.js',
       },
       {
         message: '!line 5 settings',
         startLine: 5,
         endLine: 5,
-        comment: 'settings'
+        comment: 'settings',
       },
       {
         message: '!line 5-15',
         startLine: 5,
-        endLine: 15
+        endLine: 15,
       },
       {
         message: '!line 5-15 comment',
         startLine: 5,
         endLine: 15,
-        comment: 'comment'
+        comment: 'comment',
       },
       {
         message: '!line settings.js 5-15 comment',
         startLine: 5,
         endLine: 15,
         fileName: 'settings.js',
-        comment: 'comment'
+        comment: 'comment',
       },
       {
         message: '!line 5-15 settings.js comment',
         startLine: 5,
         endLine: 15,
         fileName: 'settings.js',
-        comment: 'comment'
-      }
+        comment: 'comment',
+      },
     ];
 
-    theories.forEach(({message, startLine, endLine, fileName, comment}) => {
+    theories.forEach(({ message, startLine, endLine, fileName, comment }) => {
       const result = parseMessage(message);
       assert.ok(result);
       if (result) {
@@ -81,7 +79,5 @@ suite('Utils Tests', function() {
         assert.equal(result.comments, comment);
       }
     });
-
   });
-
 });

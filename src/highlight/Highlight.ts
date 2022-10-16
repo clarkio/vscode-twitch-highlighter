@@ -38,7 +38,7 @@ export class Highlight {
   // The range should only be updated by the app
   // when changes occur in the TextEditor, such as a newline
   // is added above this highlight range.
-  public Update(newRange: Range): void {
+  public update(newRange: Range): void {
     this._range = newRange;
   }
 }

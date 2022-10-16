@@ -1,3 +1,3 @@
 export enum InternalCommands {
-  'removeBannedHighlights' = 'twitchHighlighter.removeBannedHighlights'
+  'removeBannedHighlights' = 'twitchHighlighter.removeBannedHighlights',
 }

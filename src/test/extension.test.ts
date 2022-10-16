@@ -1,6 +1,6 @@
 import { extensionId, extSuffix } from '../constants';
-import { Settings } from "../enums";
-import { Commands } from "../enums";
+import { Settings } from '../enums';
+import { Commands } from '../enums';
 
 //
 // Note: This example test is leveraging the Mocha test framework.
@@ -28,12 +28,11 @@ interface IConfiguration {
 }
 
 export type EnumIndexer = {
-  [Key: string]: string
+  [Key: string]: string;
 };
 
 // Defines a Mocha test suite to group tests of similar kind together
-suite("Extension Tests", function () {
-
+suite('Extension Tests', function () {
   let extension: vscode.Extension<any>;
 
   setup(function () {
@@ -41,7 +40,9 @@ suite("Extension Tests", function () {
     if (!ext) {
       throw new Error('Extension was not found.');
     }
-    if (ext) { extension = ext; }
+    if (ext) {
+      extension = ext;
+    }
   });
 
   /**
@@ -49,7 +50,7 @@ suite("Extension Tests", function () {
    * we use the `done` function to inform mocha that this test run is
    * complete.
    */
-  test("Extension loads in VSCode and is active", function (done) {
+  test('Extension loads in VSCode and is active', function (done) {
     // Hopefully a 200ms timeout will allow the extension to activate within Windows
     // otherwise we get a false result.
     setTimeout(function () {
@@ -58,35 +59,44 @@ suite("Extension Tests", function () {
     }, 200);
   });
 
-  test("constants.Commands exist in package.json", function () {
-    const commandCollection: ICommand[] = extension.packageJSON.contributes.commands;
+  test('constants.Commands exist in package.json', function () {
+    const commandCollection: ICommand[] =
+      extension.packageJSON.contributes.commands;
     for (let command in Commands) {
-      const result = commandCollection.some(c => c.command === (Commands as any)[command]);
+      const result = commandCollection.some(
+        (c) => c.command === (Commands as any)[command]
+      );
       assert.ok(result);
     }
   });
 
-  test("constants.Settings exist in package.json", function () {
-    const config: IConfiguration = extension.packageJSON.contributes.configuration;
+  test('constants.Settings exist in package.json', function () {
+    const config: IConfiguration =
+      extension.packageJSON.contributes.configuration;
     const properties = Object.keys(config.properties);
     for (let setting in Settings) {
-      const result = properties.some(property => property === `${extSuffix}.${(Settings as any)[setting]}`);
+      const result = properties.some(
+        (property) => property === `${extSuffix}.${(Settings as any)[setting]}`
+      );
       assert.ok(result);
     }
   });
 
   test('package.json commands registered in extension', function (done) {
-    const commandStrings: string[] = extension.packageJSON.contributes.commands.map((c: ICommand) => c.command);
+    const commandStrings: string[] =
+      extension.packageJSON.contributes.commands.map(
+        (c: ICommand) => c.command
+      );
 
-    vscode.commands.getCommands(true)
-      .then((allCommands: string[]) => {
-        const commands: string[] = allCommands.filter(c => c.startsWith(`${extSuffix}.`));
-        commands.forEach(command => {
-          const result = commandStrings.some(c => c === command);
-          assert.ok(result);
-        });
-        done();
+    vscode.commands.getCommands(true).then((allCommands: string[]) => {
+      const commands: string[] = allCommands.filter((c) =>
+        c.startsWith(`${extSuffix}.`)
+      );
+      commands.forEach((command) => {
+        const result = commandStrings.some((c) => c === command);
+        assert.ok(result);
       });
+      done();
+    });
   });
-
 });

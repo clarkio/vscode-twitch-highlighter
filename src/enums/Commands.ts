@@ -35,5 +35,5 @@ export enum Commands {
   'signOut' = 'twitchHighlighter.signOut',
   'connect' = 'twitchHighlighter.connect',
   'disconnect' = 'twitchHighlighter.disconnect',
-  'contextMenuUnhighlight' = 'twitchHighlighter.context.unhighlight'
+  'contextMenuUnhighlight' = 'twitchHighlighter.context.unhighlight',
 }

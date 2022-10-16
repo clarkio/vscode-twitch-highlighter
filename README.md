@@ -16,10 +16,13 @@ A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos
 ![Video](./resources/intro-vid.gif)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Clarkio
+
 This VS Code extension was built with 💙 live on stream with the programming community. Come and hang out with us over on Twitch!
 
 > https://twitch.tv/clarkio

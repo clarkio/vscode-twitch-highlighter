@@ -32,7 +32,8 @@ export const parseMessage = (message: string) => {
    * !highlight 5
    *
    */
-  const commandPattern = /\!(?:line|highlight) (?:((?:[\w]+)?\.?[\w]*) )?(\!)?(-?\d+)(?:(?:-{1}|\.{2})(-?\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/i;
+  const commandPattern =
+    /\!(?:line|highlight) (?:((?:[\w]+)?\.?[\w]*) )?(\!)?(-?\d+)(?:(?:-{1}|\.{2})(-?\d+))?(?: ((?:[\w]+)?\.[\w]{1,}))?(?: (.+))?/i;
   const cmdopts = commandPattern.exec(message);
   if (!cmdopts) {
     return undefined;
@@ -52,7 +53,7 @@ export const parseMessage = (message: string) => {
     startLine: vStartLine,
     endLine: vEndLine,
     fileName,
-    comments: comments
+    comments: comments,
   };
 
   return result;

@@ -3,18 +3,24 @@ import {
   EventEmitter,
   Event,
   TreeItem,
-  TreeItemCollapsibleState
-} from "vscode";
-import{ basename } from 'path';
+  TreeItemCollapsibleState,
+} from 'vscode';
+import { basename } from 'path';
 
-import { HighlightTreeItem } from "./HighlightTreeItem";
-import { HighlightCollection } from "../HighlightManager";
+import { HighlightTreeItem } from './HighlightTreeItem';
+import { HighlightCollection } from '../HighlightManager';
 import { naturalCompare } from '../../utils';
 
-export class HighlightTreeDataProvider implements TreeDataProvider<HighlightTreeItem> {
-  private readonly _onDidChangeTreeData: EventEmitter<HighlightTreeItem | undefined>;
+export class HighlightTreeDataProvider
+  implements TreeDataProvider<HighlightTreeItem>
+{
+  private readonly _onDidChangeTreeData: EventEmitter<
+    HighlightTreeItem | undefined
+  >;
 
-  constructor(private getHighlightCollections = (): HighlightCollection[] => []) {
+  constructor(
+    private getHighlightCollections = (): HighlightCollection[] => []
+  ) {
     this._onDidChangeTreeData = new EventEmitter();
   }
 
@@ -30,19 +36,40 @@ export class HighlightTreeDataProvider implements TreeDataProvider<HighlightTree
     return element;
   }
 
-  public getChildren(element?: HighlightTreeItem): Thenable<HighlightTreeItem[]> {
+  public getChildren(
+    element?: HighlightTreeItem
+  ): Thenable<HighlightTreeItem[]> {
     if (element) {
-      return Promise.resolve(element.HighlightTreeItems.sort((highlightA, highlightB) => naturalCompare(highlightA.label, highlightB.label)));
+      return Promise.resolve(
+        element.highlightTreeItems.sort((highlightA, highlightB) =>
+          naturalCompare(highlightA.label, highlightB.label)
+        )
+      );
     }
     let highlightTreeItems = new Array<HighlightTreeItem>();
-    const currentHighlightCollections = this.getHighlightCollections().filter(hc => hc.highlights.length > 0);
-    currentHighlightCollections.forEach(hc => {
+    const currentHighlightCollections = this.getHighlightCollections().filter(
+      (hc) => hc.highlights.length > 0
+    );
+    currentHighlightCollections.forEach((hc) => {
       const highlights = hc.highlights;
       const label = basename(hc.fileName);
-      highlightTreeItems.push(new HighlightTreeItem(label, hc.fileName, highlights, TreeItemCollapsibleState.Expanded));
+      highlightTreeItems.push(
+        new HighlightTreeItem(
+          label,
+          hc.fileName,
+          highlights,
+          TreeItemCollapsibleState.Expanded
+        )
+      );
     });
-    highlightTreeItems = highlightTreeItems
-      .sort((highlightTreeItemA, highlightTreeItemB) => highlightTreeItemB.label.localeCompare(highlightTreeItemA.label));
-    return Promise.resolve(highlightTreeItems.sort((highlightTreeItemA, highlightTreeItemB) => naturalCompare(highlightTreeItemA.label, highlightTreeItemB.label)));
+    highlightTreeItems = highlightTreeItems.sort(
+      (highlightTreeItemA, highlightTreeItemB) =>
+        highlightTreeItemB.label.localeCompare(highlightTreeItemA.label)
+    );
+    return Promise.resolve(
+      highlightTreeItems.sort((highlightTreeItemA, highlightTreeItemB) =>
+        naturalCompare(highlightTreeItemA.label, highlightTreeItemB.label)
+      )
+    );
   }
 }

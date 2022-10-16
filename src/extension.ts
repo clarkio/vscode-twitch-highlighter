@@ -14,21 +14,21 @@ let ttvchat: TwitchChatService;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
   // Remove the older credentials if they exist.
   CredentialManager.deleteTwitchToken();
   CredentialManager.deleteTwitchClientId();
 
-  const outputChannel = vscode.window.createOutputChannel('Twitch Line Highlighter');
+  const outputChannel = vscode.window.createOutputChannel(
+    'Twitch Line Highlighter'
+  );
 
   app = new App(outputChannel);
-  ttvchat = new TwitchChatService(app.API, outputChannel);
+  ttvchat = new TwitchChatService(app.api, outputChannel);
 
   app.intialize(context);
   ttvchat.initialize(context);
 
-  return app.API;
-
+  return app.api;
 }
 
 export function deactivate() {
@@ -37,4 +37,4 @@ export function deactivate() {
 
 export const editorHasDecorations = () => {
   return true;
-}
+};

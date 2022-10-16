@@ -1,67 +1,147 @@
 import * as vscode from 'vscode';
 import { HighlighterAPI } from './api';
-import { AppContexts, Commands, Configuration, LogLevel, Settings } from './enums';
+import {
+  AppContexts,
+  Commands,
+  Configuration,
+  LogLevel,
+  Settings,
+} from './enums';
 import {
   HighlightManager,
-
-  HighlightTreeDataProvider, HighlightTreeItem
+  HighlightTreeDataProvider,
+  HighlightTreeItem,
 } from './highlight';
-import { log, Logger } from './logger';
-
+import { Log, Logger } from './logger';
 
 export class App implements vscode.Disposable {
   private readonly _highlightManager: HighlightManager;
   private readonly _highlightTreeDataProvider: HighlightTreeDataProvider;
-  private log: log;
+  private log: Log;
   private highlightDecorationType: vscode.TextEditorDecorationType;
   private currentDocument?: vscode.TextDocument;
   private config?: vscode.WorkspaceConfiguration;
 
   constructor(outputChannel?: vscode.OutputChannel) {
     this.log = new Logger(outputChannel).log;
-    this.config = vscode.workspace.getConfiguration(Configuration.sectionIdentifier);
+    this.config = vscode.workspace.getConfiguration(
+      Configuration.sectionIdentifier
+    );
     this.highlightDecorationType = this.createTextEditorDecorationType();
     this._highlightManager = new HighlightManager();
-    this._highlightTreeDataProvider = new HighlightTreeDataProvider(this._highlightManager.GetHighlightCollection.bind(this._highlightManager));
+    this._highlightTreeDataProvider = new HighlightTreeDataProvider(
+      this._highlightManager.getHighlightCollection.bind(this._highlightManager)
+    );
   }
 
   public intialize(context: vscode.ExtensionContext) {
     this.log('Initializing line highlighter...');
 
     context.subscriptions.push(
-      this._highlightManager.onHighlightChanged(this.onHighlightChangedHandler, this),
+      this._highlightManager.onHighlightChanged(
+        this.onHighlightChangedHandler,
+        this
+      ),
 
-      vscode.window.onDidChangeVisibleTextEditors(this.onDidChangeVisibleTextEditorsHandler, this),
-      vscode.window.onDidChangeActiveTextEditor(this.onDidChangeActiveTextEditorHandler, this),
+      vscode.window.onDidChangeVisibleTextEditors(
+        this.onDidChangeVisibleTextEditorsHandler,
+        this
+      ),
+      vscode.window.onDidChangeActiveTextEditor(
+        this.onDidChangeActiveTextEditorHandler,
+        this
+      ),
 
-      vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocumentHandler, this),
-      vscode.workspace.onDidChangeConfiguration(this.onDidChangeConfigurationHandler, this),
+      vscode.workspace.onDidChangeTextDocument(
+        this.onDidChangeTextDocumentHandler,
+        this
+      ),
+      vscode.workspace.onDidChangeConfiguration(
+        this.onDidChangeConfigurationHandler,
+        this
+      ),
 
-      vscode.window.registerTreeDataProvider('twitchHighlighterTreeView-explorer', this._highlightTreeDataProvider),
-      vscode.window.registerTreeDataProvider('twitchHighlighterTreeView-debug', this._highlightTreeDataProvider),
-      vscode.window.registerTreeDataProvider('twitchHighlighterTreeView', this._highlightTreeDataProvider),
+      vscode.window.registerTreeDataProvider(
+        'twitchHighlighterTreeView-explorer',
+        this._highlightTreeDataProvider
+      ),
+      vscode.window.registerTreeDataProvider(
+        'twitchHighlighterTreeView-debug',
+        this._highlightTreeDataProvider
+      ),
+      vscode.window.registerTreeDataProvider(
+        'twitchHighlighterTreeView',
+        this._highlightTreeDataProvider
+      ),
 
-      vscode.commands.registerCommand(Commands.refreshTreeView, this.refreshTreeviewHandler, this),
+      vscode.commands.registerCommand(
+        Commands.refreshTreeView,
+        this.refreshTreeviewHandler,
+        this
+      ),
 
-      vscode.commands.registerCommand(Commands.highlight, this.highlightHandler, this),
-      vscode.commands.registerCommand(Commands.unhighlight, this.unhighlightHandler, this),
-      vscode.commands.registerCommand(Commands.unhighlightSpecific, this.unhighlightSpecificHandler, this),
-      vscode.commands.registerCommand(Commands.unhighlightAll, this.unhighlightAllHandler, this),
-      vscode.commands.registerCommand(Commands.gotoHighlight, this.gotoHighlightHandler, this),
+      vscode.commands.registerCommand(
+        Commands.highlight,
+        this.highlightHandler,
+        this
+      ),
+      vscode.commands.registerCommand(
+        Commands.unhighlight,
+        this.unhighlightHandler,
+        this
+      ),
+      vscode.commands.registerCommand(
+        Commands.unhighlightSpecific,
+        this.unhighlightSpecificHandler,
+        this
+      ),
+      vscode.commands.registerCommand(
+        Commands.unhighlightAll,
+        this.unhighlightAllHandler,
+        this
+      ),
+      vscode.commands.registerCommand(
+        Commands.gotoHighlight,
+        this.gotoHighlightHandler,
+        this
+      ),
 
-      vscode.commands.registerCommand(Commands.requestHighlight, this.requestHighlightHandler, this),
-      vscode.commands.registerCommand(Commands.requestUnhighlight, this.requestUnhighlightHandler, this),
-      vscode.commands.registerCommand(Commands.requestUnhighlightAll, this.requestUnhighlightAllHandler, this),
+      vscode.commands.registerCommand(
+        Commands.requestHighlight,
+        this.requestHighlightHandler,
+        this
+      ),
+      vscode.commands.registerCommand(
+        Commands.requestUnhighlight,
+        this.requestUnhighlightHandler,
+        this
+      ),
+      vscode.commands.registerCommand(
+        Commands.requestUnhighlightAll,
+        this.requestUnhighlightAllHandler,
+        this
+      ),
 
-      vscode.commands.registerCommand(Commands.contextMenuUnhighlight, this.contextMenuUnhighlightHandler, this)
+      vscode.commands.registerCommand(
+        Commands.contextMenuUnhighlight,
+        this.contextMenuUnhighlightHandler,
+        this
+      )
     );
 
     this.log('Initialized line highlighter.');
   }
 
-  public API: HighlighterAPI = {
-    requestHighlight(service: string, userName: string, startLine: number, endLine?: number, comments?: string) {
-      vscode.commands.executeCommand(Commands.requestHighlight,
+  public api: HighlighterAPI = {
+    requestHighlight(
+      service: string,
+      userName: string,
+      startLine: number,
+      endLine?: number,
+      comments?: string
+    ) {
+      vscode.commands.executeCommand(
+        Commands.requestHighlight,
         service,
         userName,
         startLine,
@@ -70,7 +150,8 @@ export class App implements vscode.Disposable {
       );
     },
     requestUnhighlight(service: string, userName: string, lineNumber: number) {
-      vscode.commands.executeCommand(Commands.requestUnhighlight,
+      vscode.commands.executeCommand(
+        Commands.requestUnhighlight,
         service,
         userName,
         lineNumber
@@ -78,43 +159,56 @@ export class App implements vscode.Disposable {
     },
     requestUnhighlightAll(service: string) {
       vscode.commands.executeCommand(Commands.requestUnhighlightAll, service);
-    }
+    },
   };
 
-  public async dispose() {
-  }
+  public async dispose() {}
 
-  private onDidChangeTextDocumentHandler(event: vscode.TextDocumentChangeEvent): void {
+  private onDidChangeTextDocumentHandler(
+    event: vscode.TextDocumentChangeEvent
+  ): void {
     if (event.document.languageId === 'Log') {
       return;
     }
     // Determine if the change occured on a highlighted line, if it did then adjust the highlight.
-    event.contentChanges.forEach(valueChanged => {
-      this._highlightManager.UpdateHighlight(event.document, valueChanged);
+    event.contentChanges.forEach((valueChanged) => {
+      this._highlightManager.updateHighlight(event.document, valueChanged);
     });
 
     // Determine if we changed the fileName of the currently active open document.
-    if (this.currentDocument && event.document.fileName !== this.currentDocument.fileName) {
-      this._highlightManager.Rename(this.currentDocument.fileName, event.document.fileName);
+    if (
+      this.currentDocument &&
+      event.document.fileName !== this.currentDocument.fileName
+    ) {
+      this._highlightManager.rename(
+        this.currentDocument.fileName,
+        event.document.fileName
+      );
       this.currentDocument = event.document;
     }
   }
 
-  private onDidChangeConfigurationHandler(event: vscode.ConfigurationChangeEvent): void {
+  private onDidChangeConfigurationHandler(
+    event: vscode.ConfigurationChangeEvent
+  ): void {
     if (!event.affectsConfiguration(Configuration.sectionIdentifier)) {
       return;
     }
-    this.config = vscode.workspace.getConfiguration(Configuration.sectionIdentifier);
+    this.config = vscode.workspace.getConfiguration(
+      Configuration.sectionIdentifier
+    );
     this.highlightDecorationType = this.createTextEditorDecorationType();
     this.refresh();
   }
 
-  private onDidChangeVisibleTextEditorsHandler(editors: Array<vscode.TextEditor>): void {
+  private onDidChangeVisibleTextEditorsHandler(
+    editors: Array<vscode.TextEditor>
+  ): void {
     if (editors.length > 0) {
-      editors.forEach(te => {
+      editors.forEach((te) => {
         te.setDecorations(
           this.highlightDecorationType,
-          this._highlightManager.GetDecorations(te.document.fileName)
+          this._highlightManager.getDecorations(te.document.fileName)
         );
       });
     }
@@ -129,10 +223,21 @@ export class App implements vscode.Disposable {
   private setEditorHasHighlightsContext() {
     if (vscode.window.activeTextEditor) {
       const editor = vscode.window.activeTextEditor;
-      if (this._highlightManager.GetDecorations(editor.document.fileName).length > 0) {
-        vscode.commands.executeCommand('setContext', AppContexts.editorHasHighlights, true);
+      if (
+        this._highlightManager.getDecorations(editor.document.fileName).length >
+        0
+      ) {
+        vscode.commands.executeCommand(
+          'setContext',
+          AppContexts.editorHasHighlights,
+          true
+        );
       } else {
-        vscode.commands.executeCommand('setContext', AppContexts.editorHasHighlights, false);
+        vscode.commands.executeCommand(
+          'setContext',
+          AppContexts.editorHasHighlights,
+          false
+        );
       }
     }
   }
@@ -140,8 +245,7 @@ export class App implements vscode.Disposable {
   private onDidChangeActiveTextEditorHandler(editor?: vscode.TextEditor): void {
     if (editor) {
       this.currentDocument = editor.document;
-    }
-    else {
+    } else {
       this.currentDocument = undefined;
     }
     this.setEditorHasHighlightsContext();
@@ -152,25 +256,30 @@ export class App implements vscode.Disposable {
   }
 
   private createTextEditorDecorationType(): vscode.TextEditorDecorationType {
-    const configuration = vscode.workspace.getConfiguration(Configuration.sectionIdentifier);
+    const configuration = vscode.workspace.getConfiguration(
+      Configuration.sectionIdentifier
+    );
 
     if (this.highlightDecorationType) {
       this.highlightDecorationType.dispose();
     }
 
     return vscode.window.createTextEditorDecorationType({
-      backgroundColor: configuration.get<string>(Settings.highlightColor) || 'green',
-      border: configuration.get<string>(Settings.highlightBorder) || '2px solid white',
-      color: configuration.get<string>(Settings.highlightFontColor) || 'white'
+      backgroundColor:
+        configuration.get<string>(Settings.highlightColor) || 'green',
+      border:
+        configuration.get<string>(Settings.highlightBorder) ||
+        '2px solid white',
+      color: configuration.get<string>(Settings.highlightFontColor) || 'white',
     });
   }
 
   private refresh(): void {
     this.setEditorHasHighlightsContext();
-    vscode.window.visibleTextEditors.forEach(te => {
+    vscode.window.visibleTextEditors.forEach((te) => {
       te.setDecorations(
         this.highlightDecorationType,
-        this._highlightManager.GetDecorations(te.document.fileName)
+        this._highlightManager.getDecorations(te.document.fileName)
       );
     });
     this._highlightTreeDataProvider.refresh();
@@ -182,64 +291,69 @@ export class App implements vscode.Disposable {
 
   private get isActiveTextEditor(): boolean {
     const editor = vscode.window.activeTextEditor;
-    return (editor !== undefined &&
+    return (
+      editor !== undefined &&
       editor.document.languageId !== 'log' &&
-      editor.document.getText().length > 0);
+      editor.document.getText().length > 0
+    );
   }
 
   private async highlightHandler(): Promise<void> {
     const editor = vscode.window.activeTextEditor;
     if (!this.isActiveTextEditor) {
-      vscode.window.showInformationMessage('The current open, and active text editor is either empty or not a valid target to highlight a line.');
+      vscode.window.showInformationMessage(
+        'The current open, and active text editor is either empty or not a valid target to highlight a line.'
+      );
       return;
     }
 
     try {
       const options: vscode.InputBoxOptions = {
         ignoreFocusOut: true,
-        prompt: "Enter a line number"
+        prompt: 'Enter a line number',
       };
       const value = await vscode.window.showInputBox(options);
       if (value) {
-        this._highlightManager.Add(editor!.document, 'self', +(value || 0));
+        this._highlightManager.add(editor!.document, 'self', +(value || 0));
       }
+    } catch (err) {
+      this.log(LogLevel.error, err);
     }
-    catch (err) {
-      this.log(LogLevel.Error, err);
-    }
-
   }
 
-  private async unhighlightHandler(treeItem?: HighlightTreeItem): Promise<void> {
+  private async unhighlightHandler(
+    treeItem?: HighlightTreeItem
+  ): Promise<void> {
     if (treeItem) {
       const fileName = treeItem.fileName;
-      const highlightLines = treeItem.highlights.map(h => h.startLine);
-      highlightLines.forEach(line => {
-        this._highlightManager.Remove(fileName, 'self', line, true);
+      const highlightLines = treeItem.highlights.map((h) => h.startLine);
+      highlightLines.forEach((line) => {
+        this._highlightManager.remove(fileName, 'self', line, true);
       });
-      this._highlightManager.Refresh();
-    }
-    else {
+      this._highlightManager.refresh();
+    } else {
       try {
         const options: vscode.QuickPickOptions = {
-          ignoreFocusOut: true
+          ignoreFocusOut: true,
         };
-        const value = await vscode.window.showQuickPick(this._highlightManager.GetHighlightDetails(), options);
+        const value = await vscode.window.showQuickPick(
+          this._highlightManager.getHighlightDetails(),
+          options
+        );
         if (value) {
-          const fileNameAndLineNumber = value.split(": ");
+          const fileNameAndLineNumber = value.split(': ');
           const fileName = fileNameAndLineNumber[0];
           const lineNumber = fileNameAndLineNumber[1];
-          this._highlightManager.Remove(fileName, 'self', +(lineNumber));
+          this._highlightManager.remove(fileName, 'self', +lineNumber);
         }
-      }
-      catch (err) {
-        this.log(LogLevel.Error, err);
+      } catch (err) {
+        this.log(LogLevel.error, err);
       }
     }
   }
 
   private async unhighlightSpecificHandler(): Promise<void> {
-    if (this._highlightManager.GetHighlightCollection().length === 0) {
+    if (this._highlightManager.getHighlightCollection().length === 0) {
       vscode.window.showInformationMessage(
         'There are no highlights to unhighlight'
       );
@@ -247,8 +361,8 @@ export class App implements vscode.Disposable {
     }
 
     let pickerOptions: Array<string> = new Array<string>();
-    const highlights = this._highlightManager.GetHighlightDetails();
-    highlights.forEach(highlight => {
+    const highlights = this._highlightManager.getHighlightDetails();
+    highlights.forEach((highlight) => {
       pickerOptions = [...pickerOptions, highlight];
     });
 
@@ -259,55 +373,93 @@ export class App implements vscode.Disposable {
         return;
       }
       const [pickedFile, lineNumber] = pickedOption.split(': ');
-      this._highlightManager.Remove(pickedFile, 'self', +(lineNumber));
-    }
-    catch (err) {
-      this.log(LogLevel.Error, err);
+      this._highlightManager.remove(pickedFile, 'self', +lineNumber);
+    } catch (err) {
+      this.log(LogLevel.error, err);
     }
   }
 
   private unhighlightAllHandler(): void {
-    this._highlightManager.Clear();
+    this._highlightManager.clear();
   }
 
-  private async gotoHighlightHandler(lineNumber: number, fileName: string): Promise<void> {
+  private async gotoHighlightHandler(
+    lineNumber: number,
+    fileName: string
+  ): Promise<void> {
     const document = await vscode.workspace.openTextDocument(fileName);
     if (document) {
-      vscode.window.showTextDocument(document).then(editor => {
+      vscode.window.showTextDocument(document).then((editor) => {
         lineNumber = lineNumber < 3 ? 2 : lineNumber;
         editor.revealRange(document.lineAt(lineNumber - 2).range);
       });
     }
   }
 
-  private requestHighlightHandler(service: string, userName: string, startLine: number, endLine?: number, comments?: string): void {
+  private requestHighlightHandler(
+    service: string,
+    userName: string,
+    startLine: number,
+    endLine?: number,
+    comments?: string
+  ): void {
     const editor = vscode.window.activeTextEditor;
     if (!this.isActiveTextEditor) {
-      this.log(LogLevel.Warning, `Could not highlight the line requested by ${service}:${userName}`);
-      this.log(LogLevel.Warning, 'The current open, and active text editor is either empty or not a valid target to highlight a line.');
+      this.log(
+        LogLevel.warning,
+        `Could not highlight the line requested by ${service}:${userName}`
+      );
+      this.log(
+        LogLevel.warning,
+        'The current open, and active text editor is either empty or not a valid target to highlight a line.'
+      );
       return;
     }
-    this._highlightManager.Add(editor!.document, `${service}:${userName}`, startLine, endLine || startLine, comments);
+    this._highlightManager.add(
+      editor!.document,
+      `${service}:${userName}`,
+      startLine,
+      endLine || startLine,
+      comments
+    );
   }
 
-  private requestUnhighlightHandler(service: string, userName: string, lineNumber: number): void {
+  private requestUnhighlightHandler(
+    service: string,
+    userName: string,
+    lineNumber: number
+  ): void {
     const editor = vscode.window.activeTextEditor;
     if (!this.isActiveTextEditor) {
-      this.log(LogLevel.Warning, `Could not unhighlight the line requested by ${service}:${userName}`);
-      this.log(LogLevel.Warning, 'The current open, and active text editor is either empty or not a valid target to highlight a line.');
+      this.log(
+        LogLevel.warning,
+        `Could not unhighlight the line requested by ${service}:${userName}`
+      );
+      this.log(
+        LogLevel.warning,
+        'The current open, and active text editor is either empty or not a valid target to highlight a line.'
+      );
       return;
     }
-    this._highlightManager.Remove(editor!.document, `${service}:${userName}`, lineNumber);
+    this._highlightManager.remove(
+      editor!.document,
+      `${service}:${userName}`,
+      lineNumber
+    );
   }
 
   private requestUnhighlightAllHandler(service: string): void {
-    this._highlightManager.Clear(service);
+    this._highlightManager.clear(service);
   }
 
   private contextMenuUnhighlightHandler() {
     if (vscode.window.activeTextEditor) {
       const lineNumber = vscode.window.activeTextEditor.selection.active.line;
-      this._highlightManager.Remove(vscode.window.activeTextEditor.document, 'self', lineNumber + 1);
+      this._highlightManager.remove(
+        vscode.window.activeTextEditor.document,
+        'self',
+        lineNumber + 1
+      );
     }
   }
 }
