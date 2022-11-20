@@ -16,7 +16,7 @@ A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos
 ![Video](./resources/intro-vid.gif)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Clarkio
@@ -113,11 +113,14 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="https://github.com/parithon"><img src="https://avatars.githubusercontent.com/u/8602418?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Anthony Conrad (parithon)</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=parithon" title="Code">💻</a></td>
-    <td align="center"><a href="https://matthewkosloski.me/"><img src="https://avatars.githubusercontent.com/u/1219553?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matthew Kosloski</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=MatthewKosloski" title="Code">💻</a></td>
-    <td align="center"><a href="http://blog.yoannfleury.dev"><img src="https://avatars.githubusercontent.com/u/3920615?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Yoann Fleury</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=yoannfleurydev" title="Code">💻</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://github.com/parithon"><img src="https://avatars.githubusercontent.com/u/8602418?v=4?s=100" width="100px;" alt="Anthony Conrad (parithon)"/><br /><sub><b>Anthony Conrad (parithon)</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=parithon" title="Code">💻</a></td>
+      <td align="center"><a href="https://matthewkosloski.me/"><img src="https://avatars.githubusercontent.com/u/1219553?v=4?s=100" width="100px;" alt="Matthew Kosloski"/><br /><sub><b>Matthew Kosloski</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=MatthewKosloski" title="Code">💻</a></td>
+      <td align="center"><a href="http://blog.yoannfleury.dev"><img src="https://avatars.githubusercontent.com/u/3920615?v=4?s=100" width="100px;" alt="Yoann Fleury"/><br /><sub><b>Yoann Fleury</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=yoannfleurydev" title="Code">💻</a></td>
+      <td align="center"><a href="https://www.technickel.dev/"><img src="https://avatars.githubusercontent.com/u/22779812?v=4?s=100" width="100px;" alt="Technickel"/><br /><sub><b>Technickel</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=Technickel-Dev" title="Code">💻</a></td>
+    </tr>
+  </tbody>
 </table>
 
 <!-- markdownlint-restore -->
