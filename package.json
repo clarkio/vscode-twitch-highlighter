@@ -2,7 +2,7 @@
   "name": "twitch-highlighter",
   "displayName": "Twitch Highlighter",
   "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "preview": false,
   "publisher": "clarkio",
   "engines": {
@@ -256,9 +256,8 @@
   },
   "scripts": {
     "vscode:prepublish": "webpack --config webpack.config.js --mode production",
-    "compile": "copyfiles -au 1 ./src/**/*.htm out/ && tsc -p ./",
-    "watch": "copyfiles -au 1 ./src/**/*.htm out/ && tsc --watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
+    "compile": "copyfiles -au 1 ./src/**/*.htm ./out/ && tsc -p ./",
+    "watch": "copyfiles -au 1 ./src/**/*.htm ./out/ && tsc --watch -p ./",
     "test": "npm run compile && node ./node_modules/vscode/bin/test",
     "lint": "eslint -c .eslintrc.js --ext .ts ./src"
   },
@@ -269,6 +268,7 @@
     "@types/request": "^2.48.3",
     "@types/tmi.js": "^1.4.0",
     "@types/uuid": "^3.4.5",
+    "@types/vscode": "^1.72.0",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
     "bufferutil": "^4.0.1",
