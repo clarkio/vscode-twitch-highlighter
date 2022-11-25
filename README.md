@@ -1,6 +1,9 @@
 <div align="center">
 
 # Twitch Line Highlighter VS Code Extension
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Known Vulnerabilities](https://snyk.io/test/github/clarkio/vscode-twitch-highlighter/badge.svg)](https://snyk.io/test/github/clarkio/vscode-twitch-highlighter)
 [![Discord](https://img.shields.io/discord/421902136457035777)](https://discord.gg/xB95beJ)
