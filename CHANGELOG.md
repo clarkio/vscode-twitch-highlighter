@@ -5,19 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [1.0.4]
+
+### Changed
+
+- Testing from vscode to @vscode/test-electron in [#153](https://github.com/clarkio/vscode-twitch-highlighter/pull/153)
+
+## [1.0.3]
+
+### Changed
+
+- To new Twitch App Client Id
+
 ## [Released]
 
 ## [1.0.2]
 
 ### Security
+
 - Addressed dependency from security audit for package `bl`: [bl npm advisory](https://npmjs.com/advisories/1555)
 
 ## [1.0.1]
 
 ### Fixed
+
 - Reading of extension settings by name: [commit](https://github.com/clarkio/vscode-twitch-highlighter/commit/5b6844bd999d5eefb5ec186f76510b0a62704d4e)
 
 ## [1.0.0]
+
 First full release and no longer in preview!
 
 ### Added
@@ -38,7 +55,6 @@ First full release and no longer in preview!
 
 - [Address vulnerability for dependency 'elliptic'](https://github.com/clarkio/vscode-twitch-highlighter/commit/9150f06a4290402a562c1404001ce7fa289efce3)
 
-
 ## [0.5.1]
 
 ### Added
@@ -54,6 +70,7 @@ This is a complete rewrite of the extension. The extension now has an API that o
 ## [0.2.3]
 
 ### Fixed
+
 - Issue where highlights were not visible in tree views ([110](https://github.com/clarkio/vscode-twitch-highlighter/pull/110) thanks @parithon)
 
 ## [0.2.2]
