@@ -109,9 +109,9 @@ export class App implements vscode.Disposable {
     this.refresh();
   }
 
-  private onDidChangeVisibleTextEditorsHandler(editors: Array<vscode.TextEditor>): void {
-    if (editors.length > 0) {
-      editors.forEach(te => {
+  private onDidChangeVisibleTextEditorsHandler(e: readonly vscode.TextEditor[]): any {
+    if (e.length > 0) {
+      e.forEach(te => {
         te.setDecorations(
           this.highlightDecorationType,
           this._highlightManager.GetDecorations(te.document.fileName)

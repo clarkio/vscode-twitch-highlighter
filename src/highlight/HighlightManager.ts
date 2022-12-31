@@ -81,7 +81,7 @@ export class HighlightManager {
         });
       }
   
-      this._onHighlightsChanged.fire();
+      this._onHighlightsChanged.fire({});
       resolve();
     });
   }
@@ -101,7 +101,7 @@ export class HighlightManager {
           this.highlightCollection[idx].highlights.splice(hidx, 1);
         }
         if (!deferRefresh) {
-          this._onHighlightsChanged.fire();
+          this._onHighlightsChanged.fire({});
         }
       }
       resolve();
@@ -109,7 +109,7 @@ export class HighlightManager {
   }
 
   public Refresh() {
-    this._onHighlightsChanged.fire();
+    this._onHighlightsChanged.fire({});
   }
 
   public Clear(service?: string): Promise<void> {
@@ -125,7 +125,7 @@ export class HighlightManager {
       else {
         this.highlightCollection = new Array<HighlightCollection>();
       }
-      this._onHighlightsChanged.fire();
+      this._onHighlightsChanged.fire({});
     });
   }
 
@@ -198,7 +198,7 @@ export class HighlightManager {
       }
     }
     if (updated) {
-      this._onHighlightsChanged.fire();
+      this._onHighlightsChanged.fire({});
     }
   }
 }

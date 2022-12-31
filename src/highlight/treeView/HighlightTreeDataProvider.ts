@@ -23,7 +23,7 @@ export class HighlightTreeDataProvider implements TreeDataProvider<HighlightTree
   }
 
   public refresh(): void {
-    this._onDidChangeTreeData.fire();
+    this._onDidChangeTreeData.fire(undefined);
   }
 
   public getTreeItem(element: HighlightTreeItem): TreeItem {
