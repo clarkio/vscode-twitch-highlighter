@@ -12,13 +12,7 @@ export class HighlightTreeItem extends TreeItem {
     public readonly command?: Command
   ) {
     super(label, collapsibleState);
-  }
-
-  public get description(): string {
-    if (this.highlights.length > 0) {
-      return `Highlights: ${this.highlights.length}`;
-    }
-    return '';
+    this.description = this.highlights.length > 0 ? `Highlights: ${this.highlights.length}` : '';
   }
 
   public get HighlightTreeItems(): HighlightTreeItem[] {
