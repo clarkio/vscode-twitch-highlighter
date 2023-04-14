@@ -1,10 +1,34 @@
-# Twitch Line Highlighter VS Code Extension
+<div align="center">
 
-[![Build Status](https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_apis/build/status/Production%20Test%20%26%20Build%20-%20VS%20Code%20Line%20Highlighter%20Extension?branchName=refs%2Fpull%2F125%2Fmerge)](https://clarkcode.visualstudio.com/vscode-line-highlighter-extension/_build/latest?definitionId=23&branchName=refs%2Fpull%2F125%2Fmerge)
+# Twitch Line Highlighter VS Code Extension
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+[![Known Vulnerabilities](https://snyk.io/test/github/clarkio/vscode-twitch-highlighter/badge.svg)](https://snyk.io/test/github/clarkio/vscode-twitch-highlighter)
+[![Discord](https://img.shields.io/discord/421902136457035777)](https://discord.gg/xB95beJ)
+[![Twitch Status](https://img.shields.io/twitch/status/clarkio)](https://twitch.tv/clarkio)
+[![Build and Test](https://github.com/clarkio/vscode-twitch-highlighter/actions/workflows/ci-pipeline.yml/badge.svg?branch=main)](https://github.com/clarkio/vscode-twitch-highlighter/actions/workflows/ci-pipeline.yml)
+<br>
+[![Twitter Follow](https://img.shields.io/twitter/follow/_clarkio?style=social)](https://twitter.com/intent/follow?screen_name=_clarkio)
+
+</div>
 
 A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.
 
 ![Video](./resources/intro-vid.gif)
+
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
+
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+## Clarkio
+
+This VS Code extension was built with 💙 live on stream with the programming community. Come and hang out with us over on Twitch!
+
+> https://twitch.tv/clarkio
 
 ## Requirements
 
@@ -86,3 +110,28 @@ Some of the code in this extension has been adapted from the [twitchlint extensi
 ## Release Notes
 
 See [CHANGELOG.md](CHANGELOG.md)
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://github.com/parithon"><img src="https://avatars.githubusercontent.com/u/8602418?v=4?s=100" width="100px;" alt="Anthony Conrad (parithon)"/><br /><sub><b>Anthony Conrad (parithon)</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=parithon" title="Code">💻</a></td>
+      <td align="center"><a href="https://matthewkosloski.me/"><img src="https://avatars.githubusercontent.com/u/1219553?v=4?s=100" width="100px;" alt="Matthew Kosloski"/><br /><sub><b>Matthew Kosloski</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=MatthewKosloski" title="Code">💻</a></td>
+      <td align="center"><a href="http://blog.yoannfleury.dev"><img src="https://avatars.githubusercontent.com/u/3920615?v=4?s=100" width="100px;" alt="Yoann Fleury"/><br /><sub><b>Yoann Fleury</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=yoannfleurydev" title="Code">💻</a></td>
+      <td align="center"><a href="https://www.technickel.dev/"><img src="https://avatars.githubusercontent.com/u/22779812?v=4?s=100" width="100px;" alt="Technickel"/><br /><sub><b>Technickel</b></sub></a><br /><a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=Technickel-Dev" title="Code">💻</a> <a href="https://github.com/clarkio/vscode-twitch-highlighter/commits?author=Technickel-Dev" title="Tests">⚠️</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
