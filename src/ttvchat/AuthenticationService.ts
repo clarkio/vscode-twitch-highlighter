@@ -14,7 +14,7 @@ import { API } from './api';
 export class AuthenticationService {
   private readonly _onAuthStatusChanged: EventEmitter<boolean> = new EventEmitter();
   public readonly onAuthStatusChanged: Event<boolean> = this._onAuthStatusChanged.event;
-  private port: number = 5544;
+  private port: number = 5001;
 
   constructor(private log: log) { }
 
