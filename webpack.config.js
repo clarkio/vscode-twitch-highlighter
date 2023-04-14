@@ -9,7 +9,6 @@ module.exports = {
   entry: {
     extension: './src/extension.ts',
     ttvchat: './src/ttvchat/index.ts',
-    test: './src/test'
   },
   devtool: 'source-map',
   plugins: [
