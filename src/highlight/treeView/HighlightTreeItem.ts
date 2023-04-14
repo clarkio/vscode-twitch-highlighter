@@ -14,6 +14,7 @@ export class HighlightTreeItem extends TreeItem {
     super(label, collapsibleState);
   }
 
+  // @ts-ignore
   public get description(): string {
     if (this.highlights.length > 0) {
       return `Highlights: ${this.highlights.length}`;

@@ -31,6 +31,7 @@ export class App implements vscode.Disposable {
     context.subscriptions.push(
       this._highlightManager.onHighlightChanged(this.onHighlightChangedHandler, this),
 
+      // @ts-ignore
       vscode.window.onDidChangeVisibleTextEditors(this.onDidChangeVisibleTextEditorsHandler, this),
       vscode.window.onDidChangeActiveTextEditor(this.onDidChangeActiveTextEditorHandler, this),
 
