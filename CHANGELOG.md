@@ -5,19 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [1.0.5]
+
+### Changed
+
+- To ignore .dccache file created in a project when using the Snyk extension or CLI for Snyk Code in [#171](https://github.com/clarkio/vscode-twitch-highlighter/pull/171)
+- To newest npm package lock version in [#171](https://github.com/clarkio/vscode-twitch-highlighter/pull/171)
+- Default branch to be `main` to be used for production releases and will continue to use `vnext` as the active development branch. Feature branches will still be used with PRs for them opened against `vnext` and then when we're ready to push a new release we'll open a PR from `vnext` to `main`.
+
+### Fixed
+
+- Use of login page to run on expected port of 5001 for OAuth redirect flows between VS Code and a browser when authenticating with Twitch in [#171](https://github.com/clarkio/vscode-twitch-highlighter/pull/171)
+
+## [1.0.4]
+
+### Changed
+
+- Testing from vscode to @vscode/test-electron in [#153](https://github.com/clarkio/vscode-twitch-highlighter/pull/153)
+
+## [1.0.3]
+
+### Changed
+
+- To new Twitch App Client Id
+
 ## [Released]
 
 ## [1.0.2]
 
 ### Security
+
 - Addressed dependency from security audit for package `bl`: [bl npm advisory](https://npmjs.com/advisories/1555)
 
 ## [1.0.1]
 
 ### Fixed
+
 - Reading of extension settings by name: [commit](https://github.com/clarkio/vscode-twitch-highlighter/commit/5b6844bd999d5eefb5ec186f76510b0a62704d4e)
 
 ## [1.0.0]
+
 First full release and no longer in preview!
 
 ### Added
@@ -38,7 +67,6 @@ First full release and no longer in preview!
 
 - [Address vulnerability for dependency 'elliptic'](https://github.com/clarkio/vscode-twitch-highlighter/commit/9150f06a4290402a562c1404001ce7fa289efce3)
 
-
 ## [0.5.1]
 
 ### Added
@@ -54,6 +82,7 @@ This is a complete rewrite of the extension. The extension now has an API that o
 ## [0.2.3]
 
 ### Fixed
+
 - Issue where highlights were not visible in tree views ([110](https://github.com/clarkio/vscode-twitch-highlighter/pull/110) thanks @parithon)
 
 ## [0.2.2]
@@ -138,6 +167,8 @@ This is a complete rewrite of the extension. The extension now has an API that o
 
 - Pre-release version to gather feedback from the community and help identify gaps.
 
+[1.0.5]: https://github.com/clarkio/vscode-twitch-highlighter/compare/1.0.4...1.0.5
+[1.0.4]: https://github.com/clarkio/vscode-twitch-highlighter/compare/1.0.2...1.0.4
 [1.0.2]: https://github.com/clarkio/vscode-twitch-highlighter/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/clarkio/vscode-twitch-highlighter/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/clarkio/vscode-twitch-highlighter/compare/0.5.1...1.0.0

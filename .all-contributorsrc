@@ -31,6 +31,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Technickel-Dev",
+      "name": "Technickel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22779812?v=4",
+      "profile": "https://www.technickel.dev/",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -38,5 +48,6 @@
   "projectOwner": "clarkio",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular"
 }
