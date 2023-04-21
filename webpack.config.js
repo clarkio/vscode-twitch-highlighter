@@ -9,7 +9,6 @@ module.exports = {
   entry: {
     extension: './src/extension.ts',
     ttvchat: './src/ttvchat/index.ts',
-    test: './src/test'
   },
   devtool: 'source-map',
   plugins: [
@@ -24,7 +23,7 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        exclude: /node_module/,
+        exclude: /node_modules/,
         use: 'ts-loader',
       },
     ]

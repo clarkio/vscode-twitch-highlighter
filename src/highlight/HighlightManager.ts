@@ -60,14 +60,14 @@ export class HighlightManager {
       if (!endLine) {
         endLine = startLine;
       }
-  
+
       const range = new Range(
         new Position(--startLine, 0),
         new Position(--endLine, document.lineAt(endLine).text.length)
       );
-  
+
       const highlight = new Highlight(userName, range, comments);
-  
+
       const idx = this.highlightCollection.findIndex(h => h.fileName === document.fileName);
       if (idx > -1) {
         if (!this.highlightCollection[idx].highlights.some(h => (h.userName === userName || userName === 'self') && h.startLine <= startLine && h.endLine >= endLine!)) {
@@ -80,7 +80,8 @@ export class HighlightManager {
           highlights: [highlight]
         });
       }
-  
+
+      // @ts-ignore
       this._onHighlightsChanged.fire();
       resolve();
     });
@@ -93,7 +94,7 @@ export class HighlightManager {
       if (!isString(documentOrFileName)) {
         documentOrFileName = documentOrFileName.fileName;
       }
-  
+
       const idx = this.highlightCollection.findIndex(h => h.fileName === documentOrFileName);
       if (idx > -1) {
         const hidx = this.highlightCollection[idx].highlights.findIndex(h => (h.userName === userName || userName === 'self') && h.startLine <= lineNumber && h.endLine >= lineNumber);
@@ -101,6 +102,7 @@ export class HighlightManager {
           this.highlightCollection[idx].highlights.splice(hidx, 1);
         }
         if (!deferRefresh) {
+          // @ts-ignore
           this._onHighlightsChanged.fire();
         }
       }
@@ -109,6 +111,7 @@ export class HighlightManager {
   }
 
   public Refresh() {
+    // @ts-ignore
     this._onHighlightsChanged.fire();
   }
 
@@ -125,6 +128,7 @@ export class HighlightManager {
       else {
         this.highlightCollection = new Array<HighlightCollection>();
       }
+      // @ts-ignore
       this._onHighlightsChanged.fire();
     });
   }
@@ -198,6 +202,7 @@ export class HighlightManager {
       }
     }
     if (updated) {
+      // @ts-ignore
       this._onHighlightsChanged.fire();
     }
   }
