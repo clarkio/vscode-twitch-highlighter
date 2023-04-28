@@ -1,3 +1,5 @@
+name: "Deploy to Registries"
+
 on:
   push:
     branches:
@@ -14,9 +16,9 @@ jobs:
           node-version: 16
       - run: npm ci
       - name: Publish to Open VSX Registry
-       uses: HaaLeo/publish-vscode-extension@v1
-       with:
-         pat: ${{ secrets.OPEN_VSX_TOKEN }}
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+          pat: ${{ secrets.OPEN_VSX_TOKEN }}
       - name: Publish to Visual Studio Marketplace
         uses: HaaLeo/publish-vscode-extension@v1
         with:
