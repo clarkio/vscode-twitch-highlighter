@@ -8,7 +8,8 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/clarkio/vscode-twitch-highlighter/badge.svg)](https://snyk.io/test/github/clarkio/vscode-twitch-highlighter)
 [![Discord](https://img.shields.io/discord/421902136457035777)](https://discord.gg/xB95beJ)
 [![Twitch Status](https://img.shields.io/twitch/status/clarkio)](https://twitch.tv/clarkio)
-[![Build and Test](https://github.com/clarkio/vscode-twitch-highlighter/actions/workflows/ci-pipeline.yml/badge.svg)](https://github.com/clarkio/vscode-twitch-highlighter/actions/workflows/ci-pipeline.yml)
+[![Build and Test](https://github.com/clarkio/vscode-twitch-highlighter/actions/workflows/ci-pipeline.yml/badge.svg?branch=main)](https://github.com/clarkio/vscode-twitch-highlighter/actions/workflows/ci-pipeline.yml)
+
 <br>
 [![Twitter Follow](https://img.shields.io/twitter/follow/_clarkio?style=social)](https://twitter.com/intent/follow?screen_name=_clarkio)
 
