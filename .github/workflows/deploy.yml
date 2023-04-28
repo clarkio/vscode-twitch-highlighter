@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-name: Deploy Extension
 jobs:
   deploy:
     runs-on: ubuntu-latest
