@@ -2,7 +2,7 @@
   "name": "twitch-highlighter",
   "displayName": "Twitch Highlighter",
   "description": "Allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "preview": false,
   "publisher": "clarkio",
   "engines": {
