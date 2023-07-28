@@ -12,6 +12,9 @@
   "categories": [
     "Other"
   ],
+  "extensionDependencies": [
+    "clarkio.vscode-twitch-authprovider"
+  ],
   "activationEvents": [
     "*"
   ],

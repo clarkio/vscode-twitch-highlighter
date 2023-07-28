@@ -5,7 +5,7 @@ import {
 import {
   ConfigurationChangeEvent, Disposable, Event, EventEmitter,
   ExtensionContext, workspace,
-  WorkspaceConfiguration
+  WorkspaceConfiguration, authentication
 } from 'vscode';
 import { keytar } from "../common";
 import { Configuration, KeytarKeys, LogLevel, Settings } from "../enums";
@@ -51,9 +51,12 @@ export class ChatClient implements Disposable {
   }
 
   public async connect() {
-    if (keytar && this.config && !this.isConnected) {
-      const accessToken = await keytar.getPassword(KeytarKeys.service, KeytarKeys.account);
-      const login = await keytar.getPassword(KeytarKeys.service, KeytarKeys.userLogin);
+    if (this.config && !this.isConnected) {
+      // const accessToken = await keytar.getPassword(KeytarKeys.service, KeytarKeys.account);
+      // const login = await keytar.getPassword(KeytarKeys.service, KeytarKeys.userLogin);
+      const currentSession = await authentication.getSession("twitch", ["chat:read", "chat:edit"], { createIfNone: false });
+      const accessToken = currentSession?.accessToken;
+      const login = currentSession?.account?.label;
       if (accessToken && login) {
         this.channel = this.config.get<string>(Settings.channels) || login;
         const opts: Options = {
