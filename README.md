@@ -11,6 +11,7 @@
 [![Build and Test](https://github.com/clarkio/vscode-twitch-highlighter/actions/workflows/ci-pipeline.yml/badge.svg?branch=main)](https://github.com/clarkio/vscode-twitch-highlighter/actions/workflows/ci-pipeline.yml)
 
 <br>
+
 [![Twitter Follow](https://img.shields.io/twitter/follow/_clarkio?style=social)](https://twitter.com/intent/follow?screen_name=_clarkio)
 
 </div>
